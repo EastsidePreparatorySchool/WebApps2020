@@ -1,0 +1,11 @@
+
+*.class
+/target/*
+MathServer/target/classes/index.html
+MathServer/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+MathServer/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+MathServer/target/test-classes/.netbeans_automatic_build
+MathServer/target/MathServer-1.0-SNAPSHOT.jar
+MathServer/target/classes/.netbeans_automatic_build
+MathServer/target/classes/script.js
+MathServer/target/maven-archiver/pom.properties
