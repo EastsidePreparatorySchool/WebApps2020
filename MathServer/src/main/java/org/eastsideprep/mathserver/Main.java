@@ -10,9 +10,10 @@ import static spark.Spark.*;
 public class Main {
 
     public static void main(String[] args) {
+        port(80);
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
-        port(80);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
