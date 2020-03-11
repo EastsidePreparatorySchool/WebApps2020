@@ -10,11 +10,16 @@ import static spark.Spark.*;
 public class Main {
 
     public static void main(String[] args) {
-        // get a silly route up for testing
-        get("/hello", (req, res) -> "Hello World");
-        
         // tell spark where to find all the HTML and JS
-        staticFiles.location("/public");
+        staticFiles.location("/");
+        port(80);
+
+        // get a silly route up for testing
+        get("/hello", (req, res) -> {
+            System.out.println("Hey we were invoked:");
+            return "Hello world from code";
+        });
+
     }
 
 }
