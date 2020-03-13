@@ -20,6 +20,33 @@ public class Main {
             return "Hello world from code";
         });
 
+        // Return the value of Tau
+        get("/tau", (req, res) -> {
+            System.out.println("Tau requested");
+            return 2 * Math.PI;
+        });
+
+        // Adds stuff
+        get("/plus", (req, res) -> {
+            System.out.println("Addition requested");
+
+            // Get's inputs as Strings from req
+            String p1 = req.queryParams("p1");
+            String p2 = req.queryParams("p2");
+
+            // Check if inputs are null
+            if (p1 == null || p2 == null) {
+                throw halt();
+            }
+
+            // Converts inputs to Double
+            double d1 = Double.parseDouble(p1);
+            double d2 = Double.parseDouble(p2);
+
+            // Return addition of doubles
+            return d1 + d2;
+        });
+
     }
 
 }
