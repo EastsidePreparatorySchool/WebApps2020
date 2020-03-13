@@ -46,6 +46,27 @@ public class Main {
             // Return addition of doubles
             return d1 + d2;
         });
+        
+        // Subtract stuff
+        get("/minus", (req, res) -> {
+            System.out.println("Subtraction requested");
+
+            // Get's inputs as Strings from req
+            String p1 = req.queryParams("p1");
+            String p2 = req.queryParams("p2");
+
+            // Check if inputs are null
+            if (p1 == null || p2 == null) {
+                throw halt();
+            }
+
+            // Converts inputs to Double
+            double d1 = Double.parseDouble(p1);
+            double d2 = Double.parseDouble(p2);
+
+            // Return addition of doubles
+            return d1 - d2;
+        });
 
     }
 
