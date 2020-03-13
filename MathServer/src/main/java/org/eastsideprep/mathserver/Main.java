@@ -40,6 +40,22 @@ public class Main {
             
             return d1 + " + " + d2 + " = " + (d1+d2);
         });
+        
+        get("/minus", (req, res) -> {
+            System.out.println("Subtraction requested");
+            String p1 = req.queryParams("p1");
+            String p2 = req.queryParams("p2");
+            
+            if (p1 == null || p2 == null){
+                throw halt();
+            }
+            
+            double d1 = Double.parseDouble(p1);
+            double d2 = Double.parseDouble(p2);
+            
+            return d1 + " - " + d2 + " = " + (d1 - d2);
+            
+        });
     }
 
 }
