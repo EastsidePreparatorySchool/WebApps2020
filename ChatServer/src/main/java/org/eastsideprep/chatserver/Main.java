@@ -37,8 +37,8 @@ public class Main {
 
             String msgs = "";
 
-//            allMessagesArrayList.add(req.session().id());
-            allMessagesArrayList.add(req.session().toString());
+            allMessagesArrayList.add(req.session().id());
+//            allMessagesArrayList.add(req.session().toString());
 
             for (int i = 0;
                     i < allMessagesArrayList.size();
@@ -50,6 +50,19 @@ public class Main {
             }
 
             return msgs;
+        });
+        
+        // Send message
+        put("/send_message", (req, res) -> {
+            System.out.println("Send message requested");
+            
+            
+            String msg = req.queryParams("msg");
+
+            allMessagesArrayList.add(msg);
+            allMessagesArrayList.add(req.session().id());
+            
+            return msg;
         });
 
         // Subtract stuff

@@ -21,14 +21,13 @@ function updateMessages(f) {
         console.log("Something borked: "+error);
     });
 }
-function sendMessage(msg, f) {
+function sendMessage(msg) {
     console.log(msg);
-//    request({url: "/update_messages", verb: "GET"}).then(data => {
-//        console.log("Success! Updating Messages");
-//        f(data);
-//    }).catch(error => {
-//        console.log("Something borked: "+error);
-//    });
+    request({url: "/send_message?msg="+msg, verb: "PUT"}).then(data => {
+        console.log("Success! Updating Messages");
+    }).catch(error => {
+        console.log("Something borked: "+error);
+    });
 }
 
 
@@ -40,6 +39,12 @@ function plus_from_input() {
 }
 function updateMessagesTextArea() {
     updateMessages(function (data) { document.getElementById("result").value = data; });
+}
+function sendMessageAndUpdateTextArea() {
+    var msg = document.getElementById("textIn").value;
+    
+    sendMessage(msg);
+    updateMessagesTextArea();
 }
 
 for (var i=0; i<50; i++) {
