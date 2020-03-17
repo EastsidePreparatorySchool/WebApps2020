@@ -1,0 +1,20 @@
+h1{
+    font-family:"Arial";
+}
+
+#getnew{
+    background-color: yellow;
+}
+
+#input{
+    background-color: lightgray;
+}
+
+#sendbtn{
+    background-color: orange;
+}
+
+#result{
+    background-color: black;
+    color: white;
+}

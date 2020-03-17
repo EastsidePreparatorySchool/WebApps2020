@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat Server</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Chat Server</h1>
+        
+        <button id="getnew" onclick="show_new_messages()">Get new messages</button>
+        <br>
+        <textarea 
+            id ="result" 
+            rows="50"
+            cols="100"
+            readonly>
+            Messages will go here
+        </textarea>
+        <br>
+        
+        <input 
+            type="text"
+            id="input"
+            >
+        <button 
+            id="sendbtn"
+            onclick="add_new_message_from_button()">
+            Send</button>
+        
+        <script src="common.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>
