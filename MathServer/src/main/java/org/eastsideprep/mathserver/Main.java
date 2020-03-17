@@ -28,7 +28,7 @@ public class Main {
         });
 
         get("/plus", (req, res) -> {
-            System.out.println("Addition requested");
+            System.out.println("Addition requested :D");
             String p1 = req.queryParams("p1");
             String p2 = req.queryParams("p2");
             
