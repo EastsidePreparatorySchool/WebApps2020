@@ -6,6 +6,8 @@
 package org.eastsideprep.mathserver;
 
 import static spark.Spark.*;
+import java.util.*;
+
 
 public class Main {
 
@@ -42,12 +44,14 @@ public class Main {
             return d1+d2;
         });
         
-        get("/minus", (req, res) -> {
-            System.out.println("Addition requested");
+
+        get("/minus", (req,res) -> {
+            System.out.println("Substraction requested");
             String p1 = req.queryParams("p1");
             String p2 = req.queryParams("p2");
             
-            if (p1 == null || p2 == null) {
+            if(p1 == null || p2 == null) {
+
                 throw halt();
             }
             
@@ -56,6 +60,20 @@ public class Main {
             
             return d1-d2;
         });
+
+
+        
+        get("/getchat", (req,res) -> {
+            ArrayList<String> messages = new ArrayList<String>();   
+            String mes = "";
+            for (int i = 0; i < messages.size(); i++) {
+                mes += (messages.get(i));
+            }
+            messages.add(req.session().id().toString());
+            return(mes);
+        });
+        
+
     }
 
 }
