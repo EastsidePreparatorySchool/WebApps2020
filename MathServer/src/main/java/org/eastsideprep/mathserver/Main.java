@@ -6,6 +6,8 @@
 package org.eastsideprep.mathserver;
 
 import static spark.Spark.*;
+import java.util.*;
+
 
 public class Main {
 
@@ -55,6 +57,17 @@ public class Main {
             
             return d1-d2;
         });
+        
+        get("/getchat", (req,res) -> {
+            ArrayList<String> messages = new ArrayList<String>();   
+            String mes = "";
+            for (int i = 0; i < messages.size(); i++) {
+                mes += (messages.get(i));
+            }
+            messages.add(req.session().id().toString());
+            return(mes);
+        });
+        
     }
 
 }
