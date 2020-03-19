@@ -21,13 +21,29 @@ function plus_from_input() {
     plus(p1,p2,function (data) { document.getElementById("result").value = data; });
 }
 
-for (var i=0; i<50; i++) {
-    plus(i, i);
-}
+//for (var i=0; i<50; i++) {
+//    plus(i, i);
+//}
+
+
 
 function getMessages(){
+    
     textarea = document.getElementById("result");
     textarea.value = "eg"
+}
+
+function sendMessages(String message){
+   
+    message = document.getElementById("messageSender"); 
+    request({url: "/send?message="+message+", verb: "GET"})
+            .then(data => {
+                console.log("success: +message is" + data);
+                f(data);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
 }
 
 
