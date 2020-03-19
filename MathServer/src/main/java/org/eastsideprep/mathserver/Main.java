@@ -38,7 +38,7 @@ public class Main {
             double d1 = Double.parseDouble(p1);
             double d2 = Double.parseDouble(p2);
             
-            return d1+d2;
+            return d1-d2;
         });
     }
 
