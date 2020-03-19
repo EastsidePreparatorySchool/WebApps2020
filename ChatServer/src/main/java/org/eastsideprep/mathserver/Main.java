@@ -17,16 +17,6 @@ public class Main {
 
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
-
-        messages.add("hi");
-        messages.add("hello world");
-        messages.add("typing");
-        messages.add("MINECRAFT");
-        messages.add("caskdja;lskdf;alks;df");
-        messages.add(";ojifekjfes;");
-        messages.add("windows 10 is gud");
-        messages.add("Macos is gud");
-        
         
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -37,20 +27,48 @@ public class Main {
         get("/getnew", (req, res) -> {
             System.out.println("New Messages Requested");
             String result = "";
+            synchronized(messages){
             for(String s : messages){
                 result += s;
                 result += "\n";
-            }
-            result += req.session().toString();
+            }}
             return result;
         });
         
         get("/addmsg", (req, res) -> {
             System.out.println("Send Message Requested");
             String message = req.queryParams("message");
-            messages.add(message);
+            messages.add(getUser(req) + ": " + message);
             return "yay";
         });
+        
+        get("/login", (req, res) -> {
+            System.out.println("Login Requested");
+            String inputName = req.queryParams("usr");
+            System.out.println("Logging in as " + inputName + "...");
+            getSession(req).attribute("usr", inputName);
+            System.out.println("Username set to " + getUser(req));
+            return "logged in as " + getUser(req);
+            
+        });
+        
+        get("/getusr", (req, res) -> {
+            System.out.println("Get user requested");
+            return getUser(req);
+        });
+            
+    }
+    
+    static spark.Session getSession(spark.Request req){
+        return req.session(true);
     }
 
+    static String getUser(spark.Request req){
+        String user = getSession(req).attribute("usr");
+        if(user == null){
+            user = "@unknown";
+            getSession(req).attribute("usr", user);
+        }
+        return user;
+    }
 }

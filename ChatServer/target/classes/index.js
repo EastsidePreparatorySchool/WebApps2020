@@ -24,6 +24,18 @@ function add_new_message(m) {
             });
 }
 
+function get_username(f) {
+    console.log("getting username");
+    request({url: "/getusr", verb: "GET"})
+            .then(data => {
+                console.log("user is " + data);
+                f(data);
+            })
+            .catch(error =>{
+                console.log("error: " + error);
+            });
+}
+
 function show_new_messages(){
     get_new_messages(function (data) {
         document.getElementById("result").value = data;
@@ -31,12 +43,23 @@ function show_new_messages(){
 }
 
 function add_new_message_from_button(){
-    add_new_message(
-            document.getElementById("input").value
-            );
-    document.getElementById("input").value = "";
-    show_new_messages();
+    let val = document.getElementById("input");
+    if(val.value !== ""){
+        add_new_message(val.value);
+        val.value = "";
+    }
 }
 
-
-
+function login(f){
+    console.log("user wants to log in");
+    let new_usr = prompt("What is your username?");
+    request({url: "/login?usr=" + new_usr, verb : "GET"})
+            .then(data => {
+                console.log("success, " + data);
+                document.getElementById("title-usr").innerHTML = data;
+                //location.reload();
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
