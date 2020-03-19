@@ -6,20 +6,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>ChatServer</div>
-        
-        
-        <!--<input id="p2" placeholder="enter value" type="text"><br>-->
-        
-        <button onclick="updateMessagesTextArea()">Update</button><br>
-        
-        <textarea id="result" style="width: 25%; height: 200px;"></textarea><br>
-        
-        
-        <input id="textIn" placeholder="Your Message Here" type="text"><br>
-        <button onclick="sendMessageAndUpdateTextArea()">Send</button>
-        
-        <script src="common.js"></script>
-        <script src="script.js"></script>
+        <h1>ChatServer</h1>
+
+        <div id="loginBox">
+            <input id="username" placeholder="enter Username" type="text">
+
+            <button onclick="loginUserHTML()">Login!</button>
+        </div>
+
+        <div id ="app" style="display: none;">
+            <button onclick="updateMessagesTextArea()">Update</button><br>
+
+            <textarea id="result" style="width: 25%; height: 200px;"></textarea><br>
+
+
+            <input id="textIn" placeholder="Your Message Here" type="text"><br>
+            <button onclick="sendMessageAndUpdateTextArea()">Send</button>
+
+            <script src="common.js"></script>
+            <script src="script.js"></script>
+        </div>
     </body>
 </html>

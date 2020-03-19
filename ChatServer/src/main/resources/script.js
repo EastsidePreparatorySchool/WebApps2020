@@ -29,6 +29,16 @@ function sendMessage(msg) {
         console.log("Something borked: "+error);
     });
 }
+function loginUser(username) {
+    console.log("Login user "+username);
+    request({url: "/login_user?username="+username, verb: "PUT"}).then(data => {
+        console.log("Success! Logged in user");
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    }).catch(error => {
+        console.log("Something borked: "+error);
+    });
+}
 
 
 function plus_from_input() {
@@ -45,6 +55,12 @@ function sendMessageAndUpdateTextArea() {
     
     sendMessage(msg);
     updateMessagesTextArea();
+}
+function loginUserHTML() {
+    var username = document.getElementById("username").value;
+    
+    loginUser(username);
+//    updateMessagesTextArea();
 }
 
 for (var i=0; i<50; i++) {
