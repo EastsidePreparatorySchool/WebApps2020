@@ -12,6 +12,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
+        
         port(80);
 
         // tell spark where to find all the HTML and JS
@@ -57,7 +58,7 @@ public class Main {
             
             return d1-d2;
         });
-        
+
         get("/chat", (req,res) -> {
             ArrayList<String> messages = new ArrayList<String>();   
             String mes = "";
@@ -67,7 +68,7 @@ public class Main {
             messages.add(req.session().id().toString());
             return(mes);
         });
-        
+
     }
 
 }
