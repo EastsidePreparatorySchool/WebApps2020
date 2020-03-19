@@ -2,19 +2,22 @@ h1{
     font-family:"Arial";
 }
 
-#getnew{
-    background-color: yellow;
+button{
+    background-color: #3a5465;
+    color: white;
 }
 
 #input{
-    background-color: lightgray;
-}
-
-#sendbtn{
-    background-color: orange;
+    background-color: #d4ed9d;
+    color: white;
 }
 
 #result{
-    background-color: black;
+    background-color: #d4ed9d;
+    color: #3d3931;
+}
+
+body{
+    background-color: #3d3931;
     color: white;
 }
