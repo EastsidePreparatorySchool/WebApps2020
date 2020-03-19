@@ -29,14 +29,23 @@ function plus_from_input() {
 
 function getMessages(){
     
+    
     textarea = document.getElementById("result");
+    request({url: "/chat?message="+message+", verb: GET"})
+            .then(data => {
+                console.log("success: +message is" + data);
+                f(data);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
     textarea.value = "eg"
 }
 
-function sendMessages(String message){
+function sendMessages(){
    
     message = document.getElementById("messageSender"); 
-    request({url: "/send?message="+message+", verb: "GET"})
+    request({url: "/send?message="+message+", verb: GET"})
             .then(data => {
                 console.log("success: +message is" + data);
                 f(data);
