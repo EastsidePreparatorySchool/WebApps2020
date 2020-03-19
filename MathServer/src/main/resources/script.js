@@ -25,6 +25,11 @@ for (var i=0; i<50; i++) {
     plus(i, i);
 }
 
+function getMessages(){
+    textarea = document.getElementById("result");
+    textarea.value = "eg"
+}
+
 
 
 

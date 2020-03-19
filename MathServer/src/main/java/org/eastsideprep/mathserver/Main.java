@@ -62,9 +62,8 @@ public class Main {
         });
 
 
-        
-        get("/chat", (req,res) -> {
-            ArrayList<String> messages = new ArrayList<String>();   
+        ArrayList<String> messages = new ArrayList<String>();   
+        get("/chat", (req,res) -> {     
             String mes = "";
             for (int i = 0; i < messages.size(); i++) {
                 mes += (messages.get(i));
@@ -72,6 +71,14 @@ public class Main {
             messages.add(req.session().id().toString());
             return(mes);
         });
+//        get("/send", (req,res, mess) -> {     
+//            String mes = "";
+//            for (int i = 0; i < messages.size(); i++) {
+//                mes += (messages.get(i));
+//            }
+//            messages.add(req.session().id().toString());
+//            return(mes);
+//        });
         
 
     }
