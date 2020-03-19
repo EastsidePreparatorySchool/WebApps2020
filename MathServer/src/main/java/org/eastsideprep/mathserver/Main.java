@@ -63,6 +63,7 @@ public class Main {
 
 
         ArrayList<String> messages = new ArrayList<String>();   
+        String allmessages = "";
 //        get("/chat", (req,res) -> {     
 //            String mes = "";
 //            for (int i = 0; i < messages.size(); i++) {
@@ -74,6 +75,9 @@ public class Main {
         get("/send", (req,res) -> {  
             String mess = req.queryParams("message");
             messages.add(mess);
+            for(String message: messages){
+                allmessages.concat(","+message);
+            }
             return null;
             
         });
