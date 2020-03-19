@@ -63,7 +63,7 @@ public class Main {
 
 
         
-        get("/getchat", (req,res) -> {
+        get("/chat", (req,res) -> {
             ArrayList<String> messages = new ArrayList<String>();   
             String mes = "";
             for (int i = 0; i < messages.size(); i++) {
