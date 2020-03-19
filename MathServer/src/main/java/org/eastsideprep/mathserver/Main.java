@@ -71,7 +71,7 @@ public class Main {
         get("/send", (req,res) -> {  
             String mess = req.queryParams("message");
             messages.add(mess);
-            return null;\
+            return null;
         });
 
     }
