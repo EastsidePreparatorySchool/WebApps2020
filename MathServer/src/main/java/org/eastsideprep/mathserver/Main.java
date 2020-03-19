@@ -59,14 +59,19 @@ public class Main {
             return d1-d2;
         });
 
-        get("/chat", (req,res) -> {
-            ArrayList<String> messages = new ArrayList<String>();   
-            String mes = "";
-            for (int i = 0; i < messages.size(); i++) {
-                mes += (messages.get(i));
-            }
-            messages.add(req.session().id().toString());
-            return(mes);
+        ArrayList<String> messages = new ArrayList<String>();   
+//        get("/chat", (req,res) -> {     
+//            String mes = "";
+//            for (int i = 0; i < messages.size(); i++) {
+//                mes += (messages.get(i));
+//            }
+//            messages.add(req.session().id().toString());
+//            return(mes);
+//        });
+        get("/send", (req,res) -> {  
+            String mess = req.queryParams("message");
+            messages.add(mess);
+            return null;\
         });
 
     }
