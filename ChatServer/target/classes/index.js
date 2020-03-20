@@ -7,7 +7,7 @@ function get_new_messages(f) {
             .catch(error => {
                 console.log("error: " + error);
             });
-    
+
 }
 
 function add_new_message(m) {
@@ -16,7 +16,7 @@ function add_new_message(m) {
             .then(data => {
                 console.log("success/new messages/add");
             })
-            .catch(error =>{
+            .catch(error => {
                 console.log("error: " + error);
             });
 }
@@ -26,38 +26,38 @@ function get_username(f) {
     request({url: "/getusr", verb: "GET"})
             .then(data => {
                 console.log("user is " + data);
-                f (data);
+                f(data);
             })
-            .catch(error =>{
+            .catch(error => {
                 console.log("error: " + error);
             });
 }
 
-function show_new_messages(){
+function show_new_messages() {
     get_new_messages(function (data) {
         document.getElementById("result").value = data;
     });
 }
 
-function add_new_message_from_button(){
+function add_new_message_from_button() {
     let val = document.getElementById("input");
-    if(val.value !== ""){
+    if (val.value !== "") {
         add_new_message(val.value);
         val.value = "";
     }
 }
 
-function login(f){
+function login(f) {
     console.log("user wants to log in");
     let new_usr = prompt("Please log in to ChatServer. Enter username:");
-    
-    if(new_usr.toString().toUpperCase() === "ADMIN"){
+
+    if (new_usr.toString().toUpperCase() === "ADMIN") {
         alert("You can't be admin.");
         logout();
         return;
     }
-    
-    request({url: "/login?usr=" + new_usr, verb : "GET"})
+
+    request({url: "/login?usr=" + new_usr, verb: "GET"})
             .then(data => {
                 console.log("success/login, data: " + data);
                 refresh_user_namebox();
@@ -70,19 +70,19 @@ function login(f){
             });
 }
 
-function logout(){
-    get_username(function(data){
+function logout() {
+    get_username(function (data) {
         console.log(data + " wants to log out");
     });
-    request({url : "/logout", verb : "GET"})
+    request({url: "/logout", verb: "GET"})
             .then(data => {
                 console.log("success/logout, data: " + data);
                 location.reload(); //reload page
             })
 }
 
-function refresh_user_namebox(){
-    get_username(function (data){
+function refresh_user_namebox() {
+    get_username(function (data) {
         document.getElementById("usr-namebox").innerHTML = "Logged in as " + data;
     });
 }
@@ -90,8 +90,8 @@ function refresh_user_namebox(){
 //executes when the user loads the page
 
 
-get_username(function(data){
-    if(data === "unknown"){
+get_username(function (data) {
+    if (data === "unknown") {
         login();
         refresh_user_namebox();
     }
