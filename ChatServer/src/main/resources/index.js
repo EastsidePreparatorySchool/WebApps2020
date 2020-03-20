@@ -1,3 +1,5 @@
+let login_this_load = false;
+
 function get_new_messages(f) {
     request({url: "/getnew", verb: "GET"})
             .then(data => {
@@ -47,23 +49,16 @@ function add_new_message_from_button() {
     }
 }
 
-function login(f) {
+function login() {
     console.log("user wants to log in");
     let new_usr = prompt("Please log in to ChatServer. Enter username:");
-
-    if (new_usr.toString().toUpperCase() === "ADMIN") {
-        alert("You can't be admin.");
-        logout();
-        return;
-    }
 
     request({url: "/login?usr=" + new_usr, verb: "GET"})
             .then(data => {
                 console.log("success/login, data: " + data);
-                refresh_user_namebox();
-                alert("You are now logged in as " + data + ". Your browser should now remember your login.");
-                f(data);
-                refresh_user_namebox();
+                alert("You are now logged in as " + data + ". Your browser will now remember your login.");
+                set_user_namebox(data);
+                login_this_load = true;
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -78,13 +73,18 @@ function logout() {
             .then(data => {
                 console.log("success/logout, data: " + data);
                 location.reload(); //reload page
-            })
+            });
 }
 
 function refresh_user_namebox() {
     get_username(function (data) {
-        document.getElementById("usr-namebox").innerHTML = "Logged in as " + data;
+        set_user_namebox(data);
     });
+}
+
+function set_user_namebox(name) {
+    console.log("set_user_namebox called with parameter " + name);
+    document.getElementById("usr-namebox").innerHTML = "Logged in as " + name + ". <a href='/logout'>log out</a>";
 }
 
 //executes when the user loads the page
@@ -93,7 +93,8 @@ function refresh_user_namebox() {
 get_username(function (data) {
     if (data === "unknown") {
         login();
-        refresh_user_namebox();
+    } else if (login_this_load === false) {
+        set_user_namebox(data);
     }
 });
 

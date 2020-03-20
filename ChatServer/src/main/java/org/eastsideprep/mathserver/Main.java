@@ -12,6 +12,15 @@ public class Main {
 
     public static ArrayList<String> messages = new ArrayList<String>();
 
+    public static String[] illegalUsernames = {
+        "ADMIN",
+        "HACKER",
+        "HACKED",
+        "HACK",
+        "SCAMMER",
+        "SERVER"
+    };
+
     public static void main(String[] args) {
         port(80);
 
@@ -19,7 +28,7 @@ public class Main {
         staticFiles.location("/");
 
         get("/getnew", (req, res) -> {
-            System.out.println("New Messages Requested by " + getUser(req) + " " + req.ip());
+            //System.out.println("New Messages Requested by " + getUser(req) + " " + req.ip());
             String result = "";
             synchronized (messages) {
                 for (String s : messages) {
@@ -40,12 +49,27 @@ public class Main {
         });
 
         get("/login", (req, res) -> {
-            System.out.println("Login Requested");
+
             String inputName = req.queryParams("usr");
-            System.out.println("Logging in as " + inputName + "...");
+
+            for (String u : illegalUsernames) {
+                if (inputName.toUpperCase().contains(u)) {
+                    String newUsr = "usr_" + req.ip();
+                    getSession(req).attribute("usr", newUsr);
+                    
+                    System.out.println("Username " + inputName + " was illegal, renaming to " + newUsr);
+                    
+                    return newUsr;
+                }
+            }
+
+            System.out.println("Logging ip " + req.ip() + " as " + inputName + "...");
+
             getSession(req).attribute("usr", inputName);
+
             System.out.println("Username set to " + getUser(req));
-            return "logged in as " + getUser(req);
+
+            return getUser(req);
 
         });
 
@@ -65,7 +89,7 @@ public class Main {
         get("/logout", (req, res) -> {
             System.out.println("Logout requested by user " + getUser(req));
             getSession(req).attribute("usr", null);
-            return "logged out";
+            return "Logged out. <a href='/'>log in</a>";
         });
 
         get("/admin", (req, res) -> {
