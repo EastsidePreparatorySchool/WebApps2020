@@ -18,14 +18,8 @@ public class Main {
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
         
-        // get a silly route up for testing
-        get("/hello", (req, res) -> {
-            System.out.println("Hey we were invoked:");
-            return "Hello world from code";
-        });
-        
         get("/getnew", (req, res) -> {
-            System.out.println("New Messages Requested");
+            System.out.println("New Messages Requested by " + getUser(req) + " " + req.ip());
             String result = "";
             synchronized(messages){
             for(String s : messages){
@@ -53,8 +47,26 @@ public class Main {
         });
         
         get("/getusr", (req, res) -> {
-            System.out.println("Get user requested");
+            System.out.println("Get user requested, ip " + req.ip());
             return getUser(req);
+        });
+        
+        get("/clear", (req, res) -> {
+            System.out.println("Clearing messages");
+            messages = new ArrayList<String>();
+            return "Cleared messages";
+        });
+        
+        get("/logout", (req, res) -> {
+            System.out.println("Logout requested by user "+ getUser(req));
+            getSession(req).attribute("usr", null);
+            return "logged out";
+        });
+        
+        get("/admin", (req, res) ->{
+            System.out.println("Registering user as admin at " + req.ip());
+            getSession(req).attribute("usr", "admin");
+            return req.ip();
         });
             
     }
@@ -66,8 +78,7 @@ public class Main {
     static String getUser(spark.Request req){
         String user = getSession(req).attribute("usr");
         if(user == null){
-            user = "@unknown";
-            getSession(req).attribute("usr", user);
+            user = "unknown";
         }
         return user;
     }

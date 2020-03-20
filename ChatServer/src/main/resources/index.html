@@ -5,13 +5,10 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="styles.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
     </head>
     <body>
-        <h1>Chat Server (<span id="title-usr">not logged in</span>)</h1>
-        <button onclick="login()">Login</button>
-        
-        <button id="getnew" onclick="show_new_messages()">Get new messages</button>
-        <br>
+        <h1>Chat Server</h1>
         <textarea 
             id ="result" 
             rows="20"
@@ -29,6 +26,8 @@
             id="sendbtn"
             onclick="add_new_message_from_button()">
             Send</button>
+        <br>
+         <span id="usr-namebox">not logged in</span>
         
         <script src="common.js"></script>
         <script src="index.js"></script>
