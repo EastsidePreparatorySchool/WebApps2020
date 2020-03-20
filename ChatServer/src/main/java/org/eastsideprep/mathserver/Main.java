@@ -14,10 +14,8 @@ public class Main {
 
     public static String[] illegalUsernames = {
         "ADMIN",
-        "HACKER",
-        "HACKED",
         "HACK",
-        "SCAMMER",
+        "SCAM",
         "SERVER"
     };
 
@@ -95,7 +93,7 @@ public class Main {
         get("/admin", (req, res) -> {
             System.out.println("Registering user as admin at " + req.ip());
             getSession(req).attribute("usr", "admin");
-            return req.ip();
+            return req.ip() + " logged in as admin. <a href='/'>chat</a>";
         });
 
     }

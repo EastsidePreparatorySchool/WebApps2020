@@ -73,6 +73,9 @@ function logout() {
             .then(data => {
                 console.log("success/logout, data: " + data);
                 location.reload(); //reload page
+            })
+            .catch(error =>{
+                console.log("error: " + error);
             });
 }
 
@@ -85,11 +88,21 @@ function refresh_user_namebox() {
 function set_user_namebox(name) {
     console.log("set_user_namebox called with parameter " + name);
     document.getElementById("usr-namebox").innerHTML = "Logged in as " + name + ". <a href='/logout'>log out</a>";
+    if(name === "admin") document.getElementById("usr-namebox").innerHTML += "  <button onclick='clear_chat()'>Clear Chat</button>";
+}
+
+function clear_chat(){
+    request({url: "/clear", verb: "GET"})
+            .then(data => {
+                console.log("success/clear, data: " + data);
+                location.reload(); //reload page
+            })
+            .catch(error =>{
+                console.log("error: " + error);
+            });
 }
 
 //executes when the user loads the page
-
-
 get_username(function (data) {
     if (data === "unknown") {
         login();
