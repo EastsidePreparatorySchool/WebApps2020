@@ -39,7 +39,7 @@ function getMessages(){
             .catch(error => {
                 console.log("error: " + error);
             });
-    textarea.value = "eg"
+    textarea.value = message;
 }
 
 function sendMessages(){
