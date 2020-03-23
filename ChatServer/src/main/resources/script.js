@@ -48,10 +48,11 @@ function plus_from_input() {
     plus(p1,p2,function (data) { document.getElementById("result").value = data; });
 }
 function updateMessagesTextArea() {
-    updateMessages(function (data) { document.getElementById("result").value = data; });
+    updateMessages(function (data) { document.getElementById("result").value += data; });
 }
 function sendMessageAndUpdateTextArea() {
     var msg = document.getElementById("textIn").value;
+    document.getElementById("textIn").value = "";
     
     sendMessage(msg);
     updateMessagesTextArea();

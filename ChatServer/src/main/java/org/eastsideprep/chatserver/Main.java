@@ -24,9 +24,7 @@ public class Main {
         allMessagesArrayList.add("Second Message");
         allMessagesArrayList.add("Something else");
 
-        
         // TODO: better handle displaying shown messages
-        
         // get all new messages
         get("/update_messages", (req, res) -> {
             System.out.println("Update messages requested: ");
@@ -34,25 +32,15 @@ public class Main {
             String msgs = "";
 
             synchronized (allMessagesArrayList) {
-                int lastSeenIndex = getSeenIndex(req);
-
-                allMessagesArrayList.add(req.session().id());
-//            allMessagesArrayList.add(req.session().toString());
-
-                for (int i = 0;
-                        i < allMessagesArrayList.size();
-                        i++) {
-                    if (i < lastSeenIndex) {
-                        continue;
-                    }
-                    String get = allMessagesArrayList.get(i);
-
-                    msgs += get;
-                    msgs += "\n";
-                }
+                int lastSeenIndex = getSeenIndex(req) + 1;
+                
+                msgs = String.join("\n", allMessagesArrayList.subList(
+                        lastSeenIndex, allMessagesArrayList.size()));
+                
+                setSeenAttribute(req, allMessagesArrayList.size() - 1);
             }
 
-            return msgs;
+            return msgs+"\n";
         });
 
         // Send message
@@ -62,10 +50,9 @@ public class Main {
             String msg = req.queryParams("msg");
 
             synchronized (allMessagesArrayList) {
-                allMessagesArrayList.add("From User " + user(req) + ":");
+                allMessagesArrayList.add("From User " + user(req) + " on "
+                        + req.session().id() + ":");
                 allMessagesArrayList.add(msg);
-                allMessagesArrayList.add(req.session().id());
-                setSeenAttribute(req, allMessagesArrayList.size() - 1);
             }
 
             return msg;
@@ -86,7 +73,7 @@ public class Main {
     private static spark.Session getSession(spark.Request req) {
         spark.Session s = req.session(true);
         if (s.isNew()) {
-            s.attribute("seen", 0);
+            s.attribute("seen", -1);
         }
         return s;
     }
