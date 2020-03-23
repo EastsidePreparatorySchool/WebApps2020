@@ -64,9 +64,7 @@ function loginUserHTML() {
 //    updateMessagesTextArea();
 }
 
-for (var i=0; i<50; i++) {
-    plus(i, i);
-}
+var updateMessageInverval = setInterval(function (){updateMessagesTextArea();}, 500);
 
 
 

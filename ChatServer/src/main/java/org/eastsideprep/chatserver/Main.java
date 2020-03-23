@@ -6,6 +6,7 @@
 package org.eastsideprep.chatserver;
 
 import java.util.ArrayList;
+import java.util.List;
 import static spark.Spark.*;
 
 // @Author: Kenneth Y.
@@ -33,14 +34,18 @@ public class Main {
 
             synchronized (allMessagesArrayList) {
                 int lastSeenIndex = getSeenIndex(req) + 1;
-                
-                msgs = String.join("\n", allMessagesArrayList.subList(
-                        lastSeenIndex, allMessagesArrayList.size()));
-                
-                setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                final List<String> newMsgs
+                        = allMessagesArrayList.subList(
+                                lastSeenIndex, allMessagesArrayList.size());
+
+                if (newMsgs.size() > 0) {
+                    msgs = String.join("\n", newMsgs);
+                    msgs += "\n";
+                    setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                }
             }
 
-            return msgs+"\n";
+            return msgs;
         });
 
         // Send message
