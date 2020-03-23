@@ -87,7 +87,7 @@ function refresh_user_namebox() {
 
 function set_user_namebox(name) {
     console.log("set_user_namebox called with parameter " + name);
-    document.getElementById("usr-namebox").innerHTML = "Logged in as " + name + ". <a href='/logout'>log out</a>";
+    document.getElementById("usr-namebox").innerHTML = "Logged in as " + name + ". <button onclick='logout()'>Switch User</button>";
     if(name === "admin") document.getElementById("usr-namebox").innerHTML += "  <button onclick='clear_chat()'>Clear Chat</button>";
 }
 
@@ -112,3 +112,12 @@ get_username(function (data) {
 });
 
 setInterval(show_new_messages, 500);
+
+//for send when enter is pressed
+let input = document.getElementById("input");
+input.addEventListener("keyup", function(event) {
+    if(event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("sendbtn").click();
+    }
+});

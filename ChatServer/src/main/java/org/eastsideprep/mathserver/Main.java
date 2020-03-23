@@ -12,6 +12,8 @@ public class Main {
 
     public static ArrayList<String> messages = new ArrayList<String>();
 
+    public static ArrayList<String> loggedInUsers = new ArrayList<String>();
+    
     public static String[] illegalUsernames = {
         "ADMIN",
         "HACK",
@@ -57,6 +59,22 @@ public class Main {
                     
                     System.out.println("Username " + inputName + " was illegal, renaming to " + newUsr);
                     
+                    loggedInUsers.add(newUsr);
+                    
+                    return newUsr;
+                }
+                
+            }
+            
+            for (String u : loggedInUsers) {
+                if (inputName.toLowerCase().equals(u.toLowerCase())){
+                    String newUsr = inputName + "_2";
+                    getSession(req).attribute("usr", newUsr);
+                    
+                    System.out.println("Username " + inputName + " already existed, renaming to " + newUsr);
+                    
+                    loggedInUsers.add(newUsr);
+                    
                     return newUsr;
                 }
             }
@@ -67,7 +85,9 @@ public class Main {
 
             System.out.println("Username set to " + getUser(req));
 
-            return getUser(req);
+            loggedInUsers.add(inputName);
+            
+            return inputName;
 
         });
 
@@ -86,7 +106,11 @@ public class Main {
 
         get("/logout", (req, res) -> {
             System.out.println("Logout requested by user " + getUser(req));
+            
+            loggedInUsers.remove(getUser(req));
+            
             getSession(req).attribute("usr", null);
+            
             return "Logged out. <a href='/'>log in</a>";
         });
 

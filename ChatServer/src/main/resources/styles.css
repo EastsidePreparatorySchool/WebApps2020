@@ -15,6 +15,7 @@ button{
 #result{
     background-color: #d4ed9d;
     color: #3d3931;
+    font-family: monospace;
 }
 
 body{
