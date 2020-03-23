@@ -10,7 +10,7 @@ function plus(a, b, f) {
             .catch(error => {
                 console.log("error: " + error);
             });
-    
+            
 }
 
 
