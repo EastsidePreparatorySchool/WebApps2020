@@ -1,0 +1,28 @@
+h1{
+    font-family:"Arial";
+}
+
+button{
+    background-color: #3a5465;
+    color: white;
+}
+
+#input{
+    background-color: #d4ed9d;
+    color: black;
+}
+
+#result{
+    background-color: #d4ed9d;
+    color: #3d3931;
+    font-family: monospace;
+}
+
+body{
+    background-color: #3d3931;
+    color: white;
+}
+
+a{
+    color: #3dc7be;
+}
