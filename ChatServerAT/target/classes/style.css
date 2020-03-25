@@ -1,0 +1,26 @@
+h1{
+    font-family:"BioSans";
+    font-size: 23pt;
+}
+
+button{
+    background-color: #3dc7be;
+    color: white;
+}
+
+#input{
+    background-color: cadetblue;
+    color: white;
+}
+
+#result{
+    background-color: darkslategrey;
+    color: #ffffff;
+    font-family: monospace;
+}
+
+body{
+    background-color: black;
+    color: white;
+}
+
