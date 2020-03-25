@@ -22,9 +22,9 @@ public class Main {
         put("/send", (req, res) -> {
             System.out.println("Send message requested");
 
-            String msg = req.queryParams("msg");
+            String msg = req.queryParams("msg"); 
             synchronized (msgs) {
-                msgs.add(user(req)+"~ "+msg);
+                msgs.add(user(req)+"~ "+msg); //combine username
             }
             System.out.println(msgs.toString());
 
