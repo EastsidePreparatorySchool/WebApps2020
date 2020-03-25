@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MathServer</title>
+        <title>ChatServer</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>MathServer</div>
-        
-        
-        <input id="p1" placeholder="enter value" type="text"><br>
-        <input id="p2" placeholder="enter value" type="text"><br>
-        
-        <button onclick="plus_from_input()">Add!</button>
-        
+        <div>ChatServer</div>
+
         <p>get messages here:</p>
         <textarea id="result"></textarea>
-        <button onclick="getMessages()">Get All Messages</button>
-        
+        <button onclick="getMessagesTextArea()">Get All Messages</button>
+
         <p>send message here:</p>
         <textarea id="messageSender"></textarea>
-        <button onclick="sendMessages()">Send Messages!</button>
-        
+        <button onclick="sendMessagesTextArea()">Send Messages!</button>
+
         <script src="common.js"></script>
         <script src="script.js"></script>
     </body>
