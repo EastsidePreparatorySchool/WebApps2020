@@ -39,6 +39,8 @@ function getMessagesTextArea() {
     });
 }
 
+setInterval(function (){getMessagesTextArea();}, 100);
+
 function sendMessages(msg) {
     request({url: "/send?message=" + msg, verb: "PUT"})
             .then(data => {

@@ -63,16 +63,18 @@ public class Main {
         messages.add("Second message");
 
         get("/update_messages", (req, res) -> {
-            System.out.println("Get all messages requested");
+            System.out.println("Geting all messages requested");
             String mes = String.join(" \n", messages);
             return (mes);
         });
 
         put("/send", (req, res) -> {
-            System.out.println("Send message requested");
-            String mess = req.queryParams("message");
-            messages.add(mess);
-            return mess;
+            synchronized (messages) {
+                System.out.println("Send message requested");
+                String mess = req.queryParams("message");
+                messages.add(mess);
+                return mess;
+            }
         });
     }
 }
