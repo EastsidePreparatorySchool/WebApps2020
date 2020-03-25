@@ -41,7 +41,7 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-var x = document.getElementById("msgBox").value;
+var x = document.getElementById("msgBox");
 
 //taken from w3schools
 x.addEventListener("keyup", function(event) {
@@ -49,6 +49,7 @@ x.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     sendMsg();
+    x.value="";
   }
 });
 
