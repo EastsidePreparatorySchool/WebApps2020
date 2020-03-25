@@ -61,8 +61,9 @@ public class Main {
 
         ArrayList<String> messages = new ArrayList<String>();
         messages.add("First Message");
-        messages.add("Second message");
+        
 
+        
         get("/update_messages", (req, res) -> {
             synchronized (messages) {
                 System.out.println("Get all messages requested");
@@ -75,19 +76,28 @@ public class Main {
             synchronized (messages) {
                 System.out.println("Send message requested");
                 String mess = req.queryParams("message");
-                messages.add(mess);
+             
+                messages.add(req.session().attribute("username")+": "+mess);
+
+
                 return mess;
             }
         });
         put("/login", (req, res) -> {
             login(req);
-            System.out.println("login attempt: "+req.body());
-            String username = req.queryParams("userID");
+            System.out.println("login attempt: " + req.body());
+            String username = req.body();
 
             return username;
 
         });
-
+        before("/protected/*", (req, res) -> {
+            System.out.println("username");
+            if (req.session().attribute("username") == null) {
+                System.out.println("username");
+                halt(401, "You must login first.");
+            }
+        });
     }
 
     private static String login(spark.Request req) {

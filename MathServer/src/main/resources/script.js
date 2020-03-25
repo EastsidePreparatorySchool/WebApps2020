@@ -1,15 +1,16 @@
 console.log("Hello world!");
 function login() {
-    var userID = alert(prompt("login info:", "type here")); //doesn't pop up yet
+    var userID = prompt("login info:", "type here");
     if (userID == null || userID == "") {
         txt = "no login given";
     } else {
-         request({url: "/login", body: userID, verb: "GET"})
-            .then(data => {          
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
+
+        request({url: "/login", body: userID, verb: "PUT"})
+                .then(data => {
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
     }
 }
 
