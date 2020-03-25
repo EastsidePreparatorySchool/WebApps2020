@@ -1,5 +1,17 @@
 console.log("Hello world!");
-
+function login() {
+    var userID = alert(prompt("login info:", "type here")); //doesn't pop up yet
+    if (userID == null || userID == "") {
+        txt = "no login given";
+    } else {
+         request({url: "/login", body: userID, verb: "GET"})
+            .then(data => {          
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+    }
+}
 
 function plus(a, b, f) {
     request({url: "/plus?p1=" + a + "&p2=" + b, verb: "GET"})
@@ -51,5 +63,5 @@ function sendMessages(msg) {
 
 function sendMessagesTextArea() {
     sendMessages(document.getElementById("messageSender").value);
-    getMessageTextArea();
+
 }
