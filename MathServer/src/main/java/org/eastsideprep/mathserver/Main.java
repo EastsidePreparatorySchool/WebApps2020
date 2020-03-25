@@ -63,9 +63,11 @@ public class Main {
         messages.add("Second message");
 
         get("/update_messages", (req, res) -> {
-            System.out.println("Geting all messages requested");
-            String mes = String.join(" \n", messages);
-            return (mes);
+            synchronized (messages) {
+                System.out.println("Get all messages requested");
+                String mes = String.join(" \n", messages);
+                return (mes);
+            }
         });
 
         put("/send", (req, res) -> {
@@ -76,5 +78,18 @@ public class Main {
                 return mess;
             }
         });
+        put("/login", (req, res) -> {
+            login(req);
+            System.out.println("login attempt: "+req.body());
+            String username = req.queryParams("userID");
+
+            return username;
+        });
+
+    }
+
+    private static String login(spark.Request req) {
+        req.session().attribute("username", req.body());
+        return "login sucessful";
     }
 }
