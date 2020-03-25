@@ -33,8 +33,13 @@ public class Main {
         });
 
         get("/get", (req, res) -> {   
+            String s = "";
             synchronized (msgs) {
-                return msgs.toString();
+                for (int i=0; i<msgs.size(); i++){
+                    s+=(msgs.get(i)+"\n");
+                }
+                        
+                return s;
             }
         });
 

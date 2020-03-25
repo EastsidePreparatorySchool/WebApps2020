@@ -31,9 +31,7 @@ function getNew() {
             .then(data => {
                 console.log(data);
                 
-                var x = msgs;
-          //      x.join("\n");
-                document.getElementById("result").value = x;
+                document.getElementById("result").value = data;
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -41,9 +39,16 @@ function getNew() {
 
 }
 
-// setInterval(getNew, 500);
+setInterval(getNew, 300);
 
+var x = document.getElementById("msgBox").value;
 
+//taken from w3schools
+x.addEventListener("keyup", function(event) {
 
-
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    sendMsg();
+  }
+});
 
