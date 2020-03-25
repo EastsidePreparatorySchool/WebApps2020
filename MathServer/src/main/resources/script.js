@@ -1,6 +1,7 @@
 console.log("Hello world!");
 function login() {
     var userID = prompt("login info:", "type here");
+     document.getElementById("loginButton").disabled = true;
     if (userID == null || userID == "") {
         txt = "no login given";
     } else {
@@ -14,7 +15,7 @@ function login() {
     }
 }
 
-
+setInterval(function (){getMessagesTextArea();}, 100);
 
 function getMessages(f) {
     textarea = document.getElementById("result");

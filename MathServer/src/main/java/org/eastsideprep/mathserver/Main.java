@@ -17,14 +17,9 @@ public class Main {
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
 
-      
-        
-
         ArrayList<String> messages = new ArrayList<String>();
         messages.add("First Message");
-        
 
-        
         get("/update_messages", (req, res) -> {
             synchronized (messages) {
                 System.out.println("Get all messages requested");
@@ -35,11 +30,14 @@ public class Main {
 
         put("/send", (req, res) -> {
             synchronized (messages) {
+                if (req.session().attribute("username") == null) {
+                    req.session().attribute("username", "unknown");
+                   
+                }
                 System.out.println("Send message requested");
                 String mess = req.queryParams("message");
-             
-                messages.add(req.session().attribute("username")+": "+mess);
 
+                messages.add(req.session().attribute("username") + ": " + mess);
 
                 return mess;
             }
@@ -62,6 +60,7 @@ public class Main {
     }
 
     private static String login(spark.Request req) {
+       
         req.session().attribute("username", req.body());
         return "login successful";
     }
