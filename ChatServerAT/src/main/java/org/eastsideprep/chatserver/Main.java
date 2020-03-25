@@ -14,7 +14,6 @@ public class Main {
     public static ArrayList<String> msgs = new ArrayList<>();
 
     public static void main(String[] args) {
-        // msgs.add("hi");
         port(80);
 
         // tell spark where to find all the HTML and JS
@@ -29,14 +28,14 @@ public class Main {
             }
             System.out.println(msgs.toString());
 
-            return HttpStatus.ACCEPTED_202;
+            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
         });
 
         get("/get", (req, res) -> {   
             String s = "";
             synchronized (msgs) {
-                for (int i=0; i<msgs.size(); i++){
-                    s+=(msgs.get(i)+"\n");
+                for (int i = 0; i < msgs.size(); i++){
+                    s+=(msgs.get(i)+"\n"); // making array into strings
                 }
                         
                 return s;
@@ -64,10 +63,5 @@ public class Main {
             user = "unknown"; // default name
         }
         return user;
-    }
-
-    //logging in
-    void login(spark.Request req, String username) {
-        getSession(req).attribute("user", username);
     }
 }
