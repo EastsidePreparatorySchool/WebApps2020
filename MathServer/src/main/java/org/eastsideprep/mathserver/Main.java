@@ -17,47 +17,8 @@ public class Main {
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
 
-        // get a silly route up for testing
-        get("/hello", (req, res) -> {
-            System.out.println("Hey we were invoked:");
-            return "Hello world from code";
-        });
-
-        get("/tau", (req, res) -> {
-            System.out.println("Tau requested");
-            return 2 * Math.PI;
-        });
-
-        get("/plus", (req, res) -> {
-            System.out.println("Addition requested :D");
-            String p1 = req.queryParams("p1");
-            String p2 = req.queryParams("p2");
-
-            if (p1 == null || p2 == null) {
-                throw halt();
-            }
-
-            double d1 = Double.parseDouble(p1);
-            double d2 = Double.parseDouble(p2);
-
-            return d1 + d2;
-        });
-
-        get("/minus", (req, res) -> {
-            System.out.println("Substraction requested");
-            String p1 = req.queryParams("p1");
-            String p2 = req.queryParams("p2");
-
-            if (p1 == null || p2 == null) {
-
-                throw halt();
-            }
-
-            double d1 = Double.parseDouble(p1);
-            double d2 = Double.parseDouble(p2);
-
-            return d1 - d2;
-        });
+      
+        
 
         ArrayList<String> messages = new ArrayList<String>();
         messages.add("First Message");
@@ -102,6 +63,6 @@ public class Main {
 
     private static String login(spark.Request req) {
         req.session().attribute("username", req.body());
-        return "login sucessful";
+        return "login successful";
     }
 }
