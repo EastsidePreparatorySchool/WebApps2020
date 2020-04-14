@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ChatServer</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>ChatServer</h1>
+
+        <div id="loginBox">
+            <input id="username" placeholder="enter Username" type="text">
+
+            <button onclick="loginUserHTML()">Login!</button>
+        </div>
+
+        <div id ="app" style="display: none;">
+            <textarea id="result" style="width: 75%; height: 200px;"></textarea><br>
+
+
+            <input id="textIn" placeholder="Your Message Here" type="text"><br>
+            <button onclick="sendMessageAndUpdateTextArea()">Send</button>
+
+            <script src="common.js"></script>
+            <script src="script.js"></script>
+        </div>
+    </body>
+</html>
