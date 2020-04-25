@@ -9,10 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import static spark.Spark.*;
 
+class Message {
+
+    public String userName;
+    public String messageString;
+
+    public Message(String fromUser, String msgString) {
+        userName = fromUser;
+        messageString = msgString;
+    }
+}
+
 // @Author: Kenneth Y.
 public class Main {
 
-    public static final ArrayList<String> allMessagesArrayList
+    public static final ArrayList<Message> allMessagesArrayList
             = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -20,12 +31,11 @@ public class Main {
         staticFiles.location("/");
         port(80);
 
-        // Manually Populate
-        allMessagesArrayList.add("Message 1");
-        allMessagesArrayList.add("Second Message");
-        allMessagesArrayList.add("Something else");
+//        // Manually Populate
+//        allMessagesArrayList.add("Message 1");
+//        allMessagesArrayList.add("Second Message");
+//        allMessagesArrayList.add("Something else");
 
-        // TODO: better handle displaying shown messages
         // get all new messages
         get("/update_messages", (req, res) -> {
             System.out.println("Update messages requested: ");
@@ -34,13 +44,14 @@ public class Main {
 
             synchronized (allMessagesArrayList) {
                 int lastSeenIndex = getSeenIndex(req) + 1;
-                final List<String> newMsgs
+                final List<Message> newMsgs
                         = allMessagesArrayList.subList(
                                 lastSeenIndex, allMessagesArrayList.size());
 
                 if (newMsgs.size() > 0) {
-                    msgs = String.join("\n", newMsgs);
-                    msgs += "\n";
+//                    msgs = String.join("\n", newMsgs);
+//                    msgs += "\n";
+                    msgs = new JSONRT().render(newMsgs);
                     setSeenAttribute(req, allMessagesArrayList.size() - 1);
                 }
             }
@@ -55,9 +66,10 @@ public class Main {
             String msg = req.queryParams("msg");
 
             synchronized (allMessagesArrayList) {
-                allMessagesArrayList.add("From User " + user(req) + " on "
-                        + req.session().id() + ":");
-                allMessagesArrayList.add(msg);
+//                allMessagesArrayList.add("From User " + user(req) + " on "
+//                        + req.session().id() + ":");
+//                allMessagesArrayList.add(msg);
+                allMessagesArrayList.add(new Message(user(req), msg));
             }
 
             return msg;
