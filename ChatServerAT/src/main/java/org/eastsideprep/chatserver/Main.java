@@ -6,54 +6,77 @@
 package org.eastsideprep.chatserver;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
 public class Main {
-    public static ArrayList<String> msgs = new ArrayList<>(); 
+public static ArrayList<String> msgs = new ArrayList<>();
+
+  public static Object getNewMessages(spark.Request req, spark.Response res) {
+        List<String> myMessages;
+        
+        synchronized (msgs) {
+            myMessages = msgs;
+        }
+        return myMessages;
+    }
+  
     public static void main(String[] args) {
-       // msgs.add("hi");
         port(80);
 
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
-        
+
         put("/send", (req, res) -> {
             System.out.println("Send message requested");
+
+            String msg = req.queryParams("msg"); 
+            synchronized (msgs) {
+                msgs.add(user(req)+"~ "+msg); //combine username
+            }
+            System.out.println(msgs.toString());
+
+            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
+        });
+              
+        
+     //   get("/protected/getnewmessages", "application/json", (req, res) ->  getNewMessages(req, res), new JSONRT());      
+              
+        get("/get", "application/json", (req, res) -> {   
+            JSONRT rt = new JSONRT();
+            String s = "";
+            synchronized (msgs) {
+                for (int i = 0; i < msgs.size(); i++){
+                    s+=(msgs.get(i)+"\n"); // making array into strings
+                }
+                
+                String result = rt.render(msgs);
+                        
+                return result;
+            }
+        }, new JSONRT());
+        
+        get("/login_user", (req, res) -> {
+            String user = req.queryParams("username");
+
+            getSession(req).attribute("username", user);
             
-            String msg = req.queryParams("msg");
-            synchronized(msgs) {
-               msgs.add(msg);
-               msgs.add(req.session().id());
-           }
-            return HttpStatus.ACCEPTED_202;
-        });
-        
-        get("/get", (req, res) -> { 
-            return msgs.toString();
-        });
-        
-        get("/login_user", (req, res) -> { 
-            String username = req.queryParams("username");
-            login(req, username);
-            return msgs.toString();
+            System.out.print(user);
+            return user;
         });
     }
-    
-    spark.Session getSession(spark.Request req) {
-            spark.Session s = req.session(true); // true means if there is none, make one
-            return s;
+
+    static spark.Session getSession(spark.Request req) {
+        spark.Session s = req.session(true); // true means if there is none, make one
+        return s;
     }
-    String user (spark.Request req) {
-        String user = getSession(req).attribute("user");
+
+    static String user(spark.Request req) {
+        String user = getSession(req).attribute("username");
         if (user == null) {
             user = "unknown"; // default name
         }
         return user;
-    }
-    
-    //logging in
-    void login(spark.Request req, String username) {
-        getSession(req).attribute("user", username);
     }
 }
