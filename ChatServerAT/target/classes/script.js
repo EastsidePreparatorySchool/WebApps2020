@@ -30,18 +30,20 @@ function getNew() {
     request({url: "/get", verb: "GET"})
             .then(data => {
                 let messages = JSON.parse(data);
+                console.log("this is messages:" + messages);
                 let output = "";
                 for (var i = 0; i < messages.length; i++) {
                     let s = messages[i];
                     
-                    if (!s.startsWith("hi")) {
-                        s = "    " + s; 
-                    }              
-                    
-                    output = output + s + "<br>";
+                    console.log(s);
+                    output = output + s + "\n";
                 }
                // console.log(data);
                 document.getElementById("result").value = output;
+                
+                 //var msgData = JSON.parse(data);
+                 //msgData.forEach(msg => {
+                 //document.getElementById("result").value += msg["userName"] + ": " + msg["messageString"] + "\n";});
             })
             .catch(error => {
                 console.log("error: " + error);

@@ -45,14 +45,13 @@ public static ArrayList<String> msgs = new ArrayList<>();
               
         get("/get", "application/json", (req, res) -> {   
             JSONRT rt = new JSONRT();
-            String s = "";
+            //String s = "";
             synchronized (msgs) {
-                for (int i = 0; i < msgs.size(); i++){
-                    s+=(msgs.get(i)+"\n"); // making array into strings
-                }
+                //for (int i = 0; i < msgs.size(); i++){
+                //    s+=(msgs.get(i)+"\n"); // making array into strings
+                //}                
+                String result = rt.render(msgs);    
                 
-                String result = rt.render(msgs);
-                        
                 return result;
             }
         }, new JSONRT());
