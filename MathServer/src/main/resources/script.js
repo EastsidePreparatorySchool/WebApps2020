@@ -1,7 +1,7 @@
 console.log("Hello world!");
 function login() {
     var userID = prompt("login info:", "type here");
-     document.getElementById("loginButton").disabled = true;
+    document.getElementById("loginButton").disabled = true;
     if (userID == null || userID == "") {
         txt = "no login given";
     } else {
@@ -15,13 +15,15 @@ function login() {
     }
 }
 
-setInterval(function (){getMessagesTextArea();}, 100);
+setInterval(function () {
+    getMessagesTextArea();
+}, 100);
 
 function getMessages(f) {
     textarea = document.getElementById("result");
     request({url: "/update_messages", verb: "GET"})
             .then(data => {
-                console.log("success, updating messages");
+                console.log("success!");
                 f(data);
             })
             .catch(error => {
@@ -31,11 +33,15 @@ function getMessages(f) {
 
 function getMessagesTextArea() {
     getMessages(function (data) {
-        document.getElementById("result").value = data;
+        var msg = JSON.parse(data).toString();
+        msg = msg.replace(/~~/g, " \n");
+        document.getElementById("result").value = msg;
     });
 }
 
-setInterval(function (){getMessagesTextArea();}, 100);
+setInterval(function () {
+    getMessagesTextArea();
+}, 100);
 
 function sendMessages(msg) {
     request({url: "/send?message=" + msg, verb: "PUT"})

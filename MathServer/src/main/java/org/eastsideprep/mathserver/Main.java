@@ -63,8 +63,8 @@ public class Main {
 
         get("/update_messages", (req, res) ->{
             synchronized (messages) {
-                System.out.println("Get all messages requested");
-                String mes = String.join(" \n", messages);
+                //System.out.println("Get all messages requested");
+                String mes = String.join("~~", messages);
                 String msg = new JSONRT().render(mes);
                 return (msg);
             }
@@ -91,6 +91,7 @@ public class Main {
 
             return username;
         });
+        
         before("/protected/*", (req, res) -> {
             System.out.println("username");
             if (req.session().attribute("username") == null) {
@@ -99,6 +100,19 @@ public class Main {
             }
         });
     }
+    
+//      public static Object getMessages(spark.Request req, spark.Response res) {
+//        Context ctx = getContextFromSession(req.session());
+//        List<String> myMessages;
+//        
+//        synchronized (ctx) {
+//            synchronized (messages) {
+//                myMessages = messages.subList(ctx.seen, messages.size());
+//                ctx.seen = messages.size();
+//            }
+//        }
+//        return myMessages;
+//    }
 
     private static String login(spark.Request req) {
        
