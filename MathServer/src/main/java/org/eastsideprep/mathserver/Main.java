@@ -66,7 +66,8 @@ public class Main {
             synchronized (messages) {
                 System.out.println("Get all messages requested");
                 String mes = String.join(" \n", messages);
-                return (mes);
+                String msg = new JSONRT().render(mes);
+                return (msg);
             }
         });
 
