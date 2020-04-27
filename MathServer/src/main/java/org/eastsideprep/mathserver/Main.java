@@ -20,11 +20,12 @@ public class Main {
         ArrayList<String> messages = new ArrayList<String>();
         messages.add("First Message");
 
-        get("/update_messages", (req, res) -> {
+        get("/update_messages", (req, res) ->{
             synchronized (messages) {
                 System.out.println("Get all messages requested");
                 String mes = String.join(" \n", messages);
-                return (mes);
+                String message = new JSONRT().render(mes);
+                return (message);
             }
         });
 
