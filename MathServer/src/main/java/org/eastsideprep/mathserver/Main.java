@@ -23,7 +23,7 @@ public class Main {
         get("/update_messages", (req, res) ->{
             synchronized (messages) {
                 System.out.println("Get all messages requested");
-                String mes = String.join(" \n", messages);
+                String mes = String.join("\n", messages);
                 String message = new JSONRT().render(mes);
                 return (message);
             }

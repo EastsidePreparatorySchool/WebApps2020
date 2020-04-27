@@ -22,7 +22,10 @@ function getMessages(f) {
     request({url: "/update_messages", verb: "GET"})
             .then(data => {
                 console.log("success, updating messages");
+      
                 f(data);
+                
+                
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -30,9 +33,12 @@ function getMessages(f) {
 }
 
 function getMessagesTextArea() {
+    
     getMessages(function (data) {
+        
         document.getElementById("result").value = data;
     });
+    
 }
 
 function sendMessages(msg) {
