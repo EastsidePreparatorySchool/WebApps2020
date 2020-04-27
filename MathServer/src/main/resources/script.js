@@ -1,37 +1,21 @@
 console.log("Hello world!");
 function login() {
-    var userID = alert(prompt("login info:", "type here")); //doesn't pop up yet
+    var userID = prompt("login info:", "type here");
+     document.getElementById("loginButton").disabled = true;
     if (userID == null || userID == "") {
         txt = "no login given";
     } else {
-         request({url: "/login", body: userID, verb: "GET"})
-            .then(data => {          
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
+
+        request({url: "/login", body: userID, verb: "PUT"})
+                .then(data => {
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
     }
 }
 
-function plus(a, b, f) {
-    request({url: "/plus?p1=" + a + "&p2=" + b, verb: "GET"})
-            .then(data => {
-                console.log("success: " + a + "+" + b + " is " + data);
-                f(data);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
-
-function plus_from_input() {
-    var p1 = document.getElementById("p1").value;
-    var p2 = document.getElementById("p2").value;
-
-    plus(p1, p2, function (data) {
-        document.getElementById("result").value = data;
-    });
-}
+setInterval(function (){getMessagesTextArea();}, 100);
 
 function getMessages(f) {
     textarea = document.getElementById("result");
