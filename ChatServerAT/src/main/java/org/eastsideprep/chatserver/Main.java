@@ -8,11 +8,14 @@ package org.eastsideprep.chatserver;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jetty.http.HttpStatus;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import static spark.Spark.*;
 
-class Message {
+class Message { // created class to be able to add more details to message
     public String username;
     public String msg;
+    public String msgtime;
 }
 
 public class Main {
@@ -29,12 +32,16 @@ public class Main {
             System.out.println("Send message requested");
 
             String msg = req.queryParams("msg"); 
-            Message newMessage = new Message();
-            newMessage.username = user(req);
-            newMessage.msg = msg;
+            Message newMessage = new Message(); // creating message object
+            newMessage.username = user(req); // setting value of username property 
+            
+            // wanted to add timestamp, learned how to from: https://www.javatpoint.com/java-get-current-date
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss"); 
+            newMessage.msgtime = dtf.format(LocalDateTime.now()); // setting value of msgtime property
+            newMessage.msg = msg; // setting value of msg property
                 
             synchronized (msgs) {
-                msgs.add(newMessage);
+                msgs.add(newMessage); // adding message object to arraylist
                 //msgs.add(user(req)+"~ "+msg); //combine username
                 System.out.println(msgs.toString());
             }
@@ -43,9 +50,9 @@ public class Main {
         });     
               
         get("/get", "application/json", (req, res) -> {   
-            JSONRT rt = new JSONRT();
+            JSONRT rt = new JSONRT(); // created a response transformer object
             synchronized (msgs) {
-                String result = rt.render(msgs);
+                String result = rt.render(msgs); // rendered java objects into JSON string
                 
                 return result;
             }
