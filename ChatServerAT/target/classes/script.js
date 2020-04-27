@@ -26,29 +26,29 @@ function sendMsg() {
             });
 }
 
+function addMessage() {
+    console.log("msg:" + msg)
+    console.log("username:" + msg.username);
+    console.log("msg.msg:" + msg.msg);    
+}
+
 function getNew() {
     request({url: "/get", verb: "GET"})
             .then(data => {
-                let messages = JSON.parse(data);
-                console.log("this is messages:" + messages);
-                let output = "";
-                for (var i = 0; i < messages.length; i++) {
-                    let s = messages[i];
-                    
-                    console.log(s);
-                    output = output + s + "\n";
-                }
-               // console.log(data);
-                document.getElementById("result").value = output;
+                var messages = JSON.parse(JSON.parse(data));
                 
-                 //var msgData = JSON.parse(data);
-                 //msgData.forEach(msg => {
-                 //document.getElementById("result").value += msg["userName"] + ": " + msg["messageString"] + "\n";});
+                var msgOutput = "";
+                for(var i = 0; i < messages.length; i++) {
+                    var msg = messages[i];
+                    
+                    msgOutput += msg.username + ": " + msg.msg + "\n";         
+                }       
+                
+                document.getElementById("result").value = msgOutput;
             })
             .catch(error => {
                 console.log("error: " + error);
             });
-
 }
 
 setInterval(getNew, 300);

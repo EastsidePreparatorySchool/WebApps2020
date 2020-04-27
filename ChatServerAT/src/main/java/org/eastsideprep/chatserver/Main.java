@@ -10,17 +10,14 @@ import java.util.List;
 import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
-public class Main {
-public static ArrayList<String> msgs = new ArrayList<>();
+class Message {
+    public String username;
+    public String msg;
+}
 
-  public static Object getNewMessages(spark.Request req, spark.Response res) {
-        List<String> myMessages;
-        
-        synchronized (msgs) {
-            myMessages = msgs;
-        }
-        return myMessages;
-    }
+public class Main {
+
+  public static ArrayList<Message> msgs = new ArrayList<>();
   
     public static void main(String[] args) {
         port(80);
@@ -32,25 +29,23 @@ public static ArrayList<String> msgs = new ArrayList<>();
             System.out.println("Send message requested");
 
             String msg = req.queryParams("msg"); 
+            Message newMessage = new Message();
+            newMessage.username = user(req);
+            newMessage.msg = msg;
+                
             synchronized (msgs) {
-                msgs.add(user(req)+"~ "+msg); //combine username
+                msgs.add(newMessage);
+                //msgs.add(user(req)+"~ "+msg); //combine username
+                System.out.println(msgs.toString());
             }
-            System.out.println(msgs.toString());
 
             return HttpStatus.ACCEPTED_202; // returning that our request was accepted
-        });
-              
-        
-     //   get("/protected/getnewmessages", "application/json", (req, res) ->  getNewMessages(req, res), new JSONRT());      
+        });     
               
         get("/get", "application/json", (req, res) -> {   
             JSONRT rt = new JSONRT();
-            //String s = "";
             synchronized (msgs) {
-                //for (int i = 0; i < msgs.size(); i++){
-                //    s+=(msgs.get(i)+"\n"); // making array into strings
-                //}                
-                String result = rt.render(msgs);    
+                String result = rt.render(msgs);
                 
                 return result;
             }
