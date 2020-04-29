@@ -21,9 +21,8 @@ function getMessages(f) {
     textarea = document.getElementById("result");
     request({url: "/update_messages", verb: "GET"})
             .then(data => {
-                console.log("success, updating messages");
-      
                 f(data);
+               
                 
                 
             })
@@ -35,8 +34,9 @@ function getMessages(f) {
 function getMessagesTextArea() {
     
     getMessages(function (data) {
-        
-        document.getElementById("result").value = data;
+       var msg = JSON.parse(data).toString();
+       msg = msg.replace(/~~/g, " \n");
+        document.getElementById("result").value = msg;
     });
     
 }

@@ -18,12 +18,12 @@ public class Main {
         staticFiles.location("/");
 
         ArrayList<String> messages = new ArrayList<String>();
-        messages.add("First Message");
+        
 
         get("/update_messages", (req, res) ->{
             synchronized (messages) {
-                System.out.println("Get all messages requested");
-                String mes = String.join("\n", messages);
+               
+                String mes = String.join("~~", messages);
                 String message = new JSONRT().render(mes);
                 return (message);
             }
