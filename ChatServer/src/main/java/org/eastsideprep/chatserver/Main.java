@@ -11,6 +11,8 @@ import static spark.Spark.*;
 
 // @Author: Kenneth Y.
 public class Main {
+    
+    static JSONRT gson = new JSONRT();
 
     public static final ArrayList<String> allMessagesArrayList
             = new ArrayList<>();
@@ -27,7 +29,7 @@ public class Main {
 
         // TODO: better handle displaying shown messages
         // get all new messages
-        get("/update_messages", (req, res) -> {
+        get("/update_messages", "application/json", (req, res) -> {
             System.out.println("Update messages requested: ");
 
             String msgs = "";
@@ -45,8 +47,8 @@ public class Main {
                 }
             }
 
-            return msgs;
-        });
+            return new Message(msgs, getSession(req).attribute("user"));
+        }, new JSONRT());
 
         // Send message
         put("/send_message", (req, res) -> {
@@ -67,7 +69,9 @@ public class Main {
         put("/login_user", (req, res) -> {
             System.out.println("Login user requested");
 
-            String username = req.queryParams("username");
+            String usernameJSON = req.queryParams("username");
+
+            String username = gson.render(usernameJSON);
 
             login(req, username);
 

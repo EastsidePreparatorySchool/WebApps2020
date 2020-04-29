@@ -16,7 +16,11 @@ function plus(a, b, f) {
 function updateMessages(f) {
     request({url: "/update_messages", verb: "GET"}).then(data => {
         console.log("Success! Updating Messages");
-        f(data);
+        
+        let table = JSON.parse(data);      
+        if (table["msg"] !== "") {
+            f(table);
+        }
     }).catch(error => {
         console.log("Something borked: "+error);
     });
@@ -31,7 +35,12 @@ function sendMessage(msg) {
 }
 function loginUser(username) {
     console.log("Login user "+username);
-    request({url: "/login_user?username="+username, verb: "PUT"}).then(data => {
+    
+    //let json = JSON.stringify({"username":username, "timestamp":new Date().getTime()});
+    let json = username;
+    console.log(json);
+    
+    request({url: "/login_user?username="+json, verb: "PUT"}).then(data => {
         console.log("Success! Logged in user");
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("app").style.display = "block";
@@ -48,7 +57,7 @@ function plus_from_input() {
     plus(p1,p2,function (data) { document.getElementById("result").value = data; });
 }
 function updateMessagesTextArea() {
-    updateMessages(function (data) { document.getElementById("result").value += data; });
+    updateMessages(function (table) { document.getElementById("result").value += "\n" + table["msg"] + " -" + table["username"]; });
 }
 function sendMessageAndUpdateTextArea() {
     var msg = document.getElementById("textIn").value;
