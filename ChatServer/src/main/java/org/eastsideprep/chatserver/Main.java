@@ -7,11 +7,13 @@ package org.eastsideprep.chatserver;
 
 import java.util.ArrayList;
 import java.util.List;
+import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 // @Author: Kenneth Y.
 public class Main {
-    
+
     static JSONRT gson = new JSONRT();
 
     public static final ArrayList<String> allMessagesArrayList
@@ -49,6 +51,15 @@ public class Main {
 
             return new Message(msgs, getSession(req).attribute("user"));
         }, new JSONRT());
+
+        get("/headers", (Request req, Response res) -> {
+            System.out.println("Headers requested: ");
+            String result = "";
+
+            result = req.headers().stream().map((s) -> s + ":" + req.headers(s) + "<br>").reduce(result, String::concat);
+
+            return result; // TODO: Print this to client HTML
+        });
 
         // Send message
         put("/send_message", (req, res) -> {
