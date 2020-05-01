@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.eastsideprep.mathserver;
+package org.eastsideprep.hanabiserver;
 
 /**
  *
  * @author etardif
  */
-public interface HandInterface {
+public interface PlayerInterface {
     
 }
