@@ -17,6 +17,10 @@ function request(obj) {
                 reject(xhr.statusText);
             }
         };
+        
+//        xhr.setRequestHeader("Access-Control-Allow-Origin","https://epsauth.azurewebsites.net");
+//        xhr.setRequestHeader("Access-Control-Allow-Origin","*");
+        
         xhr.onerror = () => reject(xhr.statusText);
         xhr.send(obj.body);
     });

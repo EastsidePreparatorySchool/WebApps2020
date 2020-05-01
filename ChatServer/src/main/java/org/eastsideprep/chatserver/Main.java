@@ -26,6 +26,8 @@ public class Main {
     public static final ArrayList<Message> allMessagesArrayList
             = new ArrayList<>();
 
+    private boolean goodLogin = false;
+
     public static void main(String[] args) {
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
@@ -35,24 +37,27 @@ public class Main {
 //        allMessagesArrayList.add("Message 1");
 //        allMessagesArrayList.add("Second Message");
 //        allMessagesArrayList.add("Something else");
-
         // get all new messages
         get("/update_messages", (req, res) -> {
             System.out.println("Update messages requested: ");
 
             String msgs = "";
 
-            synchronized (allMessagesArrayList) {
-                int lastSeenIndex = getSeenIndex(req) + 1;
-                final List<Message> newMsgs
-                        = allMessagesArrayList.subList(
-                                lastSeenIndex, allMessagesArrayList.size());
+            if (user(req).equals("unknown")) {
+                msgs = "###UnknownUserNoLogin###";
+            } else {
+                synchronized (allMessagesArrayList) {
+                    int lastSeenIndex = getSeenIndex(req) + 1;
+                    final List<Message> newMsgs
+                            = allMessagesArrayList.subList(
+                                    lastSeenIndex, allMessagesArrayList.size());
 
-                if (newMsgs.size() > 0) {
+                    if (newMsgs.size() > 0) {
 //                    msgs = String.join("\n", newMsgs);
 //                    msgs += "\n";
-                    msgs = new JSONRT().render(newMsgs);
-                    setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                        msgs = new JSONRT().render(newMsgs);
+                        setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                    }
                 }
             }
 
@@ -84,6 +89,28 @@ public class Main {
             login(req, username);
 
             return username;
+        });
+        get("/login_365", (req, res) -> {
+            System.out.println("Login user with 365 requested");
+
+            String back = "http://" + req.host() + "/complete_login_365";
+            String url = "http://epsauth.azurewebsites.net/login?url=" + back
+                    + "&loginparam=useremail";
+
+            res.redirect(url);
+
+            return "365progress";
+        });
+        get("/complete_login_365", (req, res) -> {
+            System.out.println("Complete login from 365");
+
+            String useremail = req.queryParams("useremail");
+
+            login(req, useremail);
+
+            res.redirect("/");
+
+            return "";
         });
     }
 
