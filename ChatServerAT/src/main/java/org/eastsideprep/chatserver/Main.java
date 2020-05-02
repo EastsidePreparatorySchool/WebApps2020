@@ -67,7 +67,7 @@ public class Main {
             return user;
         });
     }
-
+    
     static spark.Session getSession(spark.Request req) {
         spark.Session s = req.session(true); // true means if there is none, make one
         return s;
