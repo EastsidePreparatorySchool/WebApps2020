@@ -26,6 +26,16 @@ function sendMsg() {
             });
 }
 
+function getHeaders() {
+    request({url: "/headers", verb: "GET"})
+            .then (data => {
+                console.log(data);
+    })
+            .catch(error => {
+                console.log("error" + error);
+    })
+}
+
 function getNew() {
     request({url: "/get", verb: "GET"})
             .then(data => {

@@ -66,7 +66,17 @@ public class Main {
             System.out.print(user);
             return user;
         });
+        get("/headers", (req, res) -> {
+            String result = "";
+            
+            for (String s : req.headers()) {
+                result += s + ":" + req.headers(s) + "<br>";
+            }
+
+            return result;
+        });
     }
+    
 
     static spark.Session getSession(spark.Request req) {
         spark.Session s = req.session(true); // true means if there is none, make one
