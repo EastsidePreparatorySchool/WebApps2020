@@ -58,17 +58,15 @@ public class Main {
                 return result;
             }
         }, new JSONRT());
-        
+
         get("/login", (req, res) -> {
             String userEmail = req.headers("X-MS-CLIENT-PRINCIPAL-NAME");
-            if (userEmail != null) {
-                // https://stackoverflow.com/questions/58125338/azure-function-app-gives-me-the-user-logged
-                String red = "https://epsauth.azurewebsites.net/.auth/login/aad/callback";
-                System.out.println("EPSAuth: redirecting: " + red);
-                res.redirect(red, 302);
-                return "ok";
-            }
-            throw halt(401);
+           // String back = "http://" + req.host() + "/complete_login_365";
+            // https://stackoverflow.com/questions/58125338/azure-function-app-gives-me-the-user-logged
+            String red = "https://epsauth.azurewebsites.net/login?=url" + back + "&loginparam=" + userEmail;
+            System.out.println("EPSAuth: redirecting: " + red);
+            res.redirect(red, 302);
+            return "ok";
         });
 
         get("/login_user", (req, res) -> {
