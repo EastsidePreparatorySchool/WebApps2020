@@ -59,24 +59,33 @@ public class Main {
             }
         }, new JSONRT());
 
-        get("/login", (req, res) -> {
-            String userEmail = req.headers("X-MS-CLIENT-PRINCIPAL-NAME");
-           // String back = "http://" + req.host() + "/complete_login_365";
-            // https://stackoverflow.com/questions/58125338/azure-function-app-gives-me-the-user-logged
-            String red = "https://epsauth.azurewebsites.net/login?=url" + back + "&loginparam=" + userEmail;
+        get("/login", (req, res) -> {             
+            System.out.println(req.host());  
+            String ifLoggedIn = "http://" + req.host() + "/login_user";
+            String red = "https://epsauth.azurewebsites.net/login?url=" + 
+                    ifLoggedIn + "&loginparam=useremail";
             System.out.println("EPSAuth: redirecting: " + red);
             res.redirect(red, 302);
-            return "ok";
+            
+            String userEmail = req.queryParams("useremail");
+            System.out.println(userEmail);
+
+            return userEmail;
         });
 
         get("/login_user", (req, res) -> {
-            String user = req.queryParams("username");
+            System.out.println("I MADE IT");
+            System.out.println(req.queryParams("useremail"));
+            String user = req.queryParams("useremail");
 
             getSession(req).attribute("username", user);
 
             System.out.print(user);
+            
+            res.redirect("/");
             return user;
         });
+        
         get("/headers", (req, res) -> {
             String result = "";
 

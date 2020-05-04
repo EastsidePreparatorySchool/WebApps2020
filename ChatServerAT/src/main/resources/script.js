@@ -1,14 +1,12 @@
 console.log("Hello world!");
 
-logIn();
-
 function logIn() {
-    var username = prompt("Please enter your username.");
-    request({url: "/login_user?username="+username, verb: "GET"})
+  //  var username = prompt("Please enter your username.");
+    request({url: "/login", verb: "GET"})
             .then(username => {
                 console.log(username);
-                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log(document.getElementById("displayLogIn").value);
+                //document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                //console.log(document.getElementById("displayLogIn").value);
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -61,6 +59,7 @@ function getNew() {
             });
 }
 
+logIn();
 setInterval(getNew, 300);
 
 var x = document.getElementById("msgBox");
