@@ -59,12 +59,15 @@ public class Main {
             }
         }, new JSONRT());
 
+        // sending request to EPSAuth
         get("/login", (req, res) -> {             
-            System.out.println(req.host());  
+            System.out.println(req.host());
             String ifLoggedIn = "http://" + req.host() + "/login_user";
             String red = "https://epsauth.azurewebsites.net/login?url=" + 
                     ifLoggedIn + "&loginparam=useremail";
             System.out.println("EPSAuth: redirecting: " + red);
+            
+            // redirects to /login_user and brings the useremail login parameter
             res.redirect(red, 302);
             
             String userEmail = req.queryParams("useremail");
@@ -76,16 +79,19 @@ public class Main {
         get("/login_user", (req, res) -> {
             System.out.println("I MADE IT");
             System.out.println(req.queryParams("useremail"));
+            // gets useremail to set as user id aka username
             String user = req.queryParams("useremail");
 
             getSession(req).attribute("username", user);
 
             System.out.print(user);
             
-            res.redirect("/");
+            // redirecting to "localhost"/my chat server's page
+            res.redirect("/", 302);
             return user;
         });
         
+        // route to get headers
         get("/headers", (req, res) -> {
             String result = "";
 

@@ -1,5 +1,11 @@
 console.log("Hello world!");
 
+// error/blockage by CORS policy occurs when I called this function logIn ()
+    // (and therefore send the request here, but I am able to bypass this by 
+    // manually typing "localhost/login" into the browser through which the 
+    // proper id is displayed and my user is logged in.
+logIn(); 
+
 function logIn() {
   //  var username = prompt("Please enter your username.");
     request({url: "/login", verb: "GET"})
@@ -59,7 +65,7 @@ function getNew() {
             });
 }
 
-logIn();
+
 setInterval(getNew, 300);
 
 var x = document.getElementById("msgBox");
