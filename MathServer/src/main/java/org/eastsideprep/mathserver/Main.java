@@ -18,11 +18,13 @@ public class Main {
         staticFiles.location("/");
 
         ArrayList<String> messages = new ArrayList<String>();
-        
 
-        get("/update_messages", (req, res) ->{
+        get("/headers", (req, res) -> {
+            return req.headers();
+        });
+        get("/update_messages", (req, res) -> {
             synchronized (messages) {
-               
+
                 String mes = String.join("~~", messages);
                 String message = new JSONRT().render(mes);
                 return (message);
@@ -33,7 +35,7 @@ public class Main {
             synchronized (messages) {
                 if (req.session().attribute("username") == null) {
                     req.session().attribute("username", "unknown");
-                   
+
                 }
                 System.out.println("Send message requested");
                 String mess = req.queryParams("message");
@@ -61,7 +63,7 @@ public class Main {
     }
 
     private static String login(spark.Request req) {
-       
+
         req.session().attribute("username", req.body());
         return "login successful";
     }
