@@ -9,6 +9,6 @@ package org.eastsideprep.hanabiserver;
  *
  * @author eoreizy
  */
-public class Hand {
+public class Hand implements HandInterface{    
     
 }

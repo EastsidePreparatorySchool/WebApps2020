@@ -10,5 +10,28 @@ package org.eastsideprep.hanabiserver.interfaces;
  * @author etardif
  */
 public interface HandInterface {
+    Arraylist<CardInterface> cards= new ArrayList<CardInterface> ();
     
+        
+    HandInterface(){
+         
+    }
+    
+    clue(){
+    
+    }
+    
+    CardInterface discard(int position){ //from 0 to 1
+        
+    }   
+    
+    
+    draw(CardInterFace Card){
+        
+    }
+    
+    
+    
+    
+    }
 }
