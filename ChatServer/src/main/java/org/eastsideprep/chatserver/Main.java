@@ -38,19 +38,22 @@ public class Main {
             String msgs = "";
 
             synchronized (allMessagesArrayList) {
-                int lastSeenIndex = getSeenIndex(req) + 1;
-                final List<String> newMsgs
-                        = allMessagesArrayList.subList(
-                                lastSeenIndex, allMessagesArrayList.size());
+                if (getSeenIndex(req) != null) {
+                    int lastSeenIndex = getSeenIndex(req) + 1;
+                    final List<String> newMsgs
+                            = allMessagesArrayList.subList(
+                                    lastSeenIndex, allMessagesArrayList.size());
 
-                if (newMsgs.size() > 0) {
-                    msgs = String.join("\n", newMsgs);
-                    msgs += "\n";
-                    setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                    if (newMsgs.size() > 0) {
+                        msgs = String.join("\n", newMsgs);
+                        msgs += "\n";
+                        setSeenAttribute(req, allMessagesArrayList.size() - 1);
+                    }
+                    return new Message(msgs, getSession(req).attribute("user"));
                 }
             }
 
-            return new Message(msgs, getSession(req).attribute("user"));
+            return new Message(msgs, "whack");
         }, new JSONRT());
 
         get("/headers", (Request req, Response res) -> {
@@ -95,16 +98,31 @@ public class Main {
             return username;
         });
         
-        get("/login_user", (req, res) -> {
-            String result = req.headers("X-MS-CLIENT-PRINCIPAL-NAME");
-            
-            System.out.println("Login user requested");
-            
-            res.redirect("/", 302);
-            
-            login(req, "string");
-            
+        get("/login_epsauth", (req, res) -> {
+            System.out.println("Login user with EPSAuth requested");
+
+            // Learned the code to access EPSAuth from Kenneth
+            //
+            String back = "http://" + req.host() + "/complete_login_epsauth"; // URL to return and complete the login
+            String url = "http://epsauth.azurewebsites.net/login?url=" + back 
+                    + "&loginparam=useremail";
+
+            res.redirect(url);
+            //
+
             return "ok";
+        });
+        
+        get("/complete_login_epsauth", (req, res) -> {
+            System.out.println("Complete login from EPSAuth");
+
+            String useremail = req.queryParams("useremail");
+
+            login(req, useremail);
+
+            res.redirect("/");
+
+            return "";
         });
         
         get("/session", (req, res) -> {
@@ -164,7 +182,7 @@ public class Main {
         getSession(req).attribute("seen", index);
     }
 
-    private static int getSeenIndex(spark.Request req) {
+    private static Integer getSeenIndex(spark.Request req) {
         return getSession(req).attribute("seen");
     }
 
