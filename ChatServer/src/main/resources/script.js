@@ -56,6 +56,17 @@ function plus_from_input() {
     
     plus(p1,p2,function (data) { document.getElementById("result").value = data; });
 }
+
+function displayHeaders() {
+    request({url: "/headers", verb: "GET"}).then(data => {
+        console.log("Headers page accessed");
+        
+        document.getElementById("result").value = data;
+    }).catch(error => {
+        console.log("Something borked: "+error);
+    });
+}
+
 function updateMessagesTextArea() {
     updateMessages(function (table) { document.getElementById("result").value += "\n" + table["msg"] + " -" + table["username"]; });
 }
