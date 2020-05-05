@@ -9,11 +9,6 @@ package org.eastsideprep.hanabiserver;
  *
  * @author eoreizy
  */
-public class Hand {
-    Arraylist<CardInterface> cards = new ArrayList<CardInterface> ();
-    
-    Hand(){
-         
-    }
+public class Hand implements HandInterface{    
     
 }
