@@ -79,14 +79,14 @@ public class Main {
         get("/login_user", (req, res) -> {
             System.out.println("I MADE IT");
             System.out.println(req.queryParams("useremail"));
+            
             // gets useremail to set as user id aka username
             String user = req.queryParams("useremail");
-
             getSession(req).attribute("username", user);
 
             System.out.print(user);
             
-            // redirecting to "localhost"/my chat server's page
+            // redirecting to "localhost"/my chat server's main page
             res.redirect("/", 302);
             return user;
         });
