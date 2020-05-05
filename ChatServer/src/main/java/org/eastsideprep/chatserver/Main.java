@@ -90,6 +90,16 @@ public class Main {
 
             return username;
         });
+        get("/get_headers", (req, res) -> {
+           System.out.println("Getting EPSAuth headers");
+           String headersOut = "";
+           headersOut = req.headers().stream().
+                    map((header) -> header+": "+req.headers(header)+"\n").
+                    reduce(headersOut,
+                    String::concat);
+           
+           return headersOut;
+        });
         get("/login_365", (req, res) -> {
             System.out.println("Login user with 365 requested");
 
