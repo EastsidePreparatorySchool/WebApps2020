@@ -1,6 +1,5 @@
 console.log("Hello world!");
 
-
 function plus(a, b, f) {
     request({url: "/plus?p1="+a+"&p2="+b, verb: "GET"})
             .then(data => {
@@ -9,10 +8,8 @@ function plus(a, b, f) {
             })
             .catch(error => {
                 console.log("error: " + error);
-            });
-    
+            }); 
 }
-
 
 function plus_from_input() {
     var p1 = document.getElementById("p1").value;
