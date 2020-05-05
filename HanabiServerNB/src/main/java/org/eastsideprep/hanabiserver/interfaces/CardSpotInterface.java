@@ -5,13 +5,10 @@
  */
 package org.eastsideprep.hanabiserver.interfaces;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  *
- * @author etardif
+ * @author mgoetzmann
  */
-public interface GameControlInterface {
-    public static HashMap<PlayerInterface, HandInterface> hands = new HashMap<PlayerInterface, HandInterface>() {};
+public interface CardSpotInterface {
+    
 }
