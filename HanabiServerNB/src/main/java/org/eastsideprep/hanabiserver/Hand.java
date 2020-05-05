@@ -7,8 +7,8 @@ package org.eastsideprep.hanabiserver;
 
 /**
  *
- * @author etardif
+ * @author eoreizy
  */
-public interface CardInterface {
+public class Hand {
     
 }

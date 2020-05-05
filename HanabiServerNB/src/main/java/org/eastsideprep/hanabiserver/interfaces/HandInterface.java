@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.eastsideprep.hanabiserver;
+package org.eastsideprep.hanabiserver.interfaces;
 
 /**
  *
  * @author etardif
  */
-public interface GameControlInterface {
+public interface HandInterface {
     
 }
