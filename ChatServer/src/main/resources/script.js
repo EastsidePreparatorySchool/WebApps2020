@@ -1,5 +1,12 @@
-console.log("Hello world!");
+let id = uuidv4();
+if (sessionStorage.getItem("tabid") === null) {
+    console.log(id)
+    sessionStorage.setItem("tabid", id);
+}
 
+request({url:"/session"})
+        .then(data=>{console.log(data);})
+        .catch(error=>{console.log(error);});
 
 function plus(a, b, f) {
     request({url: "/plus?p1="+a+"&p2="+b, verb: "GET"})
@@ -40,13 +47,23 @@ function loginUser(username) {
     let json = username;
     console.log(json);
     
-    request({url: "/login_user?username="+json, verb: "PUT"}).then(data => {
-        console.log("Success! Logged in user");
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("app").style.display = "block";
-    }).catch(error => {
-        console.log("Something borked: "+error);
-    });
+    if (username == "DEFAULT") {
+        request({url: "/login_user?username=", verb: "GET"}).then(data => {
+            console.log("Success! Logged in user automatically");
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("app").style.display = "block";
+        }).catch(error => {
+            console.log("Something borked: "+error);
+        });
+    } else {
+        request({url: "/login_user?username="+json, verb: "PUT"}).then(data => {
+            console.log("Success! Logged in user");
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("app").style.display = "block";
+        }).catch(error => {
+            console.log("Something borked: "+error);
+        });
+    }
 }
 
 
@@ -60,6 +77,16 @@ function plus_from_input() {
 function displayHeaders() {
     request({url: "/headers", verb: "GET"}).then(data => {
         console.log("Headers page accessed");
+        
+        document.getElementById("result").value = data;
+    }).catch(error => {
+        console.log("Something borked: "+error);
+    });
+}
+
+function displayTabContext() {
+    request({url: "/context", verb: "GET"}).then(data => {
+        console.log("Context page accessed");
         
         document.getElementById("result").value = data;
     }).catch(error => {
@@ -86,6 +113,13 @@ function loginUserHTML() {
 
 var updateMessageInverval = setInterval(function (){updateMessagesTextArea();}, 500);
 
+function uuidv4() { // Generate random identity
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
+loginUser("DEFAULT");
 
 

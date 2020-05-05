@@ -6,6 +6,7 @@
 package org.eastsideprep.chatserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import spark.Request;
 import spark.Response;
@@ -53,7 +54,7 @@ public class Main {
         }, new JSONRT());
 
         get("/headers", (Request req, Response res) -> {
-            System.out.println("Headers requested: ");
+            System.out.println("Headers requested");
             String result = "";
 
             result = req.headers().stream().map((s) -> s + ":" + req.headers(s) + "<br>").reduce(result, String::concat);
@@ -73,11 +74,16 @@ public class Main {
                 allMessagesArrayList.add(msg);
             }
 
+//            HashMap<String, Context> cm = req.session().attribute("map");
+//            cm.get(req.headers("tabid")).messagesSent++;
+//            cm.get(req.headers("tabid")).messages.add(msg);
+                       
             return msg;
         });
 
         // Login route
         put("/login_user", (req, res) -> {
+            // For custom username
             System.out.println("Login user requested");
 
             String usernameJSON = req.queryParams("username");
@@ -88,6 +94,54 @@ public class Main {
 
             return username;
         });
+        
+        get("/login_user", (req, res) -> {
+            String result = req.headers("X-MS-CLIENT-PRINCIPAL-NAME");
+            
+            System.out.println("Login user requested");
+            
+            res.redirect("/", 302);
+            
+            login(req, "string");
+            
+            return "ok";
+        });
+        
+        get("/session", (req, res) -> {
+            spark.Session s = req.session();
+
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, Context>());
+            }
+
+            HashMap<String, Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+            Context ctx = map.get(tabid);
+
+            if (ctx == null) {
+                ctx = new Context();
+                map.put(tabid, ctx);
+            }
+            
+            return ctx.toString(); // Return a hashcode that is arbitrary for our purposes
+        });
+        
+//        get("/context", (req, res) -> {
+//            System.out.println("Context requested");
+//            HashMap<String, Context> cm = req.session().attribute("map");
+//            
+//            String contextStr = "";
+//            
+//            contextStr += cm.get(req.headers("tabid")).username +"\n";
+//            contextStr += "With " + cm.get(req.headers("tabid")).messagesSent + " sent\n";
+//            contextStr = cm.get(req.headers("tabid")).messages.stream().map((msg) -> msg + "\n").reduce(contextStr, String::concat);
+//            
+//            return contextStr;
+//        });
     }
 
     private static spark.Session getSession(spark.Request req) {
@@ -116,6 +170,9 @@ public class Main {
 
     private static void login(spark.Request req, String username) {
         getSession(req).attribute("user", username);
+//        HashMap<String, Context> cm = req.session().attribute("map");
+//        cm.get(req.headers("tabid")).username = username;
+        System.out.println("Login success!");
     }
 
 }
