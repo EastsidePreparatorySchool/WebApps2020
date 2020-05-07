@@ -23,4 +23,7 @@ public interface GameInterface {
     public ArrayList<Card> getDeck();
     
     public Card getDeckCardAtId(int id);
+    
+    
+    public int getRemainingStrikes();
 }

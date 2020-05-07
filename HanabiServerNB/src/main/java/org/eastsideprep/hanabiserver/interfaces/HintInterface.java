@@ -11,4 +11,20 @@ package org.eastsideprep.hanabiserver.interfaces;
  */
 public interface HintInterface {
     
+    HintInterface(String hint);
+    
+    HintInterface(int hint);
+    
+    String toString();
+    
+    String toInt();
+    
+    Boolean isColor();
+    
+    Boolean isNumber();
+    
+    int getPlayerFrom();
+    
+    int getPlayerTo();
+    
 }
