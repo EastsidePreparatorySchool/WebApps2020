@@ -5,10 +5,26 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+
 /**
  *
  * @author eoreizy
  */
-public class Card {
-    
+public class Card implements CardInterface {
+    private String color; 
+    private int number; 
+    private boolean played;
+    private boolean discarded;    
+
+    @Override
+    public void isDicarded(boolean isdicarded) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void isPlayer(boolean isplayed) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ 
 }
