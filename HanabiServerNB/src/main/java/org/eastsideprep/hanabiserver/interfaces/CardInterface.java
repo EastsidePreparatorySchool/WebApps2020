@@ -10,5 +10,8 @@ package org.eastsideprep.hanabiserver.interfaces;
  * @author etardif
  */
 public interface CardInterface {
+    public void isDicarded(boolean isdicarded);
+    
+    public void isPlayer(boolean isplayed);
     
 }
