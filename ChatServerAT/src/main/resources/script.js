@@ -3,7 +3,7 @@ console.log("Hello world!");
 logIn();
 
 function logIn() {
-    var username = prompt("Please enter your username.");
+   // var username = prompt("Please enter your username.");
     request({url: "/login_user?username="+username, verb: "GET"})
             .then(username => {
                 console.log(username);

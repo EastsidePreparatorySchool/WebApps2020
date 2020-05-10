@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Chat Server</title>
+        <title>Hanabi Live</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    <body style="background-image: linear-gradient(-90deg, cyan, black)">
-        <div>Chat Server</div>
-        
-        <textarea id="result" rows="15" cols="50"></textarea><br>
+    <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
+        <div>Hanabi</div>
+        <div id="container">
+            <div id="redPile" class="boxed inline-block" style="color: red; border-color: red"><br><br><br><br><br>
+                0</div>
+            <div id="greenPile" class="boxed inline-block" style="color: green; border-color: green"><br><br><br><br><br>
+                0</div>
+            <div id="yellowPile" class="boxed inline-block" style="color: yellow; border-color: yellow"><br><br><br><br><br>
+                0</div>
+            <div id="bluePile" class="boxed inline-block" style="color: blue; border-color: blue"><br><br><br><br><br>
+                0</div>
+        </div>
+
+        <!-- <textarea id="result" rows="15" cols="50"></textarea><br>
         <button onclick="logIn()">Switch User</button><br>
         <p id="displayLogIn" style="color: white;">Not Logged In</p> 
         <input id="msgBox" placeholder="enter value" type="text"><br>
-        
+
         <button onclick="sendMsg()">Send!</button>
-        
-        <button onclick="getNew()">Manual Get!</button><br><br>
-        
-        <img src="https://thumbs.gfycat.com/MinorBronzeHorse.webp" alt="Stich!" width="300" align="right">
-        
+
+        <button onclick="getNew()">Manual Get!</button><br><br> -->
+
         <script src="common.js"></script>
         <script src="script.js"></script>
     </body>
