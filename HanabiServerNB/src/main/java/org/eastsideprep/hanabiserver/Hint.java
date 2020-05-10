@@ -9,8 +9,56 @@ import org.eastsideprep.hanabiserver.interfaces.HintInterface;
 
 /**
  *
- * @author kyang
+ * @author eoreizy
  */
 public class Hint implements HintInterface {
+
+    Boolean isColor;
     
+    int playerFromId;
+    int playerToId;
+    
+    String hintContent;
+
+    public Hint(String _hintContent, int _playerFromId, int _playerToId){
+        hintContent = _hintContent;
+        playerFromId = _playerFromId;
+        playerToId = _playerToId;
+        isColor = findIsColor(_hintContent);
+        
+    }
+    
+    @Override
+    public String toString() {
+        return hintContent;
+    }
+    
+    @Override
+    public Boolean getIsColor() {
+        return isColor;
+    }
+
+    @Override
+    public Boolean isNumber() {
+        return !isColor;
+    }
+
+    @Override
+    public int getPlayerFrom() {
+        return playerFromId;
+    }
+
+    @Override
+    public int getPlayerTo() {
+        return playerToId;
+    }
+    
+    private Boolean findIsColor(String _hintContent) {
+        try {
+            Integer.parseInt(_hintContent);
+        } catch (Exception ex) {
+            return true;
+        }
+        return false;
+    }
 }

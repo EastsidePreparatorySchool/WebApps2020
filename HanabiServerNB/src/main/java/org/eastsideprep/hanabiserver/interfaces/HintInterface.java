@@ -13,9 +13,7 @@ public interface HintInterface {
     
     String toString();
     
-    String toInt();
-    
-    Boolean isColor();
+    Boolean getIsColor();
     
     Boolean isNumber();
     

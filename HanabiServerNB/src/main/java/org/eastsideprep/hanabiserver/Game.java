@@ -16,6 +16,8 @@ public class Game implements GameInterface {
 
     private ArrayList<Player> players;
     
+    private int remainingStrikes;
+    
     private ArrayList<Card> deck;
     
     @Override
@@ -34,13 +36,27 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public Player getPlayerHandAtId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //Until I see whatever the getHand() function on a Player is.
+    public Hand getPlayerHandAtId(int id) {
+        return players.get(id).GetHand();
     }
 
     @Override
     public Card getDeckCardAtId(int id) {
         return deck.get(id);
+    }
+
+    @Override
+    public int getRemainingStrikes() {
+        return remainingStrikes;
+    }
+
+    @Override
+    public ArrayList<Hint> getAllSentHints() {
+        ArrayList<Hint> hints = new ArrayList<Hint>();
+        for (Player p : players){
+            hints.addAll(p.GetReceivedHints());
+        }
+        return hints;
     }
     
 }

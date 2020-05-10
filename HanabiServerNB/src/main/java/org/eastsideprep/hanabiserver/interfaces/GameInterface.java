@@ -18,12 +18,13 @@ public interface GameInterface {
     
     public Player getPlayerAtId(int id);
     
-    public Player getPlayerHandAtId(int id);
+    public Hand getPlayerHandAtId(int id);
     
     public ArrayList<Card> getDeck();
     
     public Card getDeckCardAtId(int id);
     
+    public ArrayList<Hint> getAllSentHints();
     
     public int getRemainingStrikes();
 }
