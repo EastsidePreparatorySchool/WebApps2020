@@ -5,10 +5,16 @@
  */
 package org.eastsideprep.hanabiserver.interfaces;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author mgoetzmann
  */
 public interface CardSpotInterface {
+    
+    public String getName();
+    
+    public ArrayList<CardInterface> getCards();
     
 }

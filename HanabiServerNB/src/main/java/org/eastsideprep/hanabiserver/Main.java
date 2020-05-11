@@ -27,5 +27,18 @@ public class Main {
             return "Hello world from code";
         });
         
+        get("/load", (req, res) -> {
+            // Open new, independent tab
+            System.out.println("Hey we were invoked:");
+            return "Hello world from code";
+        });
+        
+        put("/update", (req, res) -> {
+            return "/update route";
+        });
+        
+        put("/turn", (req, res) -> {
+            return "/turn route";
+        });
     }
 }

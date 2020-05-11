@@ -13,5 +13,11 @@ import java.util.HashMap;
  * @author etardif
  */
 public interface GameControlInterface {
-    public static HashMap<PlayerInterface, HandInterface> hands = new HashMap<PlayerInterface, HandInterface>() {};
+    
+    // Shuffle the cards currently in a spot
+    public void shuffle(CardSpotInterface spot); 
+    
+    // Move a card from one spot to another
+    public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo);
+    
 }

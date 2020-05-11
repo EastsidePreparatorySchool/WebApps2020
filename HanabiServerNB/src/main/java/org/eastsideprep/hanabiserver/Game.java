@@ -18,7 +18,7 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
-    private ArrayList<Card> deck;
+    private ArrayList<Card> deck; // Can be an instance of the Deck class
     
     @Override
     public ArrayList<Player> getPlayers() {

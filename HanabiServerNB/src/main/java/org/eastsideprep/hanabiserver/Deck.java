@@ -5,10 +5,27 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.util.ArrayList;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
+
 /**
  *
  * @author mgoetzmann
  */
-public class Deck {
+public class Deck implements CardSpotInterface{
     
+    private final String name = "Deck";
+    
+    private ArrayList<CardInterface> cards;
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public ArrayList<CardInterface> getCards() {
+        return cards;
+    }
 }
