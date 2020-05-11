@@ -15,7 +15,14 @@ import org.eastsideprep.hanabiserver.interfaces.HandInterface;
  * @author eoreizy
  */
 public class Hand implements HandInterface{    
-
+    private ArrayList<CardInterface> cards;
+    private String Name; //letting it be defined in constructor 
+                         //bec we have multiple hands
+    
+    Hand(String name){
+        name=Name;
+    }
+    
     @Override
     public void draw(CardInterface Card) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -23,7 +30,7 @@ public class Hand implements HandInterface{
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Name;
     }
 
     @Override
