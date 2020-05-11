@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static spark.Spark.*;
@@ -19,7 +20,7 @@ public class Main {
         port(80);
 
         // tell spark where to find all the HTML and JS
-        staticFiles.location("/");
+        staticFiles.location("static");
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -29,8 +30,30 @@ public class Main {
         
         get("/load", (req, res) -> {
             // Open new, independent tab
-            System.out.println("Hey we were invoked:");
-            return "Hello world from code";
+            spark.Session s = req.session();
+
+            // if the session is new, make sure it has a context map
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, Context>());
+            }
+
+            // now we can safely access the context map whether the session is new or not
+            HashMap<String, Context> map = s.attribute("map");
+
+            // find the context that goes with the tab
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+            Context ctx = map.get(tabid);
+
+            // no context? no problem.
+            if (ctx == null) {
+                ctx = new Context();
+                map.put(tabid, ctx);
+            }
+            
+            return ctx.toString();
         });
         
         put("/update", (req, res) -> {
