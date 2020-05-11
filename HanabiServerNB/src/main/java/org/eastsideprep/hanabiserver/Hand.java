@@ -25,9 +25,17 @@ public class Hand implements HandInterface{
     
     @Override
     public void draw(CardInterface Card) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cards.add(Card);   //I assumed that this didn't include discarding
     }
-
+    
+    public CardInterface discard(int pos) {
+        CardInterface x= cards.get(pos);
+        cards.remove(x);
+        
+        //need to change member variable of card, discarded to true
+        return x;
+    }
+    
     @Override
     public String getName() {
         return Name;
@@ -35,7 +43,7 @@ public class Hand implements HandInterface{
 
     @Override
     public ArrayList<CardInterface> getCards() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return cards;
     }
     
 }
