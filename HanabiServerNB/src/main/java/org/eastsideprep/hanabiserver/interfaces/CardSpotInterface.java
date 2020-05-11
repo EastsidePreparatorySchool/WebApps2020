@@ -17,4 +17,8 @@ public interface CardSpotInterface {
     
     public ArrayList<CardInterface> getCards();
     
+//    public CardInterface remove();
+//    
+//    public void add();
+    
 }

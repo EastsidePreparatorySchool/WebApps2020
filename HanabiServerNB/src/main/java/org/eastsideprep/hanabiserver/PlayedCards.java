@@ -5,10 +5,24 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.util.ArrayList;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
+
 /**
  *
  * @author mgoetzmann
  */
-public class PlayedCards {
+public class PlayedCards implements CardSpotInterface {
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<CardInterface> getCards() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
