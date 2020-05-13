@@ -16,6 +16,8 @@ public class Card implements CardInterface {
     private int number; 
     private boolean played;
     private boolean discarded;    
+    
+    //do we still need booleans for color_revealed and/or number_revealed?
 
     @Override
     public void isDicarded(boolean isdicarded) {
