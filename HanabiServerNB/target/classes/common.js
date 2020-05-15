@@ -22,5 +22,18 @@ function request(obj) {
     });
 }
 
+// make an id for the tab that we are in
+
+if (sessionStorage.getItem("tabid") === null) {
+    //seed = new Date().getTime();
+    id = String(Math.random());
+    console.log(id);
+    sessionStorage.setItem("tabid", id);
+}
+
+request({url:"/load"})
+        .then(data=>{console.log(data);})
+        .catch(error=>{console.log(error);});
+
 
 
