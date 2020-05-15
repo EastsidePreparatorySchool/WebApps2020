@@ -15,7 +15,7 @@ import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
  */
 public class Discard implements CardSpotInterface {
 
-    private final String name = "Discard Pile";
+    private final String name = "Discard Pile"; //figure we'll have only 1
     
     private ArrayList<CardInterface> cards;
     
@@ -27,5 +27,9 @@ public class Discard implements CardSpotInterface {
     @Override
     public ArrayList<CardInterface> getCards() {
         return cards;
+    }
+    
+    public void add(CardInterface card){
+        cards.add(card);
     }
 }

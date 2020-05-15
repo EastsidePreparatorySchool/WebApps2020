@@ -17,10 +17,9 @@ public interface CardSpotInterface {
     
     public ArrayList<CardInterface> getCards();
     
-//    public CardInterface remove();
+//    public CardInterface remove(); //All CardSpots don't share these
 //    
 //    public void add();
     
-//  
-    
+//      
 }

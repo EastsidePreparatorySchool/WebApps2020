@@ -14,9 +14,8 @@ public interface HandInterface extends CardSpotInterface {
         
     // "ArrayList<CardInterface> cards" is inferred from CardSpotInterface
     
-
+    public void draw(CardInterface Card); 
     
-    
-    public void draw(CardInterface Card);
+    public CardInterface discard(int pos);
     
 }

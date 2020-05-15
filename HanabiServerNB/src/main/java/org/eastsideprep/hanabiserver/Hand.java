@@ -9,33 +9,40 @@ import java.util.ArrayList;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.HandInterface;
 
-
 /**
  *
  * @author eoreizy
  */
-public class Hand implements HandInterface{    
+public class Hand implements HandInterface {
+
     private ArrayList<CardInterface> cards;
     private String Name; //letting it be defined in constructor 
-                         //bec we have multiple hands
-    
-    Hand(String name){
-        name=Name;
+    //bec we have multiple hands
+
+    Hand(String name) {
+        name = Name;
     }
-    
+
     @Override
     public void draw(CardInterface Card) {
         cards.add(Card);   //I assumed that this didn't include discarding
     }
-    
+
     public CardInterface discard(int pos) {
-        CardInterface x= cards.get(pos);
+        CardInterface x = cards.get(pos);
         cards.remove(x);
-        
+
         //need to change member variable of card, discarded to true
         return x;
     }
-    
+
+    public CardInterface discard(CardInterface card) {
+        boolean x = cards.remove(card);
+        if (x) {return card;}
+
+        return null;
+    }
+
     @Override
     public String getName() {
         return Name;
@@ -45,5 +52,4 @@ public class Hand implements HandInterface{
     public ArrayList<CardInterface> getCards() {
         return cards;
     }
-    
 }
