@@ -11,3 +11,5 @@ MathServer/target/classes/script.js
 MathServer/target/maven-archiver/pom.properties
 /MathServer/target/
 /ChatServer/target/
+/SQLiteTest/nbproject/private/
+/SQLiteTest/build/
