@@ -15,6 +15,12 @@ import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
  */
 public class GameControl implements GameControlInterface {
 
+    private Game gameData;
+    
+    public Game getGameData(){
+        return gameData;
+    }
+    
     @Override
     public void shuffle(CardSpotInterface spot) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

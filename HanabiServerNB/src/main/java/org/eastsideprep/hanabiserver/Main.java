@@ -15,6 +15,8 @@ import static spark.Spark.*;
 
 public class Main {
 
+    static ArrayList<GameControl> games;
+            
     public static void main(String[] args) {
 
         port(80);
@@ -56,9 +58,11 @@ public class Main {
             return ctx.toString();
         });
         
-        put("/update", (req, res) -> {
-            return "/update route";
-        });
+        get("/update", (req, res) -> {
+            String gameID = req.queryParams("gid");
+            Game gameData = games.get(Integer.parseInt(gameID)).getGameData();
+            return gameData;
+        }, new JSONRT());
         
         put("/turn", (req, res) -> {
             return "/turn route";
