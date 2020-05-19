@@ -83,3 +83,8 @@ and open the template in the editor.
     background-color: lightgoldenrodyellow;
 }
 
+#pileselectors {
+    display: flex;
+    margin-left: 0;
+}
+

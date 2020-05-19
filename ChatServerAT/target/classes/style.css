@@ -59,6 +59,10 @@ and open the template in the editor.
     display: inline-block;
 }
 
+#selectors {
+    display: inline;
+}
+
 .clueButtons{
     padding: 0px;
     margin-left: 0;
@@ -78,3 +82,9 @@ and open the template in the editor.
     color: lightgrey;
     background-color: lightgoldenrodyellow;
 }
+
+#pileselectors {
+    display: flex;
+    margin-left: 0;
+}
+
