@@ -14,6 +14,35 @@ and open the template in the editor.
     justify-content: flex-end;
     text-align: center;
 }
+#cluePlayer {
+    display: flex;
+    clear: right;
+    justify-content: flex-end;
+    text-align: center;
+    border-radius: 40%;
+}
+#clueColor {
+    display: flex;
+    clear: right;
+    justify-content: flex-end;
+    text-align: center;
+
+}
+
+#clueNumber {
+    display: flex;
+    clear: right;
+    justify-content: flex-end;
+    text-align: center;
+}
+
+.clueHeading{
+    position: relative;
+    display: flex;
+    clear: left;
+    justify-content: flex-end;
+    text-align: center;
+}
 .boxed {
     height: 200px;
     width: 100px;
@@ -28,4 +57,24 @@ and open the template in the editor.
 }
 .inline-block {
     display: inline-block;
+}
+
+.clueButtons{
+    padding: 0px;
+    margin-left: 0;
+    text-align: center;
+    display: inline-block;
+    float: left;
+    width: 80px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.clueButtons:hover{
+    background-color: transparent;
+}
+
+.clueButtons:disabled{
+    color: lightgrey;
+    background-color: lightgoldenrodyellow;
 }

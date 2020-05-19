@@ -1,4 +1,3 @@
-console.log("Hello world!");
 logIn();
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
@@ -24,7 +23,7 @@ function displayUsername(playerNumber, username){
 
 
 function logIn() {
-// var username = prompt("Please enter your username.");
+    // var username = prompt("Please enter your username.");
     request({url: "/login_user?username=" + username, verb: "GET"})
             .then(username => {
                 console.log(username);
@@ -59,10 +58,12 @@ function getNew() {
                 // here's what helped me solve the issue: 
                 // https://stackoverflow.com/questions/30194562/json-parse-not-working
                 var messages = JSON.parse(JSON.parse(data));
+
                 var msgOutput = "";
                 for (var i = 0; i < messages.length; i++) {
                     var msg = messages[i];
-                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n"; // formatting output properly       
+
+                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n";  // formatting output properly       
                 }
 
                 document.getElementById("result").value = msgOutput; // displaying formatted output in text area
@@ -83,3 +84,15 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
+// disable the other clue buttons once one is clicked
+function disable(num, id) {
+    // storing ids of all clue giving buttons
+    var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
+    console.log(num);
+    for (var i = 0; i < clueButtons[num].length; i++) {
+        if ((clueButtons[num][i]).localeCompare(id) != 0) {
+            document.getElementById(clueButtons[num][i]).setAttribute("disabled", "disabled");
+        }
+    }
+    console.log(id);
+}
