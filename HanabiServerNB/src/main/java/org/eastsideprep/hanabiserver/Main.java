@@ -9,12 +9,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
 
 public class Main {
-
+    
+    final static String[] CARD_COLORS = new String[] {"Purple", "Green", "Yellow", "Blue", "Red"};
+    final static int CARD_NUMBERS = 5;
+    final static int CARD_DUPLICATES = 3;
+    
+    static Game game;
+    static GameControl gameControl;
+    
+    static ArrayList<Player> players = new ArrayList<>();
+    static int maxCardsInHand;
+    
+    static Deck deck;
+    
+    
     public static void main(String[] args) {
 
         port(80);
@@ -63,5 +77,31 @@ public class Main {
         put("/turn", (req, res) -> {
             return "/turn route";
         });
+        
+        StartGame();
+    }
+    
+    public static void StartGame() {
+        gameControl = new GameControl();
+        
+        ArrayList<Card> tempDeck = new ArrayList<>();
+        for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
+            for (String cardColor : CARD_COLORS) {
+                for (int i = 0; i < CARD_DUPLICATES; i++) {
+                    tempDeck.add(new Card(cardColor, cardNumber));
+                }
+            }
+        }
+        deck = new Deck(tempDeck);
+        
+        gameControl.shuffle(deck);
+        
+        players.forEach((player) -> {
+            for (int i = 0; i < maxCardsInHand; i++) {
+                player.AddCardToHand(deck.draw());
+            }
+        });
+        
+        game = new Game(players, deck);
     }
 }

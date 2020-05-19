@@ -18,7 +18,7 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
-    private ArrayList<Card> deck; // Can be an instance of the Deck class
+    private Deck deck; // Can be an instance of the Deck class
     
     @Override
     public ArrayList<Player> getPlayers() {
@@ -27,7 +27,7 @@ public class Game implements GameInterface {
 
     @Override
     public ArrayList<Card> getDeck() {
-        return deck;
+        return (ArrayList<Card>) deck.getCards();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Game implements GameInterface {
 
     @Override
     public Card getDeckCardAtId(int id) {
-        return deck.get(id);
+        return deck.getCards().get(id);
     }
 
     @Override
@@ -59,4 +59,9 @@ public class Game implements GameInterface {
         return hints;
     }
     
+    Game(ArrayList<Player> players, Deck deck) {
+        this.players = players;
+        this.deck = deck;
+        this.remainingStrikes = 3;
+    }
 }
