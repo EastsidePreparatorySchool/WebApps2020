@@ -9,4 +9,8 @@ MathServer/target/MathServer-1.0-SNAPSHOT.jar
 MathServer/target/classes/.netbeans_automatic_build
 MathServer/target/classes/script.js
 MathServer/target/maven-archiver/pom.properties
+
 /HanabiClient/nbproject/private/
+/SQLiteTest/nbproject/private/
+/SQLiteTest/build/
+

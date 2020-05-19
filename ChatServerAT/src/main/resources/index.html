@@ -9,6 +9,11 @@
     <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
         <div>Hanabi</div>
 
+        <!--made start button, someone else make actual functionality to start the game-->
+        <button onclick="startGame()">Click to start game</button>
+        <br>Clues left:
+        <p id="clues"></p>
+
         <button onclick = "selectPlay()" id = "playbutton">Play</button>
         <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
 
@@ -24,7 +29,11 @@
             <br><br>
             <button id = "select5" disabled = "disabled" onclick = "selectCard(5)">Select</button>  
         </div>
-
+        
+        <!--0 is the placeholder number for the clue counter, add clue variable-->
+        <script>
+            document.getElementById("clues").innerHTML = "0";
+        </script>
         <div id="container">
             <div id="redPile" class="boxed inline-block" style="color: red; border-color: red"><br><br><br><br><br>
                 0</div>
