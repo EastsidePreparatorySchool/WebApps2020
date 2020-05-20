@@ -12,12 +12,19 @@ import java.util.logging.Logger;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
-
 public class Main {
 
     static ArrayList<GameControl> games;
-            
+
     public static void main(String[] args) {
+
+        //everest testing
+        ArrayList<Player> testPlayers = new ArrayList<Player>();
+        testPlayers.add(new Player("Windows"));
+        testPlayers.add(new Player("MacOS"));
+        testPlayers.add(new Player("Linux"));
+        games.add(new GameControl(new Game(testPlayers, 5, 30)));
+        //
 
         port(80);
 
@@ -29,7 +36,7 @@ public class Main {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-        
+
         get("/load", (req, res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -54,16 +61,16 @@ public class Main {
                 ctx = new Context();
                 map.put(tabid, ctx);
             }
-            
+
             return ctx.toString();
         });
-        
+
         get("/update", (req, res) -> {
             String gameID = req.queryParams("gid");
             Game gameData = games.get(Integer.parseInt(gameID)).getGameData();
             return gameData;
         }, new JSONRT());
-        
+
         put("/turn", (req, res) -> {
             return "/turn route";
         });

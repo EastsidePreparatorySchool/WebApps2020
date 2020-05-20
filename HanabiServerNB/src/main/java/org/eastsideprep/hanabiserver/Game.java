@@ -20,6 +20,13 @@ public class Game implements GameInterface {
     
     private ArrayList<Card> deck; // Can be an instance of the Deck class
     
+    public Game(ArrayList<Player> players, int startingStrikes, int deckVolume){
+        this.players = players;
+        this.remainingStrikes = startingStrikes;
+        this.deck = new ArrayList<Card>();
+        //do the stuff to fill the deck//
+    }
+    
     @Override
     public ArrayList<Player> getPlayers() {
         return players;
