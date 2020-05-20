@@ -20,14 +20,11 @@ public class Main {
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
     
-    static Game game;
+    static ArrayList<Game> games = new ArrayList<>();
     static GameControl gameControl;
     
     static ArrayList<Player> players = new ArrayList<>();
-    static int maxCardsInHand;
-    
-    static Deck deck;
-    
+       
     
     public static void main(String[] args) {
 
@@ -78,11 +75,10 @@ public class Main {
             return "/turn route";
         });
         
-        StartGame();
+        gameControl = new GameControl();
     }
     
-    public static void StartGame() {
-        gameControl = new GameControl();
+    public static void createGame() {
         
         ArrayList<Card> tempDeck = new ArrayList<>();
         for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
@@ -92,16 +88,17 @@ public class Main {
                 }
             }
         }
-        deck = new Deck(tempDeck);
+        Deck deck = new Deck(tempDeck);
         
         gameControl.shuffle(deck);
         
+        Game game = new Game(players, deck);
+        games.add(game); // "players" here needs to become a subset
+        
         players.forEach((player) -> {
-            for (int i = 0; i < maxCardsInHand; i++) {
+            for (int i = 0; i < game.getMaxCardsInHand(); i++) {
                 player.AddCardToHand(deck.draw());
             }
         });
-        
-        game = new Game(players, deck);
     }
 }

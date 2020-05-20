@@ -20,6 +20,10 @@ public class Game implements GameInterface {
     
     private Deck deck; // Can be an instance of the Deck class
     
+    private ArrayList<Discard> discardPiles;
+    
+    private PlayedCards playedCards;
+    
     @Override
     public ArrayList<Player> getPlayers() {
         return players;
@@ -59,9 +63,23 @@ public class Game implements GameInterface {
         return hints;
     }
     
-    Game(ArrayList<Player> players, Deck deck) {
+    @Override
+    public int getMaxCardsInHand() {
+        if (players.size() <= 3) {
+            return 5;
+        } else if (players.size() <= 5) {
+            return 4;
+        } else {
+            return 3;
+        }
+    }
+    
+    Game(ArrayList<Player> players, Deck deck, ArrayList<Discard> discard, PlayedCards playedCards) {
         this.players = players;
         this.deck = deck;
+        this.discardPiles = discard;
+        this.playedCards = playedCards;
+        
         this.remainingStrikes = 3;
     }
 }
