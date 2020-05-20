@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 
 /**
@@ -20,7 +21,7 @@ public class Game implements GameInterface {
     
     private Deck deck; // Can be an instance of the Deck class
     
-    private ArrayList<Discard> discardPiles;
+    private HashMap<String, Discard> discardPiles;
     
     private PlayedCards playedCards;
     
@@ -64,6 +65,16 @@ public class Game implements GameInterface {
     }
     
     @Override
+    public Discard getDiscardPile(String discardPileColor) {
+        return discardPiles.get(discardPileColor);
+    }
+
+    @Override
+    public PlayedCards getPlayedCardsPile() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public int getMaxCardsInHand() {
         if (players.size() <= 3) {
             return 5;
@@ -74,7 +85,7 @@ public class Game implements GameInterface {
         }
     }
     
-    Game(ArrayList<Player> players, Deck deck, ArrayList<Discard> discard, PlayedCards playedCards) {
+    Game(ArrayList<Player> players, Deck deck, HashMap<String, Discard> discard, PlayedCards playedCards) {
         this.players = players;
         this.deck = deck;
         this.discardPiles = discard;

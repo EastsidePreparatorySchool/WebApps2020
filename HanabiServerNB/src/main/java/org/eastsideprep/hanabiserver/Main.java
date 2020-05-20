@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -89,10 +90,16 @@ public class Main {
             }
         }
         Deck deck = new Deck(tempDeck);
-        
         gameControl.shuffle(deck);
         
-        Game game = new Game(players, deck);
+        HashMap<String, Discard> discards = new HashMap<>();
+        for (String color : CARD_COLORS) {
+            discards.put(color, new Discard(color));
+        }
+        
+        PlayedCards playedCards = new PlayedCards();
+        
+        Game game = new Game(players, deck, discards, playedCards);
         games.add(game); // "players" here needs to become a subset
         
         players.forEach((player) -> {
