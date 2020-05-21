@@ -59,10 +59,6 @@ and open the template in the editor.
     display: inline-block;
 }
 
-#selectors {
-    display: inline;
-}
-
 .clueButtons{
     padding: 0px;
     margin-left: 0;
@@ -83,8 +79,35 @@ and open the template in the editor.
     background-color: lightgoldenrodyellow;
 }
 
+#selectors {
+    display: flex;
+}
+
 #pileselectors {
     display: flex;
     margin-left: 0;
 }
 
+.player1Cards{
+    display: inline;
+}
+
+.player2Cards{
+    
+}
+
+.player3Cards{
+    
+}
+
+.player4Cards{
+    
+}
+
+.player5Cards{
+    
+}
+
+.player6Cards{
+    
+}
