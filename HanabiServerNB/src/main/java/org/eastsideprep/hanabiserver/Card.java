@@ -29,4 +29,8 @@ public class Card implements CardInterface {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
  
+    Card(String color, int number) {
+        this.color = color;
+        this.number = number;
+    }
 }
