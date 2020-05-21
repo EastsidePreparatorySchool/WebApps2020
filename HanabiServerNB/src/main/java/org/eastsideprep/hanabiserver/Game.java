@@ -21,9 +21,9 @@ public class Game implements GameInterface {
     
     private Deck deck; // Can be an instance of the Deck class
     
-    private HashMap<String, Discard> discardPiles;
+    private HashMap<String, PlayedCards> playedCardPiles;
     
-    private PlayedCards playedCards;
+    private Discard discardPile;
     
     @Override
     public ArrayList<Player> getPlayers() {
@@ -65,13 +65,13 @@ public class Game implements GameInterface {
     }
     
     @Override
-    public Discard getDiscardPile(String discardPileColor) {
-        return discardPiles.get(discardPileColor);
+    public PlayedCards getPlayedCardPile(String playedCardPileColor) {
+        return playedCardPiles.get(playedCardPileColor);
     }
 
     @Override
-    public PlayedCards getPlayedCardsPile() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Discard getDiscardPile() {
+        return this.discardPile;
     }
     
     @Override
@@ -85,11 +85,11 @@ public class Game implements GameInterface {
         }
     }
     
-    Game(ArrayList<Player> players, Deck deck, HashMap<String, Discard> discard, PlayedCards playedCards) {
+    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
         this.players = players;
         this.deck = deck;
-        this.discardPiles = discard;
-        this.playedCards = playedCards;
+        this.discardPile = discard;
+        this.playedCardPiles = playedCards;
         
         this.remainingStrikes = 3;
     }
