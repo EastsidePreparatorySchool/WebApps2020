@@ -92,14 +92,14 @@ public class Main {
         Deck deck = new Deck(tempDeck);
         gameControl.shuffle(deck);
         
-        HashMap<String, Discard> discards = new HashMap<>();
+        HashMap<String, PlayedCards> playedCards = new HashMap<>();
         for (String color : CARD_COLORS) {
-            discards.put(color, new Discard(color));
+            playedCards.put(color, new PlayedCards(color));
         }
         
-        PlayedCards playedCards = new PlayedCards();
+        Discard discards = new Discard();
         
-        Game game = new Game(players, deck, discards, playedCards);
+        Game game = new Game(players, deck, playedCards, discards);
         games.add(game); // "players" here needs to become a subset
         
         players.forEach((player) -> {
