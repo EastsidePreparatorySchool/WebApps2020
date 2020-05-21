@@ -20,17 +20,22 @@ public class Game implements GameInterface {
     private int remainingStrikes;
     
     
+    
     private static int GameIdSettingValue=1; 
     
     private String name;
     
-    private ArrayList<Card> deck; // Can be an instance of the Deck class
+    private int gameID;
+    
+ //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
+    
     private HashMap<String, PlayedCards> playedCardPiles;
     
     private Discard discardPile;
     
     Game(String nm){ //whenever you call game, synchronize
+        name=nm;
         gameID=GameIdSettingValue;
         GameIdSettingValue+=1;
     }
