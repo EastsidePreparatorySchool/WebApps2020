@@ -8,6 +8,7 @@ package org.eastsideprep.hanabiserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -19,9 +20,8 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
-    
-    
-    private static int GameIdSettingValue=1; 
+//    private static int GameIdSettingValue=1; 
+    private static AtomicInteger GameIdSettingValue2=new AtomicInteger(Integer.MIN_VALUE);
     
     private String name;
     
@@ -36,8 +36,10 @@ public class Game implements GameInterface {
     
     Game(String nm){ //whenever you call game, synchronize
         name=nm;
-        gameID=GameIdSettingValue;
-        GameIdSettingValue+=1;
+        gameID=GameIdSettingValue2.getAndDecrement();
+
+        // gameID=GameIdSettingValue;
+        // GameIdSettingValue+=1;
     }
     
     @Override
