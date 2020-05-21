@@ -23,7 +23,7 @@ public class Main {
         testPlayers.add(new Player("Windows"));
         testPlayers.add(new Player("MacOS"));
         testPlayers.add(new Player("Linux"));
-        games.add(new GameControl(new Game(testPlayers, 5, 30)));
+        games.add(new GameControl(new GameData(testPlayers, 5, 30, "Mein Fun Happy Time", 1)));
         //
 
         port(80);
@@ -67,7 +67,7 @@ public class Main {
 
         get("/update", (req, res) -> {
             String gameID = req.queryParams("gid");
-            Game gameData = games.get(Integer.parseInt(gameID)).getGameData();
+            GameData gameData = games.get(Integer.parseInt(gameID)).getGameData();
             return gameData;
         }, new JSONRT());
 

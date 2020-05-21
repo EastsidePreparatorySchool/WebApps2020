@@ -12,18 +12,24 @@ import org.eastsideprep.hanabiserver.interfaces.GameInterface;
  *
  * @author eoreizy
  */
-public class Game implements GameInterface {
+public class GameData implements GameInterface {
 
+    private int gameId;
+    
+    private String name;
+    
     private ArrayList<Player> players;
     
     private int remainingStrikes;
     
     private ArrayList<Card> deck; // Can be an instance of the Deck class
     
-    public Game(ArrayList<Player> players, int startingStrikes, int deckVolume){
+    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId){
         this.players = players;
         this.remainingStrikes = startingStrikes;
         this.deck = new ArrayList<Card>();
+        this.name = name;
+        this.gameId = gameId;
         //do the stuff to fill the deck//
     }
     

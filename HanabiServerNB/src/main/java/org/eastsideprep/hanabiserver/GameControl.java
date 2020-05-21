@@ -15,9 +15,9 @@ import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
  */
 public class GameControl implements GameControlInterface {
 
-    private Game gameData;
+    private GameData gameData;
     
-    public Game getGameData(){
+    public GameData getGameData(){
         return gameData;
     }
     
@@ -31,7 +31,7 @@ public class GameControl implements GameControlInterface {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public GameControl(Game gameData){
+    public GameControl(GameData gameData){
         this.gameData = gameData;
     }
     
