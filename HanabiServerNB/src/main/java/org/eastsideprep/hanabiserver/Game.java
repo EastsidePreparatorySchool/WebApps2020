@@ -18,7 +18,7 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
-    private int id;
+    private int gameID;
     
     private static int GameIdSettingValue=1; 
     
@@ -28,7 +28,7 @@ public class Game implements GameInterface {
     
     Game(String nm){ //whenever you call game, synchronize
         name=nm;
-        id=GameIdSettingValue;
+        gameID=GameIdSettingValue;
         GameIdSettingValue+=1;
     }
     
@@ -72,7 +72,7 @@ public class Game implements GameInterface {
     }
     
     public int getid(){
-        return id;
+        return gameID;
     }
     
     public String getname(){
