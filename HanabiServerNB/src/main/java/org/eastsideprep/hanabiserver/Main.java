@@ -14,11 +14,11 @@ import static spark.Spark.*;
 //HANABI SERVER NB
 
 public class Main {
-
+    
     public static void main(String[] args) {
 
         port(80);
-
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
 

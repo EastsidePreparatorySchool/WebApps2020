@@ -18,7 +18,19 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
+    private int id;
+    
+    private static int GameIdSettingValue=1; 
+    
+    private String name;
+    
     private ArrayList<Card> deck; // Can be an instance of the Deck class
+    
+    Game(String nm){ //whenever you call game, synchronize
+        name=nm;
+        id=GameIdSettingValue;
+        GameIdSettingValue+=1;
+    }
     
     @Override
     public ArrayList<Player> getPlayers() {
@@ -58,5 +70,14 @@ public class Game implements GameInterface {
         }
         return hints;
     }
+    
+    public int getid(){
+        return id;
+    }
+    
+    public String getname(){
+        return name;
+    }
+    
     
 }
