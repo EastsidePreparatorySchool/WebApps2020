@@ -1,5 +1,26 @@
-
 logIn();
+function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
+    //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
+    var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
+    playerCard.style.color = newColor;
+    playerCard.innerHTML = newNumber;
+}
+
+function RandomizeCards() { //function to randomize cards from 1-5 and colors wise
+    var colors = ["red", "blue", "purple", "green", "yellow"];
+    for (var i = 1; i < 7; i++) { //iterate thru players
+        for (var j = 1; j < 4; j++) { //iterate thru player slots
+            updateCardInfo(i, j, colors[Math.floor(Math.random() * colors.length)], Math.round((Math.random() * 4 + 1)));
+        }
+    }
+}
+
+function displayUsername(playerNumber, username){
+    document.getElementById("playerLabel"+playerNumber).innerHTML = username
+}
+
+
+
 
 function logIn() {
     // var username = prompt("Please enter your username.");
@@ -13,6 +34,8 @@ function logIn() {
                 console.log("error: " + error);
             });
 }
+
+
 
 function sendMsg() {
     var a = document.getElementById("msgBox").value;
@@ -153,7 +176,6 @@ function discard(card) {
     document.getElementById("discardbutton").removeAttribute('disabled');
 }
 setInterval(getNew, 300);
-
 var x = document.getElementById("msgBox");
 //taken from w3schools
 x.addEventListener("keyup", function (event) {

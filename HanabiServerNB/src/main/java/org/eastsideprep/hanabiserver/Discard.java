@@ -17,7 +17,9 @@ public class Discard implements CardSpotInterface {
 
     private final String name = "Discard Pile"; //figure we'll have only 1
     
-    private ArrayList<CardInterface> cards;
+    private String color;
+    
+    private ArrayList<Card> cards;
     
     @Override
     public String getName() {
@@ -25,11 +27,19 @@ public class Discard implements CardSpotInterface {
     }
 
     @Override
-    public ArrayList<CardInterface> getCards() {
+    public ArrayList<Card> getCards() {
         return cards;
     }
     
-    public void add(CardInterface card){
+    public void add(Card card){
         cards.add(card);
+    }
+    
+    public String getColor() {
+        return color;
+    }
+    
+    Discard(String color) {
+        this.color = color;
     }
 }
