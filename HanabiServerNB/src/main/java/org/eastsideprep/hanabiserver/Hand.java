@@ -15,7 +15,7 @@ import org.eastsideprep.hanabiserver.interfaces.HandInterface;
  */
 public class Hand implements HandInterface {
 
-    private ArrayList<CardInterface> cards;
+    private ArrayList<Card> cards;
     private String Name; //letting it be defined in constructor 
     //bec we have multiple hands
 
@@ -24,7 +24,7 @@ public class Hand implements HandInterface {
     }
 
     @Override
-    public void draw(CardInterface Card) {
+    public void draw(Card Card) {
         cards.add(Card);   //I assumed that this didn't include discarding
     }
 
@@ -49,7 +49,7 @@ public class Hand implements HandInterface {
     }
 
     @Override
-    public ArrayList<CardInterface> getCards() {
+    public ArrayList<Card> getCards() {
         return cards;
     }
 }
