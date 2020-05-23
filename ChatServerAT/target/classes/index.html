@@ -8,6 +8,7 @@
     </head>
     <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
         <div>Hanabi</div>
+
         <!--made start button, someone else make actual functionality to start the game-->
         <button onclick="startGame()">Click to start game</button>
         <br>Clues left:
@@ -17,6 +18,7 @@
         <script>
             document.getElementById("clues").innerHTML = "0";
         </script>
+
 
         <button onclick = "selectPlay()" id = "playbutton">Play</button>
         <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
@@ -48,6 +50,7 @@
                 0</div>
         </div>
         
+
         <button id="randomizer" onclick="RandomizeCards()">(DevTool) Randomize Cards</button>
         <div id="playerCards">
             <div style="text-align: left; display: inline-block">
@@ -148,6 +151,7 @@
         </div>
 
 
+        <!-- not quite sure how to format these under the piles so I'm just having them sit here-->
         <button id = "redpilebutton" disabled = "disabled" onclick = "selectPile(1)">Select</button><br><br>
         <button id = "greenpilebutton" disabled = "disabled" onclick = "selectPile(2)">Select</button><br><br>
         <button id = "yellowpilebutton" disabled = "disabled" onclick = "selectPile(3)">Select</button><br><br>
