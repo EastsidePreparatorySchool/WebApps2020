@@ -17,6 +17,24 @@
         <script>
             document.getElementById("clues").innerHTML = "0";
         </script>
+
+        <button onclick = "selectPlay()" id = "playbutton">Play</button>
+        <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
+
+        <div id="selectors">
+            <br><br><br>
+            <button id = "select1" disabled = "disabled" onclick = "selectCard(1)">Select</button>
+            <br><br>
+            <button id = "select2" disabled = "disabled" onclick = "selectCard(2)">Select</button>
+            <br><br>
+            <button id = "select3" disabled = "disabled" onclick = "selectCard(3)">Select</button>
+            <br><br>
+            <button id = "select4" disabled = "disabled" onclick = "selectCard(4)">Select</button>
+            <br><br>
+            <button id = "select5" disabled = "disabled" onclick = "selectCard(5)">Select</button>  
+        </div>
+
+
         <div id="container">
             <div id="redPile" class="boxed inline-block" style="color: red; border-color: red"><br><br><br><br><br>
                 0</div>
@@ -128,6 +146,14 @@
             <button id="5clue" class="clueButtons inline-block" onclick = "disable(1, '5clue')"><br><br>
                 5<br><br></button>
         </div>
+
+
+        <button id = "redpilebutton" disabled = "disabled" onclick = "selectPile(1)">Select</button><br><br>
+        <button id = "greenpilebutton" disabled = "disabled" onclick = "selectPile(2)">Select</button><br><br>
+        <button id = "yellowpilebutton" disabled = "disabled" onclick = "selectPile(3)">Select</button><br><br>
+        <button id = "bluepilebutton" disabled = "disabled" onclick = "selectPile(4)">Select</button><br><br>
+        <button id = "purplepilebutton" disabled = "disabled" onclick = "selectPiile(5)">Select</button><br><br>
+
 
 
         <!-- <textarea id="result" rows="15" cols="50"></textarea><br>
