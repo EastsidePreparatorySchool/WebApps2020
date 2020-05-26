@@ -7,168 +7,22 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
-        <div>Hanabi</div>
-
-        <!--made start button, someone else make actual functionality to start the game-->
-        <button onclick="startGame()">Click to start game</button>
-        <br>Clues left:
-        <p id="clues"></p>
-
-        <!--0 is the placeholder number for the clue counter, add clue variable-->
-        <script>
-            document.getElementById("clues").innerHTML = "0";
-        </script>
-
-
-        <button onclick = "selectPlay()" id = "playbutton">Play</button>
-        <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
-
-        <div id="selectors">
-            <br><br><br>
-            <button id = "select1" disabled = "disabled" onclick = "selectCard(1)">Select</button>
-            <br><br>
-            <button id = "select2" disabled = "disabled" onclick = "selectCard(2)">Select</button>
-            <br><br>
-            <button id = "select3" disabled = "disabled" onclick = "selectCard(3)">Select</button>
-            <br><br>
-            <button id = "select4" disabled = "disabled" onclick = "selectCard(4)">Select</button>
-            <br><br>
-            <button id = "select5" disabled = "disabled" onclick = "selectCard(5)">Select</button>  
-        </div>
-
-
-        <div id="container">
-            <div id="redPile" class="boxed inline-block" style="color: red; border-color: red"><br><br><br><br><br>
-                0</div>
-            <div id="greenPile" class="boxed inline-block" style="color: green; border-color: green"><br><br><br><br><br>
-                0</div>
-            <div id="yellowPile" class="boxed inline-block" style="color: yellow; border-color: yellow"><br><br><br><br><br>
-                0</div>
-            <div id="bluePile" class="boxed inline-block" style="color: blue; border-color: blue"><br><br><br><br><br>
-                0</div>
-            <div id="purplePile" class="boxed inline-block" style="color: purple; border-color: purple"><br><br><br><br><br>
-                0</div>
-        </div>
-        
-
-        <button id="randomizer" onclick="RandomizeCards()">(DevTool) Randomize Cards</button>
-        <div id="playerCards">
-            <div style="text-align: left; display: inline-block">
-            <div id="player1Cards" class="boxed block" style="color:red;height:370px;width:465px;">
-                <h1 id="playerLabel1">Player One</h1>
-                <div id="player1Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player1Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player1Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            <div id="player2Cards" class="boxed block" style="color:green;height:370px;width:465px;">
-                <h1 id="playerLabel2">Player Two</h1>
-                <div id="player2Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player2Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player2Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            </div>
-            <div style="text-align: center; display: inline-block">
-            <div id="player3Cards" class="boxed block" style="color:red;height:370px;width:465px;">
-                <h1 id="playerLabel3">Player Three</h1>
-                <div id="player3Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player3Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player3Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            <div id="player4Cards" class="boxed block" style="color:green;height:370px;width:465px;">
-                <h1 id="playerLabel4">Player Four</h1>
-                <div id="player4Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player4Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player4Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            </div>
-            <div style="text-align: right; display: inline-block">
-            <div id="player5Cards" class="boxed block" style="color:red;height:370px;width:465px;">
-                <h1 id="playerLabel5">Player Five</h1>
-                <div id="player5Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player5Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player5Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            <div id="player6Cards" class="boxed block" style="color:green;height:370px;width:465px;">
-                <h1 id="playerLabel6">Player Six</h1>
-                <div id="player6Card1" class="boxed inline-block" style="color:black">0</div>
-                <div id="player6Card2" class="boxed inline-block" style="color:black">0</div>
-                <div id="player6Card3" class="boxed inline-block" style="color:black">0</div>
-            </div>
-            </div>
-
-
-
-        </div>
-
-        <h1 class = "clueHeading" style="right: 135px;"> Give Clue </h1>
-
-        <h3 class = "clueHeading" style="right: 145px;"> Choose Player   </h3>
-
-        <div id = "cluePlayer">
-
-            <button id="P1clue" class="clueButtons inline-block" onclick = "disable(0, 'P1clue')"> <br><br>
-                Player 1 <br> <br> </button>
-            <button id="P2clue" class="clueButtons inline-block" onclick = "disable(0, 'P2clue')"><br><br>
-                Player 2<br><br></button>
-            <button id="P3clue" class="clueButtons inline-block" onclick = "disable(0, 'P3clue')"><br><br>
-                Player 3<br><br></button>
-            <button id="P4clue" class="clueButtons inline-block" onclick = "disable(0, 'P4clue')"><br><br>
-                Player 4<br><br></button>
-            <button id="P5clue" class="clueButtons inline-block" onclick = "disable(0, 'P5clue')"><br><br>
-                Player 5<br><br></button>
-        </div>
-
-        <\n> 
-        <h3 class = "clueHeading" style="right:100px"> Choose Color or Number </h3>
-
-        <div id = "clueColor">
-
-            <button id="redClue" class="clueButtons inline-block" style="color: red; border-color: red" onclick = "disable(1, 'redClue')"><br><br>
-                Red<br><br></button>
-            <button id="greenClue" class="clueButtons inline-block" style="color: green; border-color: green" onclick = "disable(1, 'greenClue')"><br><br>
-                Green<br><br></button>
-            <button id="yellowClue" class="clueButtons inline-block" style="color: yellow; border-color: yellow" onclick = "disable(1, 'yellowClue')"><br><br>
-                Yellow<br><br></button>
-            <button id="blueClue" class="clueButtons inline-block" style="color: blue; border-color: blue" onclick = "disable(1, 'blueClue')"><br><br>
-                Blue<br><br></button>
-            <button id="purpleClue" class="clueButtons inline-block" style="color: purple; border-color: purple" onclick = "disable(1, 'purpleClue')"><br><br>
-                Purple<br><br></button>
-        </div>
-
-        <div id = "clueNumber">
-
-
-            <button id="1clue" class="clueButtons inline-block" onclick = "disable(1, '1clue')"><br><br>
-                1<br><br></button>
-            <button id="2clue" class="clueButtons inline-block" onclick = "disable(1, '2clue')"><br><br>
-                2<br><br></button>
-            <button id="3clue" class="clueButtons inline-block" onclick = "disable(1, '3clue')"><br><br>
-                3<br><br></button>
-            <button id="4clue" class="clueButtons inline-block" onclick = "disable(1, '4clue')"><br><br>
-                4<br><br></button>
-            <button id="5clue" class="clueButtons inline-block" onclick = "disable(1, '5clue')"><br><br>
-                5<br><br></button>
-        </div>
-
-
-        <!-- not quite sure how to format these under the piles so I'm just having them sit here-->
-        <button id = "redpilebutton" disabled = "disabled" onclick = "selectPile(1)">Select</button><br><br>
-        <button id = "greenpilebutton" disabled = "disabled" onclick = "selectPile(2)">Select</button><br><br>
-        <button id = "yellowpilebutton" disabled = "disabled" onclick = "selectPile(3)">Select</button><br><br>
-        <button id = "bluepilebutton" disabled = "disabled" onclick = "selectPile(4)">Select</button><br><br>
-        <button id = "purplepilebutton" disabled = "disabled" onclick = "selectPiile(5)">Select</button><br><br>
-
-
-
-        <!-- <textarea id="result" rows="15" cols="50"></textarea><br>
-        <button onclick="logIn()">Switch User</button><br>
-        <p id="displayLogIn" style="color: white;">Not Logged In</p> 
-        <input id="msgBox" placeholder="enter value" type="text"><br>
-
-        <button onclick="sendMsg()">Send!</button>
-
-        <button onclick="getNew()">Manual Get!</button><br><br> -->
-
+        <h1>Welcome to Hanabi Live!</h1>
+        <h2> Current Games </h2>
+        <table id = "gameTable">
+            <tr>
+                <th>Game Name</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Test Game</td>
+                <td><div><a href="game.html">Join Game</a></div></td>
+            </tr>
+            <tr>
+                <td>Test Game 2</td>
+                <td><div><a href="game.html">Join Game</a></div></td>
+            </tr>
+        </table>
         <script src="common.js"></script>
         <script src="script.js"></script>
     </body>
