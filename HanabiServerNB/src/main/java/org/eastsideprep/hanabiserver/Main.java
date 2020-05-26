@@ -11,12 +11,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import spark.Request;
 import spark.Response;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
 
 public class Main {
     
+
+    final static String[] CARD_COLORS = new String[] {"Purple", "Green", "Yellow", "Blue", "Red"};
+    final static int CARD_NUMBERS = 5;
+    final static int CARD_DUPLICATES = 3;
+    
+    static ArrayList<Game> games = new ArrayList<>();
+    static GameControl gameControl;
+    
+    static ArrayList<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
         
@@ -78,7 +89,39 @@ public class Main {
             return "/turn route";
         });
         
-         
+
+        gameControl = new GameControl();
+    }
+    
+    public static void createGame() {
+        
+        ArrayList<Card> tempDeck = new ArrayList<>();
+        for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
+            for (String cardColor : CARD_COLORS) {
+                for (int i = 0; i < CARD_DUPLICATES; i++) {
+                    tempDeck.add(new Card(cardColor, cardNumber));
+                }
+            }
+        }
+        Deck deck = new Deck(tempDeck);
+        gameControl.shuffle(deck);
+        
+        HashMap<String, PlayedCards> playedCards = new HashMap<>();
+        for (String color : CARD_COLORS) {
+            playedCards.put(color, new PlayedCards(color));
+        }
+        
+        Discard discards = new Discard();
+        
+        Game game = new Game(players, deck, playedCards, discards);
+        games.add(game); // "players" here needs to become a subset
+        
+        players.forEach((player) -> {
+            for (int i = 0; i < game.getMaxCardsInHand(); i++) {
+                player.AddCardToHand(deck.draw());
+            }
+        });
+
     }
 }
 

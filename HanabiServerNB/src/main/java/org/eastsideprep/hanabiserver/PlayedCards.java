@@ -5,10 +5,41 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.util.ArrayList;
+import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
+
 /**
  *
  * @author mgoetzmann
  */
-public class PlayedCards {
+public class PlayedCards implements CardSpotInterface {
+        
+    private final String name = "Played Cards Pile"; //figure we'll have only 1
+    
+    private String color;
+    
+    private ArrayList<Card> cards;
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+    
+    public void add(Card card){
+        cards.add(card);
+    }
+    
+    public String getColor() {
+        return color;
+    }
+    
+    PlayedCards(String color) {
+        this.color = color;
+    }
     
 }

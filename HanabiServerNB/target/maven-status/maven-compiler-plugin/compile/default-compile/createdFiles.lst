@@ -1,3 +1,4 @@
+
 org\eastsideprep\hanabiserver\Card.class
 org\eastsideprep\hanabiserver\Deck.class
 org\eastsideprep\hanabiserver\Hint.class
@@ -18,3 +19,6 @@ org\eastsideprep\hanabiserver\Context.class
 org\eastsideprep\hanabiserver\interfaces\HandInterface.class
 org\eastsideprep\hanabiserver\GameControl.class
 org\eastsideprep\hanabiserver\Player.class
+org\eastsideprep\hanabiserver\Context.class
+org\eastsideprep\hanabiserver\Main.class
+

@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver.interfaces;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.eastsideprep.hanabiserver.*;
 
 /**
@@ -22,9 +23,15 @@ public interface GameInterface {
     
     public ArrayList<Card> getDeck();
     
+    public PlayedCards getPlayedCardPile(String playedCardPileColor);
+    
+    public Discard getDiscardPile();
+    
     public Card getDeckCardAtId(int id);
     
     public ArrayList<Hint> getAllSentHints();
+    
+    public int getMaxCardsInHand();
     
     public int getRemainingStrikes();
 }

@@ -1,3 +1,4 @@
+
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Context.java
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\GameControl.java
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Card.java
@@ -18,3 +19,21 @@ C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\e
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\GameInterface.java
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\PlayedCards.java
 C:\Users\kuberti\Desktop\WebApps2020-KUBranch\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\HandInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Hand.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\CardInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Context.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\HintInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\CardSpotInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\HandInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Main.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Player.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\PlayerInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\GameInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Hint.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Card.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\PlayedCards.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Discard.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\GameControl.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\interfaces\GameControlInterface.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Game.java
+C:\Users\aturkarslan\OD\Documents\GitHub\WebApps2020\HanabiServerNB\src\main\java\org\eastsideprep\hanabiserver\Deck.java
