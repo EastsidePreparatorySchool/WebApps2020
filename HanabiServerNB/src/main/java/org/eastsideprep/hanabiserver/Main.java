@@ -9,18 +9,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
 
 public class Main {
+    
 
     public static void main(String[] args) {
+        
 
         port(80);
 
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
+        User.setup(args);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -28,10 +33,13 @@ public class Main {
             return "Hello world from code";
         });
         
-        get("/load", (req, res) -> {
+           
+           /*
+        get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
 
+         
             // if the session is new, make sure it has a context map
             if (s.isNew()) {
                 s.attribute("map", new HashMap<String, Context>());
@@ -44,18 +52,24 @@ public class Main {
             String tabid = req.headers("tabid");
             if (tabid == null) {
                 tabid = "default";
+                System.out.println(tabid);
             }
             Context ctx = map.get(tabid);
+            System.out.println("tabid =" + tabid);
 
             // no context? no problem.
             if (ctx == null) {
-                ctx = new Context();
+               User user = new User(); 
+                ctx = new Context(user);
+                System.out.println("context=" + ctx);
+                System.out.println(user);
                 map.put(tabid, ctx);
             }
-            
+            System.out.println(tabid);
             return ctx.toString();
         });
         
+*/
         put("/update", (req, res) -> {
             return "/update route";
         });
@@ -63,5 +77,8 @@ public class Main {
         put("/turn", (req, res) -> {
             return "/turn route";
         });
+        
+         
     }
 }
+
