@@ -11,26 +11,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spark.Request;
+import spark.Response;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
 import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
-// optional chat feature in lobby (Aybala) - msg class
-class Message {
-
-    public String username;
-    public String msg;
-    public String msgtime;
-}
-
 //HANABI SERVER NB
 public class Main {
 
-    // optional chat feature
-    public static ArrayList<Message> msgs = new ArrayList<>();
-
     final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
@@ -40,22 +32,26 @@ public class Main {
     static ArrayList<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
+        
 
         port(80);
 
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
+        User.setup(args);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-
-        get("/load", (req, res) -> {
+           
+           /*
+        get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
 
+         
             // if the session is new, make sure it has a context map
             if (s.isNew()) {
                 s.attribute("map", new HashMap<String, Context>());
@@ -68,18 +64,24 @@ public class Main {
             String tabid = req.headers("tabid");
             if (tabid == null) {
                 tabid = "default";
+                System.out.println(tabid);
             }
             Context ctx = map.get(tabid);
+            System.out.println("tabid =" + tabid);
 
             // no context? no problem.
             if (ctx == null) {
-                ctx = new Context();
+               User user = new User(); 
+                ctx = new Context(user);
+                System.out.println("context=" + ctx);
+                System.out.println(user);
                 map.put(tabid, ctx);
             }
-
+            System.out.println(tabid);
             return ctx.toString();
         });
-
+        
+*/
         put("/update", (req, res) -> {
             return "/update route";
         });
@@ -89,36 +91,6 @@ public class Main {
         });
 
         gameControl = new GameControl();
-
-        // optional chat feature in lobby (Aybala)
-        put("/send", (req, res) -> {
-            System.out.println("Send message requested");
-
-            String msg = req.queryParams("msg");
-            Message newMessage = new Message();
-            newMessage.username = user(req);
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-            newMessage.msgtime = dtf.format(LocalDateTime.now());
-            newMessage.msg = msg;
-
-            synchronized (msgs) {
-                msgs.add(newMessage);
-                System.out.println(msgs.toString());
-            }
-
-            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
-        });
-
-        get("/get", "application/json", (req, res) -> {
-            JSONRT rt = new JSONRT(); // created a response transformer object
-            synchronized (msgs) {
-                String result = rt.render(msgs); // rendered java objects into JSON string
-
-                return result;
-            }
-        }, new JSONRT());
-
     }
 
     public static void createGame() {
@@ -149,5 +121,7 @@ public class Main {
                 player.AddCardToHand(deck.draw());
             }
         });
+
     }
 }
+
