@@ -5,6 +5,7 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -16,21 +17,20 @@ import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
-
 public class Main {
-    
 
-    final static String[] CARD_COLORS = new String[] {"Purple", "Green", "Yellow", "Blue", "Red"};
+    final static Gson gson = new Gson();
+
+    final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
-    
+
     static ArrayList<Game> games = new ArrayList<>();
     static GameControl gameControl;
-    
+
     static ArrayList<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
-        
 
         port(80);
 
@@ -43,9 +43,8 @@ public class Main {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-        
-           
-           /*
+
+        /*
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -80,21 +79,40 @@ public class Main {
             return ctx.toString();
         });
         
-*/
+         */
         put("/update", (req, res) -> {
+            Context ctx = getContext(req);
+            Game userGame = ctx.getGame();
+            
             return "/update route";
         });
-        
+
         put("/turn", (req, res) -> {
             return "/turn route";
         });
-        
 
         gameControl = new GameControl();
     }
-    
+
+    public static Context getContext(Request req) {
+        spark.Session s = req.session();
+//        if (s.isNew()) {
+//            s.attribute("map", new HashMap<String, Context>());
+//        }
+        HashMap<String, Context> map = s.attribute("map");
+        System.out.println("map =" + map);
+        String tabid = req.headers("tabid");
+//        if (tabid == null) {
+//            tabid = "default";
+//            System.out.println(tabid);
+//        }
+        Context ctx = map.get(tabid);
+
+        return ctx;
+    }
+
     public static void createGame() {
-        
+
         ArrayList<Card> tempDeck = new ArrayList<>();
         for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
             for (String cardColor : CARD_COLORS) {
@@ -105,17 +123,17 @@ public class Main {
         }
         Deck deck = new Deck(tempDeck);
         gameControl.shuffle(deck);
-        
+
         HashMap<String, PlayedCards> playedCards = new HashMap<>();
         for (String color : CARD_COLORS) {
             playedCards.put(color, new PlayedCards(color));
         }
-        
+
         Discard discards = new Discard();
-        
+
         Game game = new Game(players, deck, playedCards, discards);
         games.add(game); // "players" here needs to become a subset
-        
+
         players.forEach((player) -> {
             for (int i = 0; i < game.getMaxCardsInHand(); i++) {
                 player.AddCardToHand(deck.draw());
@@ -124,4 +142,3 @@ public class Main {
 
     }
 }
-

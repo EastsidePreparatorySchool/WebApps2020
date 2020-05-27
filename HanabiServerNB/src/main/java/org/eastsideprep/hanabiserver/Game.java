@@ -57,10 +57,10 @@ public class Game implements GameInterface {
 
     @Override
     public ArrayList<Hint> getAllSentHints() {
-        ArrayList<Hint> hints = new ArrayList<Hint>();
-        for (Player p : players){
+        ArrayList<Hint> hints = new ArrayList<>();
+        players.forEach((p) -> {
             hints.addAll(p.GetReceivedHints());
-        }
+        });
         return hints;
     }
     

@@ -34,4 +34,6 @@ public interface PlayerInterface {
     public Hand GetHand();
     
     public ArrayList<Hint> GetReceivedHints(); // grab what is known about the cards
+    
+    public User GetUserObject();
 }
