@@ -10,51 +10,50 @@ import java.util.HashMap;
 
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 
 /**
- * 
+ *
  * @author eoreizy
  */
 public class GameData implements GameInterface {
 
     private int gameId;
-    
+
     private String name;
-    
+
     private ArrayList<Player> players;
-    
+
     private int remainingStrikes;
-    
+
 //    private static int GameIdSettingValue=1; 
-    private static AtomicInteger GameIdSettingValue2=new AtomicInteger(Integer.MIN_VALUE);
-    
-    private String name;
-    
+    private static AtomicInteger GameIdSettingValue2 = new AtomicInteger(Integer.MIN_VALUE);
+
     private int gameID;
-    
- //   private ArrayList<Card> deck; // Can be an instance of the Deck class
+
+    //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
-    
-    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId){
+
+    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId) {
         this.players = players;
         this.remainingStrikes = startingStrikes;
-        this.deck = new Deck(new ArrayList<CardInterface>());
+        this.deck = new Deck(new ArrayList<Card>());
         this.name = name;
         this.gameId = gameId;
         //do the stuff to fill the deck//
     }
     private HashMap<String, PlayedCards> playedCardPiles;
-    
+
     private Discard discardPile;
-    
-    Game(String nm){ //whenever you call game, synchronize
-        name=nm;
-        gameID=GameIdSettingValue2.getAndDecrement();
+
+    GameData(String nm) { //whenever you call game, synchronize
+        name = nm;
+        gameID = GameIdSettingValue2.getAndDecrement();
 
         // gameID=GameIdSettingValue;
         // GameIdSettingValue+=1;
     }
-    
+
     @Override
     public ArrayList<Player> getPlayers() {
         return players;
@@ -63,10 +62,11 @@ public class GameData implements GameInterface {
     @Override
     public Deck getDeck() {
         return deck;
-    public ArrayList<Card> getDeck() {
-        return (ArrayList<Card>) deck.getCards();
     }
 
+//    public ArrayList<Card> getDeck() {
+//        return (ArrayList<Card>) deck.getCards();
+//    }
     @Override
     public Player getPlayerAtId(int id) {
         return players.get(id);
@@ -90,21 +90,20 @@ public class GameData implements GameInterface {
     @Override
     public ArrayList<Hint> getAllSentHints() {
         ArrayList<Hint> hints = new ArrayList<Hint>();
-        for (Player p : players){
+        for (Player p : players) {
             hints.addAll(p.GetReceivedHints());
         }
         return hints;
     }
-    
-    public int getid(){
+
+    public int getid() {
         return gameID;
     }
-    
-    public String getname(){
+
+    public String getname() {
         return name;
     }
-    
-    
+
     @Override
     public PlayedCards getPlayedCardPile(String playedCardPileColor) {
         return playedCardPiles.get(playedCardPileColor);
@@ -114,7 +113,7 @@ public class GameData implements GameInterface {
     public Discard getDiscardPile() {
         return this.discardPile;
     }
-    
+
     @Override
     public int getMaxCardsInHand() {
         if (players.size() <= 3) {
@@ -125,26 +124,26 @@ public class GameData implements GameInterface {
             return 3;
         }
     }
-    
-    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+
+    GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;
         this.playedCardPiles = playedCards;
-        
+
         this.remainingStrikes = 3;
-        
-        gameID=GameIdSettingValue2.getAndDecrement();
+
+        gameID = GameIdSettingValue2.getAndDecrement();
     }
-    
-    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
+
+    GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;
         this.playedCardPiles = playedCards;
-        
+
         this.remainingStrikes = 3;
-        this.name=name;
-        gameID=GameIdSettingValue2.getAndDecrement();
+        this.name = name;
+        gameID = GameIdSettingValue2.getAndDecrement();
     }
 }
