@@ -2,6 +2,10 @@ org\eastsideprep\hanabiserver\Deck.class
 org\eastsideprep\hanabiserver\interfaces\PlayerInterface.class
 org\eastsideprep\hanabiserver\interfaces\CardInterface.class
 org\eastsideprep\hanabiserver\interfaces\GameControlInterface.class
+org\eastsideprep\hanabiserver\GameData.class
+org\eastsideprep\hanabiserver\interfaces\HintInterface.class
+org\eastsideprep\hanabiserver\PlayedCards.class
+org\eastsideprep\hanabiserver\JSONRT.class
 org\eastsideprep\hanabiserver\interfaces\UserInterface.class
 org\eastsideprep\hanabiserver\interfaces\HintInterface.class
 org\eastsideprep\hanabiserver\Message.class

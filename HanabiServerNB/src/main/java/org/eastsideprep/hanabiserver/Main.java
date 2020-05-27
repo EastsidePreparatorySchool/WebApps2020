@@ -30,21 +30,33 @@ public class Main {
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-    static ArrayList<Game> games = new ArrayList<>();
+    static ArrayList<Game> games1 = new ArrayList<>();
     static int gameIdStep = 0;
     static GameControl gameControl = new GameControl();
 
 
     static ArrayList<Player> players = new ArrayList<>();
 
+    static ArrayList<GameControl> games;
+    
     public static void main(String[] args) {
 
         port(80);
-
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
 
+        games = new ArrayList<>();
+
+        //Making a test GameControl object
+        ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(new Player("Windows"));
+        testPlayers.add(new Player("MacOS"));
+        testPlayers.add(new Player("Linux"));
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        GameControl testGC = new GameControl(testGD);
+        games.add(testGC);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -52,7 +64,7 @@ public class Main {
             return "Hello world from code";
         });
            
-           /*
+           
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -83,11 +95,11 @@ public class Main {
                 System.out.println(user);
                 map.put(tabid, ctx);
             }
-            System.out.println(tabid);
+
             return ctx.toString();
         });
         
-         */
+         
         get("/update2", (req, res) -> {
             Context ctx = getContext(req);
             if (ctx == null) {return "";}
@@ -104,10 +116,23 @@ public class Main {
 
             String gameJSON = gson.toJson(userGame);
             //System.out.println(gameJSON);
-
             return gameJSON;
-        }
-        );
+        });
+
+        get("/update", "application/json", (req, res) -> {
+            String gameID = req.queryParams("gid");
+            System.out.println("Update requested by " + req.ip() + " for game " + gameID);
+
+            if (gameID != null) {
+                int gameID_int = Integer.parseInt(gameID);
+                GameControl game = games.get(gameID_int);
+                GameData gameData = game.getGameData();
+                return gameData;
+            } else {
+                System.out.println("returning games");
+                return games;
+            }
+        }, new JSONRT());
 
         get("/turn", (req, res) -> {
             String turnJSON = req.queryParams("json");
@@ -124,7 +149,6 @@ public class Main {
             
             return "";
         });
-
     }
 
     public static Context getContext(Request req) {
