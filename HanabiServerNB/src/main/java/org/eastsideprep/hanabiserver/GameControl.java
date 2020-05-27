@@ -16,6 +16,12 @@ import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
  */
 public class GameControl implements GameControlInterface {
 
+    private GameData gameData;
+    
+    public GameData getGameData(){
+        return gameData;
+    }
+    
     @Override
     public void shuffle(CardSpotInterface spot) {
         Collections.shuffle(spot.getCards());
@@ -24,6 +30,10 @@ public class GameControl implements GameControlInterface {
     @Override
     public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public GameControl(GameData gameData){
+        this.gameData = gameData;
     }
     
 }

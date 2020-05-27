@@ -7,15 +7,20 @@ package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
+ * 
  * @author eoreizy
  */
-public class Game implements GameInterface {
+public class GameData implements GameInterface {
 
+    private int gameId;
+    
+    private String name;
+    
     private ArrayList<Player> players;
     
     private int remainingStrikes;
@@ -30,6 +35,14 @@ public class Game implements GameInterface {
  //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
     
+    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId){
+        this.players = players;
+        this.remainingStrikes = startingStrikes;
+        this.deck = new Deck(new ArrayList<CardInterface>());
+        this.name = name;
+        this.gameId = gameId;
+        //do the stuff to fill the deck//
+    }
     private HashMap<String, PlayedCards> playedCardPiles;
     
     private Discard discardPile;
@@ -48,6 +61,8 @@ public class Game implements GameInterface {
     }
 
     @Override
+    public Deck getDeck() {
+        return deck;
     public ArrayList<Card> getDeck() {
         return (ArrayList<Card>) deck.getCards();
     }
@@ -63,7 +78,7 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public Card getDeckCardAtId(int id) {
+    public CardInterface getDeckCardAtId(int id) {
         return deck.getCards().get(id);
     }
 
