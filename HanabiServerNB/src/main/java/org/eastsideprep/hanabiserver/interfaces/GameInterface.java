@@ -20,9 +20,9 @@ public interface GameInterface {
     
     public Hand getPlayerHandAtId(int id);
     
-    public ArrayList<Card> getDeck();
+    public Deck getDeck();
     
-    public Card getDeckCardAtId(int id);
+    public CardInterface getDeckCardAtId(int id);
     
     public ArrayList<Hint> getAllSentHints();
     

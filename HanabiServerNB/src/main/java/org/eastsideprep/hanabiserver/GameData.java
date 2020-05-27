@@ -6,10 +6,11 @@
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 
 /**
- *
+ * 
  * @author eoreizy
  */
 public class GameData implements GameInterface {
@@ -22,12 +23,12 @@ public class GameData implements GameInterface {
     
     private int remainingStrikes;
     
-    private ArrayList<Card> deck; // Can be an instance of the Deck class
+    private Deck deck; // Can be an instance of the Deck class
     
     public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId){
         this.players = players;
         this.remainingStrikes = startingStrikes;
-        this.deck = new ArrayList<Card>();
+        this.deck = new Deck(new ArrayList<CardInterface>());
         this.name = name;
         this.gameId = gameId;
         //do the stuff to fill the deck//
@@ -39,7 +40,7 @@ public class GameData implements GameInterface {
     }
 
     @Override
-    public ArrayList<Card> getDeck() {
+    public Deck getDeck() {
         return deck;
     }
 
@@ -54,8 +55,8 @@ public class GameData implements GameInterface {
     }
 
     @Override
-    public Card getDeckCardAtId(int id) {
-        return deck.get(id);
+    public CardInterface getDeckCardAtId(int id) {
+        return deck.getCards().get(id);
     }
 
     @Override

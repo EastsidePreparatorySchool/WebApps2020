@@ -14,7 +14,7 @@ import spark.*;
  */
 public class JSONRT implements ResponseTransformer {
     
-    private Gson gson;
+    private Gson gson = new Gson();
     
     @Override
     public String render(Object o) {
