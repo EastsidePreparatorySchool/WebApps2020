@@ -10,5 +10,9 @@ package org.eastsideprep.hanabiserver;
  * @author mgoetzmann
  */
 public class Context {
+    public User user;
+    public Context(User user){
+        this.user = user;
+    }
     
 }
