@@ -15,12 +15,9 @@ function RandomizeCards() { //function to randomize cards from 1-5 and colors wi
     }
 }
 
-function displayUsername(playerNumber, username){
-    document.getElementById("playerLabel"+playerNumber).innerHTML = username
+function displayUsername(playerNumber, username) {
+    document.getElementById("playerLabel" + playerNumber).innerHTML = username
 }
-
-
-
 
 function logIn() {
     // var username = prompt("Please enter your username.");
@@ -34,8 +31,6 @@ function logIn() {
                 console.log("error: " + error);
             });
 }
-
-
 
 function sendMsg() {
     var a = document.getElementById("msgBox").value;
@@ -133,14 +128,14 @@ var selectedCard = 0;
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
-    if(playdiscard === 1) {
+    if (playdiscard === 1) {
         play(id);
     } else if (playdiscard === 2) {
         discard(id);
     }
     playdiscard = 0;
     blurButtons();
-    
+
 }
 
 var pile = 0;
@@ -156,13 +151,13 @@ function play(id) {
 
     //remove card
     //hand.remove(id)
-    
+
     //add value to pile
     //pile.value++;
-    
+
     //draw new card
     //hand.draw();
-    
+
     //end turn
     pile = 0;
 }
@@ -198,3 +193,31 @@ function disable(num, id) {
     }
     console.log(id);
 }
+
+// template functions for updating available games in lobby
+function getGames(f) {
+    request({url: "/update_games", verb: "GET"})
+            .then(data => {
+                console.log("success, updating games");
+                f(data);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
+function getGamesUpdateTable() {
+    getMessages(function (data) {
+        var table = document.getElementById("gameTable");
+        let games = JSON.parse(data);
+        for (var i = 0; i < messages.length; i++) {
+            var row = table.insertRow(0);
+            row.insertCell(0).innerHTML = games[i];
+            row.insertCell(1).innerHTML = "<a href='game.html'>Join Game</a>";
+        }
+    });
+}
+
+setInterval(function () {
+    getGamesUpdateTable();
+}, 200);
