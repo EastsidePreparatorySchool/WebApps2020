@@ -14,6 +14,8 @@ import org.eastsideprep.hanabiserver.interfaces.GameInterface;
  * @author eoreizy
  */
 public class Game implements GameInterface {
+    
+    private String GameID;
 
     private ArrayList<Player> players;
     
@@ -92,5 +94,9 @@ public class Game implements GameInterface {
         this.playedCardPiles = playedCards;
         
         this.remainingStrikes = 3;
+    }
+    
+    public String GetGameID() {
+        return GameID;
     }
 }

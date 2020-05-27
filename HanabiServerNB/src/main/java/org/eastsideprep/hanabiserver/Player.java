@@ -15,9 +15,14 @@ import org.eastsideprep.hanabiserver.interfaces.PlayerInterface;
 public class Player implements PlayerInterface {
 
     // Private Variables
-    private String myUsername;
+//    private String myUsername;
+    private User myUser;
     private Hand myHand;
     private ArrayList<Hint> myHints; // things I known about my cards
+    
+    public Player(User user) {
+        myUser = user;
+    }
 
     @Override
     public void SendHint(Hint hint, Player toPlayer) {
@@ -51,17 +56,17 @@ public class Player implements PlayerInterface {
 
     @Override
     public String GetUsername() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return myUser.GetStringName();
     }
 
     @Override
     public Hand GetHand() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return myHand;
     }
 
     @Override
     public ArrayList<Hint> GetReceivedHints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return myHints;
     }
     
 }
