@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 
 /**
@@ -18,7 +19,11 @@ public class Game implements GameInterface {
     
     private int remainingStrikes;
     
-    private ArrayList<Card> deck; // Can be an instance of the Deck class
+    private Deck deck; // Can be an instance of the Deck class
+    
+    private HashMap<String, PlayedCards> playedCardPiles;
+    
+    private Discard discardPile;
     
     @Override
     public ArrayList<Player> getPlayers() {
@@ -27,7 +32,7 @@ public class Game implements GameInterface {
 
     @Override
     public ArrayList<Card> getDeck() {
-        return deck;
+        return (ArrayList<Card>) deck.getCards();
     }
 
     @Override
@@ -42,7 +47,7 @@ public class Game implements GameInterface {
 
     @Override
     public Card getDeckCardAtId(int id) {
-        return deck.get(id);
+        return deck.getCards().get(id);
     }
 
     @Override
@@ -59,4 +64,33 @@ public class Game implements GameInterface {
         return hints;
     }
     
+    @Override
+    public PlayedCards getPlayedCardPile(String playedCardPileColor) {
+        return playedCardPiles.get(playedCardPileColor);
+    }
+
+    @Override
+    public Discard getDiscardPile() {
+        return this.discardPile;
+    }
+    
+    @Override
+    public int getMaxCardsInHand() {
+        if (players.size() <= 3) {
+            return 5;
+        } else if (players.size() <= 5) {
+            return 4;
+        } else {
+            return 3;
+        }
+    }
+    
+    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+        this.players = players;
+        this.deck = deck;
+        this.discardPile = discard;
+        this.playedCardPiles = playedCards;
+        
+        this.remainingStrikes = 3;
+    }
 }

@@ -5,6 +5,8 @@
  */
 package org.eastsideprep.hanabiserver.interfaces;
 
+import org.eastsideprep.hanabiserver.Card;
+
 /**
  *
  * @author etardif
@@ -14,7 +16,7 @@ public interface HandInterface extends CardSpotInterface {
         
     // "ArrayList<CardInterface> cards" is inferred from CardSpotInterface
     
-    public void draw(CardInterface Card); 
+    public void draw(Card Card); 
     
     public CardInterface discard(int pos);
     

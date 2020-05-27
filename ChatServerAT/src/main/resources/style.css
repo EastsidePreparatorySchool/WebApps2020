@@ -78,3 +78,8 @@ and open the template in the editor.
     color: lightgrey;
     background-color: lightgoldenrodyellow;
 }
+
+#selectors {
+    display: inline;
+}
+

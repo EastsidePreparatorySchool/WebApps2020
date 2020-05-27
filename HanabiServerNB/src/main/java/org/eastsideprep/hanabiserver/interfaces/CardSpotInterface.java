@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver.interfaces;
 
 import java.util.ArrayList;
+import org.eastsideprep.hanabiserver.Card;
 
 /**
  *
@@ -15,7 +16,7 @@ public interface CardSpotInterface {
     
     public String getName();
     
-    public ArrayList<CardInterface> getCards();
+    public ArrayList<Card> getCards();
     
 //    public CardInterface remove(); //All CardSpots don't share these
 //    
