@@ -1,0 +1,58 @@
+{
+    "players": [
+        {
+            "myUsername": "GunnarMein",
+            "myHand": {
+                "cards": [
+                    {
+                        "color": "blue",
+                        "number": 4,
+                        "played": false,
+                        "discarded": false
+                    },
+                    {
+                        "color": "red",
+                        "number": 5,
+                        "played": false,
+                        "discarded": false
+                    }
+                ],
+                "Name": "I'm not sure what this is for"
+            },
+            "myHints": [
+                {
+                    "isColor": true,
+                    "playerFromId": 3,
+                    "playerToId": 1,
+                    "hintContent": "blue"
+                },
+                {
+                    "isColor": false,
+                    "playerFromId": 3,
+                    "playerToId": 1,
+                    "hintContent": "5"
+                }
+            ]
+        }
+    ],
+    "remainingStrikes": 5,
+    "deck": [
+        {
+            "name": "Deck",
+            "cards": [
+                {
+                    "color": "purple",
+                    "number": 2,
+                    "played": false,
+                    "discarded": false
+                },
+                {
+                    "color": "yellow",
+                    "number": 5,
+                    "played": false,
+                    "discarded": false
+                }
+            ]
+        }
+    ]
+}
