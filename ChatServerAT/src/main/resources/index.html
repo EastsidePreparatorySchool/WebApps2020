@@ -51,19 +51,31 @@
                 document.getElementById("displayusername").innerHTML = "nulluser";
             </script>
         </div>
-        <h2> Current Games </h2>
+        <div>
+            <h2> Current Games: </h2>
+            <h2 id="gameCounter">2</h2>
+        </div>
         <table id = "gameTable">
             <tr>
                 <th>Game Name</th>
                 <th>Action</th>
+                <th>Time Created</th>
             </tr>
+
             <tr>
                 <td>Test Game</td>
                 <td><div><a href="game.html">Join Game</a></div></td>
+                <th>00:00:00</th>
             </tr>
             <tr>
                 <td>Test Game 2</td>
                 <td><div><a href="game.html">Join Game</a></div></td>
+                <th>00:00:00</th>
+            </tr>
+            <tr>
+                <td>New Game</td>
+                <td><button onclick="createNewGame()">Create Game</button></td>
+                <th>00:00:00</th>
             </tr>
         </table>
 

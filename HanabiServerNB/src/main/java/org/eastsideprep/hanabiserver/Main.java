@@ -31,14 +31,27 @@ public class Main {
 
     static ArrayList<Player> players = new ArrayList<>();
 
+    static ArrayList<GameControl> games;
+    
     public static void main(String[] args) {
         
 
         port(80);
-
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
+
+        games = new ArrayList<>();
+
+        //Making a test GameControl object
+        ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(new Player("Windows"));
+        testPlayers.add(new Player("MacOS"));
+        testPlayers.add(new Player("Linux"));
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        GameControl testGC = new GameControl(testGD);
+        games.add(testGC);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -46,7 +59,7 @@ public class Main {
             return "Hello world from code";
         });
            
-           /*
+           
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -77,19 +90,28 @@ public class Main {
                 System.out.println(user);
                 map.put(tabid, ctx);
             }
-            System.out.println(tabid);
+
             return ctx.toString();
         });
-        
-*/
-        put("/update", (req, res) -> {
-            return "/update route";
-        });
+
+        get("/update", "application/json", (req, res) -> {
+            String gameID = req.queryParams("gid");
+            System.out.println("Update requested by " + req.ip() + " for game " + gameID);
+
+            if (gameID != null) {
+                int gameID_int = Integer.parseInt(gameID);
+                GameControl game = games.get(gameID_int);
+                GameData gameData = game.getGameData();
+                return gameData;
+            } else {
+                System.out.println("returning games");
+                return games;
+            }
+        }, new JSONRT());
 
         put("/turn", (req, res) -> {
             return "/turn route";
         });
-
         gameControl = new GameControl();
     }
 
