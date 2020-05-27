@@ -8,16 +8,12 @@ package org.eastsideprep.mathserver;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spark.Route;
 import static spark.Spark.*;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        test();
-        if (true) {
-            return;
-        }
 
         port(80);
 
@@ -25,18 +21,25 @@ public class Main {
         staticFiles.location("/");
 
         // get a silly route up for testing
-        get("/hello", (req, res) -> {
+        
+        Route lambda = (req, res) -> {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
-        });
+        };
+                
+        get("/hello", lambda);
 
         get("/tau", (req, res) -> {
             System.out.println("Tau requested");
             return 2 * Math.PI;
         });
+        
+        ArrayList<String> als = new ArrayList<>();
+        String.join("\n", als);
 
         get("/plus", (req, res) -> {
             System.out.println("Addition requested");
+            // e.g. http://localhost/plus?p1=5&p2=6
             String p1 = req.queryParams("p1");
             String p2 = req.queryParams("p2");
 
