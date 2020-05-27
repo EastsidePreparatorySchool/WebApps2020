@@ -26,18 +26,17 @@ public class Main {
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-    static ArrayList<Game> games = new ArrayList<>();
+//    static ArrayList<GameData> games = new ArrayList<>();
     static GameControl gameControl;
 
     static ArrayList<Player> players = new ArrayList<>();
 
     static ArrayList<GameControl> games;
-    
+
     public static void main(String[] args) {
-        
 
         port(80);
-        
+
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
@@ -58,13 +57,11 @@ public class Main {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-           
-           
+
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
 
-         
             // if the session is new, make sure it has a context map
             if (s.isNew()) {
                 s.attribute("map", new HashMap<String, Context>());
@@ -84,7 +81,7 @@ public class Main {
 
             // no context? no problem.
             if (ctx == null) {
-               User user = new User(); 
+                User user = new User();
                 ctx = new Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
@@ -112,7 +109,7 @@ public class Main {
         put("/turn", (req, res) -> {
             return "/turn route";
         });
-        gameControl = new GameControl();
+//        gameControl = new GameControl();
     }
 
     public static void createGame() {
@@ -135,8 +132,9 @@ public class Main {
 
         Discard discards = new Discard();
 
-        Game game = new Game(players, deck, playedCards, discards);
-        games.add(game); // "players" here needs to become a subset
+        GameData game = new GameData(players, deck, playedCards, discards);
+        GameControl gc = new GameControl(game);
+        games.add(gc); // "players" here needs to become a subset
 
         players.forEach((player) -> {
             for (int i = 0; i < game.getMaxCardsInHand(); i++) {
@@ -146,4 +144,3 @@ public class Main {
 
     }
 }
-
