@@ -6,7 +6,8 @@
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
-import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import java.util.HashMap;
+
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 
 /**
@@ -33,6 +34,9 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
     }
+    private HashMap<String, PlayedCards> playedCardPiles;
+    
+    private Discard discardPile;
     
     @Override
     public ArrayList<Player> getPlayers() {
@@ -42,6 +46,8 @@ public class GameData implements GameInterface {
     @Override
     public Deck getDeck() {
         return deck;
+    public ArrayList<Card> getDeck() {
+        return (ArrayList<Card>) deck.getCards();
     }
 
     @Override
@@ -73,4 +79,33 @@ public class GameData implements GameInterface {
         return hints;
     }
     
+    @Override
+    public PlayedCards getPlayedCardPile(String playedCardPileColor) {
+        return playedCardPiles.get(playedCardPileColor);
+    }
+
+    @Override
+    public Discard getDiscardPile() {
+        return this.discardPile;
+    }
+    
+    @Override
+    public int getMaxCardsInHand() {
+        if (players.size() <= 3) {
+            return 5;
+        } else if (players.size() <= 5) {
+            return 4;
+        } else {
+            return 3;
+        }
+    }
+    
+    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+        this.players = players;
+        this.deck = deck;
+        this.discardPile = discard;
+        this.playedCardPiles = playedCards;
+        
+        this.remainingStrikes = 3;
+    }
 }

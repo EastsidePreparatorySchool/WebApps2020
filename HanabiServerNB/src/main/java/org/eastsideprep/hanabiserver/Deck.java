@@ -17,7 +17,7 @@ public class Deck implements CardSpotInterface{
     
     private final String name = "Deck";
     
-    private ArrayList<CardInterface> cards;
+    private ArrayList<Card> cards;
 
     @Override
     public String getName() {
@@ -25,11 +25,16 @@ public class Deck implements CardSpotInterface{
     }
 
     @Override
-    public ArrayList<CardInterface> getCards() {
+    public ArrayList<Card> getCards() {
         return cards;
     }
-    
     public Deck(ArrayList<CardInterface> cards){
         this.cards = cards;
+    public Card draw() {
+        return cards.remove(0);
+    }
+        
+    Deck(ArrayList<Card> deck) {
+        cards = deck;
     }
 }

@@ -5,6 +5,7 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.util.Collections;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
 import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
@@ -23,7 +24,7 @@ public class GameControl implements GameControlInterface {
     
     @Override
     public void shuffle(CardSpotInterface spot) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collections.shuffle(spot.getCards());
     }
 
     @Override
