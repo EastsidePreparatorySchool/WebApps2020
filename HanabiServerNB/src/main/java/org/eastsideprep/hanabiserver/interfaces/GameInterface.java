@@ -23,9 +23,9 @@ public interface GameInterface {
     
     public ArrayList<Card> getDeck();
     
-    public Discard getDiscardPile(String discardPileColor);
+    public PlayedCards getPlayedCardPile(String playedCardPileColor);
     
-    public PlayedCards getPlayedCardsPile();
+    public Discard getDiscardPile();
     
     public Card getDeckCardAtId(int id);
     
