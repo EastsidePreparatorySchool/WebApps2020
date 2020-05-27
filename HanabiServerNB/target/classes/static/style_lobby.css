@@ -8,3 +8,21 @@ and open the template in the editor.
     Author     : aturkarslan
 */
 
+/* available games table style*/
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 3px solid black;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: lightgray;
+}
+
