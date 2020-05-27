@@ -92,7 +92,7 @@ public class Main {
         gameControl = new GameControl();
     }
 
-    public static void createGame() {
+    public static void createGame(String name) {
 
         ArrayList<Card> tempDeck = new ArrayList<>();
         for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
@@ -112,7 +112,7 @@ public class Main {
 
         Discard discards = new Discard();
 
-        Game game = new Game(players, deck, playedCards, discards);
+        Game game = new Game(players, deck, playedCards, discards, name);
         games.add(game); // "players" here needs to become a subset
 
         players.forEach((player) -> {
