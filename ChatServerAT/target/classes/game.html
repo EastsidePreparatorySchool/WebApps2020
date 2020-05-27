@@ -161,6 +161,17 @@ and open the template in the editor.
 
         <button onclick="getNew()">Manual Get!</button><br><br> -->
 
+        <textarea readonly="readonly" id="chatbox" name="chatbox" rows="15" cols="75">
+        <!--Add chat contents to this text area-->
+        </textarea>
+        
+        <textarea id="chatenter" name="chatenter" rows="3" cols="50">
+        <!--Add message contents to this editable text area-->
+        </textarea>
+        <!--Someone please implement sendMsg() if we decide to do a chat area-->
+        <button onclick="sendMsg()">Send</button>
+        
+
         <script src="common.js"></script>
         <script src="script.js"></script>
     </body>
