@@ -1,12 +1,12 @@
 logIn();
 
 var game;
-setInterval(function() {
-    request({url: "/update", verb: "PUT"})
+setInterval(function () {
+    request({url: "/update", verb: "GET"})
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
                 game = JSON.parse(data);
-                console.log(game);
+                //console.log(game);
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -14,10 +14,10 @@ setInterval(function() {
 }, 1000);
 
 function completeTurn(jsonForServer) {
-    request({url: "/turn?json=" + jsonForServer, verb: "PUT"})
+    json = JSON.stringify(jsonForServer);
+    request({url: "/turn?json=" + json, verb: "GET"})
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
-                let game = JSON.parse(data);
                 console.log(game);
             })
             .catch(error => {
@@ -41,8 +41,8 @@ function RandomizeCards() { //function to randomize cards from 1-5 and colors wi
     }
 }
 
-function displayUsername(playerNumber, username){
-    document.getElementById("playerLabel"+playerNumber).innerHTML = username
+function displayUsername(playerNumber, username) {
+    document.getElementById("playerLabel" + playerNumber).innerHTML = username;
 }
 
 
@@ -74,30 +74,30 @@ function sendMsg() {
             });
 }
 
-function getNew() {
-    request({url: "/get", verb: "GET"})
-            .then(data => {
-                // parsing message (took a while to figure out why the parsing 
-                // wasn't working, I was able to solve the problem by doing it 
-                // twice but I'm still unsure as to why it didn't just work by 
-                // doing it once the first time)
-                // here's what helped me solve the issue: 
-                // https://stackoverflow.com/questions/30194562/json-parse-not-working
-                var messages = JSON.parse(JSON.parse(data));
-
-                var msgOutput = "";
-                for (var i = 0; i < messages.length; i++) {
-                    var msg = messages[i];
-
-                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n";  // formatting output properly       
-                }
-
-                document.getElementById("result").value = msgOutput; // displaying formatted output in text area
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
+//function getNew() {
+//    request({url: "/get", verb: "GET"})
+//            .then(data => {
+//                // parsing message (took a while to figure out why the parsing 
+//                // wasn't working, I was able to solve the problem by doing it 
+//                // twice but I'm still unsure as to why it didn't just work by 
+//                // doing it once the first time)
+//                // here's what helped me solve the issue: 
+//                // https://stackoverflow.com/questions/30194562/json-parse-not-working
+//                var messages = JSON.parse(JSON.parse(data));
+//
+//                var msgOutput = "";
+//                for (var i = 0; i < messages.length; i++) {
+//                    var msg = messages[i];
+//
+//                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n";  // formatting output properly       
+//                }
+//
+//                document.getElementById("result").value = msgOutput; // displaying formatted output in text area
+//            })
+//            .catch(error => {
+//                console.log("error: " + error);
+//            });
+//}
 
 //0 is neither 1 is play 2 is discard
 var playdiscard = 0;
@@ -159,14 +159,14 @@ var selectedCard = 0;
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
-    if(playdiscard === 1) {
+    if (playdiscard === 1) {
         play(id);
     } else if (playdiscard === 2) {
         discard(id);
     }
     playdiscard = 0;
     blurButtons();
-    
+
 }
 
 var pile = 0;
@@ -182,13 +182,13 @@ function play(id) {
 
     //remove card
     //hand.remove(id)
-    
+
     //add value to pile
     //pile.value++;
-    
+
     //draw new card
     //hand.draw();
-    
+
     //end turn
     pile = 0;
 }

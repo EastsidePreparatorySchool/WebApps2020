@@ -7,7 +7,6 @@ package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.eastsideprep.hanabiserver.*;
 import org.eastsideprep.hanabiserver.interfaces.UserInterface;
 import spark.Request;
 import spark.Response;

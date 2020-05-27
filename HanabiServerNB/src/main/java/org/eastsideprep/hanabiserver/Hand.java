@@ -15,7 +15,7 @@ import org.eastsideprep.hanabiserver.interfaces.HandInterface;
  */
 public class Hand implements HandInterface {
 
-    private ArrayList<Card> cards;
+    private ArrayList<Card> cards = new ArrayList<>();
     private String Name; //letting it be defined in constructor 
     //bec we have multiple hands
 

@@ -15,6 +15,8 @@ import org.eastsideprep.hanabiserver.interfaces.GameInterface;
  */
 public class Game implements GameInterface {
     
+    public int debug = 0;
+    
     private int id;
 
     private ArrayList<Player> players;

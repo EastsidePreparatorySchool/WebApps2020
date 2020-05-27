@@ -27,9 +27,9 @@ public class Main {
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-    static ArrayList<Game> games = new ArrayList<>(); 
+    static ArrayList<Game> games = new ArrayList<>();
     static int gameIdStep = 0;
-    static GameControl gameControl;
+    static GameControl gameControl = new GameControl();
 
     public static void main(String[] args) {
 
@@ -81,41 +81,57 @@ public class Main {
         });
         
          */
-        put("/update", (req, res) -> {
+        get("/update", (req, res) -> {
             Context ctx = getContext(req);
-            Game userGame = games.get(ctx.user.getGameId());
-            
-            if (userGame == null) {
+            if (ctx == null) {return "";}
+
+            if (ctx.user.getGameId() == null) {
                 if (DEBUG) {
                     createGame(new ArrayList<>(Arrays.asList(ctx.user)));
                 } else {
                     throw new Exception();
                 }
             }
-            
+            Game userGame = games.get(ctx.user.getGameId());
+            //userGame.debug++;
+
             String gameJSON = gson.toJson(userGame);
+            //System.out.println(gameJSON);
+
             return gameJSON;
+        }
+        );
+
+        get("/turn", (req, res) -> {
+            String turnJSON = req.attribute("json");
+            Turn turn = gson.fromJson(turnJSON, Turn.class);
+            System.out.println(turn);
+            
+            Context ctx = getContext(req);
+            if (ctx == null) {return "";}
+            Game userGame = games.get(ctx.user.getGameId());
+            
+            if (turn.debug > 0) {
+                userGame.debug += turn.debug;
+            }
+            
+            return "";
         });
 
-        put("/turn", (req, res) -> {
-            return "/turn route";
-        });
-
-        gameControl = new GameControl();
     }
 
     public static Context getContext(Request req) {
         spark.Session s = req.session();
-//        if (s.isNew()) {
-//            s.attribute("map", new HashMap<String, Context>());
-//        }
+        if (s.isNew()) {
+            s.attribute("map", new HashMap<String, Context>());
+        }
         HashMap<String, Context> map = s.attribute("map");
         System.out.println("map =" + map);
         String tabid = req.headers("tabid");
-//        if (tabid == null) {
-//            tabid = "default";
-//            System.out.println(tabid);
-//        }
+        if (tabid == null) {
+            tabid = "default";
+            System.out.println(tabid);
+        }
         Context ctx = map.get(tabid);
 
         return ctx;
@@ -140,16 +156,16 @@ public class Main {
         }
 
         Discard discards = new Discard();
-        
+
         ArrayList<Player> players = new ArrayList<>(); // TODO: populate this with Users in a room
         users.forEach((user) -> {
             players.add(new Player(user, new Hand(user.getName() + "\' hand")));
         });
 
         Game game = new Game(gameIdStep, players, deck, playedCards, discards);
-        games.add(gameIdStep, game); 
+        games.add(gameIdStep, game);
         gameIdStep++;
-        
+
         users.forEach((user) -> {
             user.setGameId(game.getId());
         });
