@@ -35,7 +35,15 @@ class Message {
 
 public class User implements UserInterface {
 
-    String name;
+    private String Name;
+    private String ID;
+    private String InGameID;
+    
+    public User(String name, String id) {
+        Name = name;
+        ID = id;
+    }
+        
     
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
@@ -56,46 +64,47 @@ public class User implements UserInterface {
 
             return result;
         });
-        get("/load", (Request req, Response res) -> {
-            // Open new, independent tab
-            spark.Session s = req.session();
-
-            // if the session is new, make sure it has a context map
-            if (s.isNew()) {
-                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
-            }
-
-            // now we can safely access the context map whether the session is new or not
-            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
-            System.out.println("map =" + map);
-
-            // find the context that goes with the tab
-            String tabid = req.headers("tabid");
-            if (tabid == null) {
-                tabid = "default";
-                System.out.println(tabid);
-            }
-            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-            System.out.println("tabid =" + tabid);
-
-            // no context? no problem.
-            if (ctx == null) {
-                User user = new User();
-                ctx = new org.eastsideprep.hanabiserver.Context(user);
-                System.out.println("context=" + ctx);
-                System.out.println(user);
-                map.put(tabid, ctx);
-            }
-            System.out.println(tabid);
-            String username = ctx.user.getName();
-            System.out.println("user=" + username);
-
-            if (username == null) {
-                username = "unknown"; // default name
-            }
-            return ctx.toString();
-
-        });
+//        get("/load", (Request req, Response res) -> {
+//            // Open new, independent tab
+//            spark.Session s = req.session();
+//
+//            // if the session is new, make sure it has a context map
+//            if (s.isNew()) {
+//                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+//            }
+//
+//            // now we can safely access the context map whether the session is new or not
+//            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+//            System.out.println("map =" + map);
+//
+//            // find the context that goes with the tab
+//            String tabid = req.headers("tabid");
+//            if (tabid == null) {
+//                tabid = "default";
+//                System.out.println(tabid);
+//            }
+//            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+//            System.out.println("tabid =" + tabid);
+//
+//            // no context? no problem.
+//            if (ctx == null) {
+//                // TODO: fix this user generation
+//                User user = new User("GenericUserName", "GenericUserID");
+//                ctx = new org.eastsideprep.hanabiserver.Context(user);
+//                System.out.println("context=" + ctx);
+//                System.out.println(user);
+//                map.put(tabid, ctx);
+//            }
+//            System.out.println(tabid);
+//            String username = ctx.user.getName();
+//            System.out.println("user=" + username);
+//
+//            if (username == null) {
+//                username = "unknown"; // default Name
+//            }
+//            return ctx.toString();
+//
+//        });
 
         //get("/user", "application/json", (req, res) -> user(req, res));
         
@@ -137,11 +146,11 @@ public class User implements UserInterface {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public static String loginextra(Request req, Response res) {
@@ -188,7 +197,7 @@ public class User implements UserInterface {
          System.out.println("user=" +user);
          
         if (user == null) {
-            user = "unknown"; // default name
+            user = "unknown"; // default Name
         }
         return user;
         //how to merge together
@@ -213,6 +222,26 @@ public class User implements UserInterface {
     @Override
     public void joinGame() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void SetInGameID(String gameID) {
+        InGameID = gameID;
+    }
+
+    @Override
+    public String GetName() {
+        return Name;
+    }
+
+    @Override
+    public String GetID() {
+        return ID;
+    }
+
+    @Override
+    public String GetInGameID() {
+        return InGameID;
     }
 
 }

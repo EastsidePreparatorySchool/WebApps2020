@@ -27,7 +27,7 @@ public class Player implements PlayerInterface {
     }
 
     public Player(String username){
-        this.myUsername = username;
+        this.myUser.setName(username);
         this.myHints = new ArrayList<Hint>();
     }
     
@@ -63,7 +63,7 @@ public class Player implements PlayerInterface {
 
     @Override
     public String GetUsername() {
-        return myUser.GetStringName();
+        return myUser.GetName();
     }
 
     @Override
