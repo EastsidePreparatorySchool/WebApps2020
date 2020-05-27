@@ -89,11 +89,8 @@ public class Main {
             return "/turn route";
         });
         
-        get("/update.lobby","application/json", (req,res)->{ //route specifically for sending lobby info to client
-            return games;                                    //so we don't have to send the arraylist of games 
-        }, new JSONRT());                                    //With each regular update for the game. 
-                                                             //Can be a separate update function that runs less frequently
-        gameControl = new GameControl();                     //Maybe even manually.
+                                       
+        gameControl = new GameControl();
     }
     
     public static void createGame() {
