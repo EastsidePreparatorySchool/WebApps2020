@@ -13,9 +13,39 @@ function request(obj) {
         };
         xhr.onerror = () => reject(xhr.statusText);
         xhr.setRequestHeader("tabid", sessionStorage.getItem("tabid")); 
+        console.log(sessionStorage);
         xhr.send(obj.body);
     });
 };
+
+/*
+function updateUser() {
+    request({url: "user", verb: "GET"})
+            .then(username=> {
+                console.log(username);
+                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username;
+                console.log(document.getElementById("displayLogIn").value);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+ * 
+ */
+
+function switchUser(){
+   window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+}
+
+function getheaders() {
+    request({url: "getheaders", verb: "GET"})
+            .then(result=> {
+                console.log(result);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+        }
 
 // make an id for the tab that we are in
 
@@ -30,3 +60,4 @@ request({url:"/load"})
         .then(data=>{console.log(data);})
         .catch(error=>{console.log(error);});
     
+   // updateUser();
