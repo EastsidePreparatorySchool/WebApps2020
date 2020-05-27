@@ -6,6 +6,8 @@
 package org.eastsideprep.hanabiserver;
 
 import com.google.gson.Gson;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import spark.Request;
 import spark.Response;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
+import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -31,6 +34,9 @@ public class Main {
     static int gameIdStep = 0;
     static GameControl gameControl = new GameControl();
 
+
+    static ArrayList<Player> players = new ArrayList<>();
+
     public static void main(String[] args) {
 
         port(80);
@@ -39,7 +45,14 @@ public class Main {
         staticFiles.location("static");
         User.setup(args);
 
-        /*
+
+        // get a silly route up for testing
+        get("/hello", (req, res) -> {
+            System.out.println("Hey we were invoked:");
+            return "Hello world from code";
+        });
+           
+           /*
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -75,7 +88,7 @@ public class Main {
         });
         
          */
-        get("/update", (req, res) -> {
+        get("/update2", (req, res) -> {
             Context ctx = getContext(req);
             if (ctx == null) {return "";}
 

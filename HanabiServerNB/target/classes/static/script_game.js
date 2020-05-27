@@ -202,15 +202,7 @@ function discard(card) {
     document.getElementById("discardbutton").removeAttribute('disabled');
 }
 setInterval(getNew, 300);
-var x = document.getElementById("msgBox");
-//taken from w3schools
-x.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        sendMsg();
-        x.value = "";
-    }
-});
+
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
@@ -224,3 +216,62 @@ function disable(num, id) {
     }
     console.log(id);
 }
+
+
+// optional chat feature (Aybala)
+
+function sendMsg() {
+    console.log("made it sendMsg");
+    var a = document.getElementById("msgBox").value;
+    request({url: "/send?msg=" + a, method: "PUT"})
+            .then(data => {
+                console.log(a);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
+function getNew() {
+    request({url: "/get", method: "GET"})
+            .then(data => {
+                var messages = JSON.parse(JSON.parse(data)); 
+                var msgOutput = "";
+                for(var i = 0; i < messages.length; i++) {
+                    var msg = messages[i]; 
+                    msgOutput += msg.username + ": " + msg.msg + "\n";  // formatting output properly       
+                }       
+                
+                document.getElementById("chatbox").value = msgOutput; // displaying formatted output in text area
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
+setInterval(getNew, 300);
+
+logIn();
+
+function logIn() {
+    request({url: "/login_user?username=" + username, method: "GET"})
+            .then(username => {
+                console.log(username);
+                document.getElementById("displayusername").innerHTML = "Logged in as " + username + ".";
+                console.log(document.getElementById("displayusername").value);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
+// sends message by just pressing enter
+var x = document.getElementById("msgBox");
+//taken from w3schools
+x.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        sendMsg();
+        x.value = "";
+    }
+});
