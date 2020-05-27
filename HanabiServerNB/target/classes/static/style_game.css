@@ -4,9 +4,10 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : May 9, 2020, 4:45:44 PM
+    Created on : May 26, 2020, 7:04:31 PM
     Author     : aturkarslan
 */
+
 
 #container {
     display: flex;
@@ -107,7 +108,7 @@ and open the template in the editor.
 }
 
 #interactives {
-    margin-top: 75px;
+    margin-top: 25px;
     margin-left: 25px;
 }
 
@@ -200,20 +201,8 @@ and open the template in the editor.
     top: 510px;
 }
 
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+#chatstuff {
+    position:absolute;
+    bottom: 30px;
+    right: 230px;
 }
-
-td, th {
-  border: 3px solid black;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: lightgray;
-}
-
-
