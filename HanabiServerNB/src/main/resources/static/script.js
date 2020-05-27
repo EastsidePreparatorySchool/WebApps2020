@@ -2,11 +2,11 @@ logIn();
 
 var game;
 setInterval(function () {
-    request({url: "/update", verb: "GET"})
+    request({url: "/update", verb: "GET"}) // "PUT" verb does not work here. Debug at your own risk
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
                 game = JSON.parse(data);
-                console.log(game);
+                //console.log(game);
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -18,8 +18,7 @@ function completeTurn(jsonForServer) {
     console.log(turnJSON);
     request({url: "/turn?json=" + turnJSON, verb: "GET"})
             .then(data => {
-                // "data" should contain the JSON of the Game object etc. from the server
-                console.log(game);
+                //console.log(game);
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -75,30 +74,30 @@ function sendMsg() {
             });
 }
 
-//function getNew() {
-//    request({url: "/get", verb: "GET"})
-//            .then(data => {
-//                // parsing message (took a while to figure out why the parsing 
-//                // wasn't working, I was able to solve the problem by doing it 
-//                // twice but I'm still unsure as to why it didn't just work by 
-//                // doing it once the first time)
-//                // here's what helped me solve the issue: 
-//                // https://stackoverflow.com/questions/30194562/json-parse-not-working
-//                var messages = JSON.parse(JSON.parse(data));
-//
-//                var msgOutput = "";
-//                for (var i = 0; i < messages.length; i++) {
-//                    var msg = messages[i];
-//
-//                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n";  // formatting output properly       
-//                }
-//
-//                document.getElementById("result").value = msgOutput; // displaying formatted output in text area
-//            })
-//            .catch(error => {
-//                console.log("error: " + error);
-//            });
-//}
+function getNew() {
+    request({url: "/get", verb: "GET"})
+            .then(data => {
+                // parsing message (took a while to figure out why the parsing 
+                // wasn't working, I was able to solve the problem by doing it 
+                // twice but I'm still unsure as to why it didn't just work by 
+                // doing it once the first time)
+                // here's what helped me solve the issue: 
+                // https://stackoverflow.com/questions/30194562/json-parse-not-working
+                var messages = JSON.parse(JSON.parse(data));
+
+                var msgOutput = "";
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = messages[i];
+
+                    msgOutput += "[" + msg.msgtime + "] " + msg.username + ": " + msg.msg + "\n";  // formatting output properly       
+                }
+
+                document.getElementById("result").value = msgOutput; // displaying formatted output in text area
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
 
 //0 is neither 1 is play 2 is discard
 var playdiscard = 0;

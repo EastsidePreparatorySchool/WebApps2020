@@ -39,12 +39,6 @@ public class Main {
         staticFiles.location("static");
         User.setup(args);
 
-        // get a silly route up for testing
-        get("/hello", (req, res) -> {
-            System.out.println("Hey we were invoked:");
-            return "Hello world from code";
-        });
-
         /*
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
@@ -104,7 +98,7 @@ public class Main {
 
         get("/turn", (req, res) -> {
             String turnJSON = req.queryParams("json");
-            System.out.println(turnJSON);
+            //System.out.println(turnJSON);
             Turn turn = gson.fromJson(turnJSON, Turn.class);
             
             Context ctx = getContext(req);
