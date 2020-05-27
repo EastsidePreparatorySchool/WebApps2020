@@ -118,5 +118,18 @@ public class Game implements GameInterface {
         this.playedCardPiles = playedCards;
         
         this.remainingStrikes = 3;
+        
+        gameID=GameIdSettingValue2.getAndDecrement();
+    }
+    
+    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
+        this.players = players;
+        this.deck = deck;
+        this.discardPile = discard;
+        this.playedCardPiles = playedCards;
+        
+        this.remainingStrikes = 3;
+        this.name=name;
+        gameID=GameIdSettingValue2.getAndDecrement();
     }
 }

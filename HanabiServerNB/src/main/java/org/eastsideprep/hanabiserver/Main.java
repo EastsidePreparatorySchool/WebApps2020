@@ -76,6 +76,10 @@ public class Main {
             return "/turn route";
         });
         
+        get("/update.lobby", (req,res)->{
+            return "/update.lobby route";
+        });
+        
         gameControl = new GameControl();
     }
     
