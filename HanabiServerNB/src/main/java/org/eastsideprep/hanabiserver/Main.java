@@ -35,7 +35,7 @@ public class Main {
         
 
         port(80);
-
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
@@ -89,7 +89,6 @@ public class Main {
         put("/turn", (req, res) -> {
             return "/turn route";
         });
-
         gameControl = new GameControl();
     }
 
