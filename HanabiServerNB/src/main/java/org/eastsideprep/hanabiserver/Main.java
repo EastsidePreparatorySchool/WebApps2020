@@ -32,17 +32,18 @@ public class Main {
 
     static ArrayList<GameData> games1 = new ArrayList<>();
     static int gameIdStep = 0;
-    static GameControl gameControl = new GameControl();
 
+//    static ArrayList<GameData> games = new ArrayList<>();
+    static GameControl gameControl;
 
     static ArrayList<Player> players = new ArrayList<>();
 
     static ArrayList<GameControl> games;
-    
+
     public static void main(String[] args) {
 
         port(80);
-        
+
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
@@ -63,13 +64,11 @@ public class Main {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-           
-           
+
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
 
-         
             // if the session is new, make sure it has a context map
             if (s.isNew()) {
                 s.attribute("map", new HashMap<String, Context>());
@@ -89,7 +88,7 @@ public class Main {
 
             // no context? no problem.
             if (ctx == null) {
-               User user = new User(); 
+                User user = new User();
                 ctx = new Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
@@ -188,18 +187,9 @@ public class Main {
 
         Discard discards = new Discard();
 
-        ArrayList<Player> players = new ArrayList<>(); // TODO: populate this with Users in a room
-        users.forEach((user) -> {
-            players.add(new Player(user, new Hand(user.getName() + "\' hand")));
-        });
-
-        GameData game = new GameData(gameIdStep, players, deck, playedCards, discards);
-        games1.add(gameIdStep, game);
-        gameIdStep++;
-
-        users.forEach((user) -> {
-            user.setGameId(game.getId());
-        });
+        GameData game = new GameData(players, deck, playedCards, discards);
+        GameControl gc = new GameControl(game);
+        games.add(gc); // "players" here needs to become a subset
 
         players.forEach((player) -> {
             for (int i = 0; i < game.getMaxCardsInHand(); i++) {

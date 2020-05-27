@@ -13,10 +13,10 @@ import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
  *
  * @author mgoetzmann
  */
-public class Deck implements CardSpotInterface{
-    
+public class Deck implements CardSpotInterface {
+
     private final String name = "Deck";
-    
+
     private ArrayList<Card> cards;
 
     @Override
@@ -29,11 +29,12 @@ public class Deck implements CardSpotInterface{
         return cards;
     }
 
+    public Deck(ArrayList<Card> cards) {
+        this.cards = cards;
+    }
+
     public Card draw() {
         return cards.remove(0);
     }
-        
-    Deck(ArrayList<Card> deck) {
-        cards = deck;
-    }
+
 }
