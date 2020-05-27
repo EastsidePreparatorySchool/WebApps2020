@@ -24,7 +24,6 @@ import static spark.Spark.staticFiles;
  *
  * @author kuberti
  */
-
 // optional chat feature in lobby (Aybala) - msg class
 class Message {
 
@@ -36,7 +35,8 @@ class Message {
 public class User implements UserInterface {
 
     String name;
-    
+    String usernameForMsg;
+
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
 
@@ -56,6 +56,7 @@ public class User implements UserInterface {
 
             return result;
         });
+
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -94,10 +95,7 @@ public class User implements UserInterface {
                 username = "unknown"; // default name
             }
             return ctx.toString();
-
         });
-
-        //get("/user", "application/json", (req, res) -> user(req, res));
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
@@ -105,13 +103,21 @@ public class User implements UserInterface {
 
             String msg = req.queryParams("msg");
             Message newMessage = new Message();
-            newMessage.username = getSession(req).attribute("username");
-            if (newMessage.username == null) {
-                String username = login(req, res);
-                newMessage.username = username;
-                getSession(req).attribute("username", username);
-                System.out.println("Got user!");
-            }
+            newMessage.username = username(req);
+
+            String username = req.queryParams("username");
+            String tabid = req.queryParams("tabid");
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
+            Context ctx = map.get(tabid);
+            String eachUser = username + tabid;
+            System.out.println("username in login=" + username);
+            System.out.println("tabid in login=" + tabid);
+            System.out.println("ctx in login=" + ctx);
+            ctx.user.setName(eachUser);
+            String userName = ctx.user.getName();
+            // String username = getSession(req).attribute("username");
+            newMessage.username = userName;
+
             System.out.println(newMessage.username);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             newMessage.msgtime = dtf.format(LocalDateTime.now());
@@ -122,7 +128,7 @@ public class User implements UserInterface {
                 System.out.println(msgs.toString());
             }
 
-            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
+            return "hi";
         });
 
         get("/get", "application/json", (req, res) -> {
@@ -161,13 +167,14 @@ public class User implements UserInterface {
         HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
         Context ctx = map.get(tabid);
         String eachUser = username + tabid;
-        System.out.println("username in login=" +username);
+        System.out.println("username in login=" + username);
         System.out.println("tabid in login=" + tabid);
-        System.out.println("ctx in login=" +ctx);
+        System.out.println("ctx in login=" + ctx);
         ctx.user.setName(eachUser);
-        System.out.println("eachUser=" +eachUser);
+        System.out.println("eachUser=" + eachUser);
         return username;
     }
+
 
     /*
      static String user(spark.Request req, Response res) {
@@ -194,7 +201,6 @@ public class User implements UserInterface {
         //how to merge together
     }
      */
-
     static spark.Session getSession(spark.Request req) {
         spark.Session s = req.session(true); // true means if there is none, make one
         return s;

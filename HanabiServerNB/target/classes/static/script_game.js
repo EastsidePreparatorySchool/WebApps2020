@@ -176,9 +176,8 @@ logIn();
 function logIn() {
     request({url: "/login_user?username=" + username, method: "GET"})
             .then(username => {
+                //document.getElementById("displayusername").innerHTML = "Logged in as " + username + ".";
                 console.log(username);
-                document.getElementById("displayusername").innerHTML = "Logged in as " + username + ".";
-                console.log(document.getElementById("displayusername").value);
             })
             .catch(error => {
                 console.log("error: " + error);
