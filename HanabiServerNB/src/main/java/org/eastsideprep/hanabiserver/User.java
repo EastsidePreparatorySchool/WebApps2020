@@ -23,7 +23,8 @@ import static spark.Spark.staticFiles;
 public class User implements UserInterface {
 
     String name;
-
+    private Integer gameId;
+    
     public static void setup(String[] args) {
         System.out.println("it's working");
         staticFiles.location("static");
@@ -159,8 +160,13 @@ public class User implements UserInterface {
     }
 
     @Override
-    public void joinGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer getGameId() {
+        return this.gameId;
+    }
+
+    @Override
+    public void setGameId(int id) {
+        this.gameId = id;
     }
 
 }

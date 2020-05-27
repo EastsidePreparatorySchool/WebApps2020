@@ -7,6 +7,7 @@ package org.eastsideprep.hanabiserver;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,16 +20,16 @@ import static spark.Spark.*;
 //HANABI SERVER NB
 public class Main {
 
+    final static boolean DEBUG = true;
     final static Gson gson = new Gson();
 
     final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-    static ArrayList<Game> games = new ArrayList<>();
+    static ArrayList<Game> games = new ArrayList<>(); 
+    static int gameIdStep = 0;
     static GameControl gameControl;
-
-    static ArrayList<Player> players = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -82,9 +83,18 @@ public class Main {
          */
         put("/update", (req, res) -> {
             Context ctx = getContext(req);
-            Game userGame = ctx.getGame();
+            Game userGame = games.get(ctx.user.getGameId());
             
-            return "/update route";
+            if (userGame == null) {
+                if (DEBUG) {
+                    createGame(new ArrayList<>(Arrays.asList(ctx.user)));
+                } else {
+                    throw new Exception();
+                }
+            }
+            
+            String gameJSON = gson.toJson(userGame);
+            return gameJSON;
         });
 
         put("/turn", (req, res) -> {
@@ -111,7 +121,7 @@ public class Main {
         return ctx;
     }
 
-    public static void createGame() {
+    public static void createGame(ArrayList<User> users) {
 
         ArrayList<Card> tempDeck = new ArrayList<>();
         for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
@@ -130,9 +140,19 @@ public class Main {
         }
 
         Discard discards = new Discard();
+        
+        ArrayList<Player> players = new ArrayList<>(); // TODO: populate this with Users in a room
+        users.forEach((user) -> {
+            players.add(new Player(user, new Hand(user.getName() + "\' hand")));
+        });
 
-        Game game = new Game(players, deck, playedCards, discards);
-        games.add(game); // "players" here needs to become a subset
+        Game game = new Game(gameIdStep, players, deck, playedCards, discards);
+        games.add(gameIdStep, game); 
+        gameIdStep++;
+        
+        users.forEach((user) -> {
+            user.setGameId(game.getId());
+        });
 
         players.forEach((player) -> {
             for (int i = 0; i < game.getMaxCardsInHand(); i++) {

@@ -15,6 +15,7 @@ import org.eastsideprep.hanabiserver.interfaces.PlayerInterface;
 public class Player implements PlayerInterface {
 
     // Private Variables
+    private User user; // User object that holds session (and eventually server) saved data
     private String myUsername;
     private Hand myHand;
     private ArrayList<Hint> myHints; // things I known about my cards
@@ -46,22 +47,33 @@ public class Player implements PlayerInterface {
 
     @Override
     public void AddCardToHand(Card card) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.myHand.draw(card);
     }
 
     @Override
     public String GetUsername() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.myUsername;
     }
 
     @Override
     public Hand GetHand() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.myHand;
     }
 
     @Override
     public ArrayList<Hint> GetReceivedHints() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public User GetUserObject() {
+        return this.user;
+    }
     
+    Player(User user, Hand hand) {
+        this.user = user;
+        this.myUsername = user.name;
+        this.myHand = hand;
+        this.myHints = new ArrayList<>();
+    }
 }

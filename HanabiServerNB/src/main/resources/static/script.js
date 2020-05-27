@@ -1,4 +1,30 @@
 logIn();
+
+var game;
+setInterval(function() {
+    request({url: "/update", verb: "PUT"})
+            .then(data => {
+                // "data" should contain the JSON of the Game object etc. from the server
+                game = JSON.parse(data);
+                console.log(game);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}, 1000);
+
+function completeTurn(jsonForServer) {
+    request({url: "/turn?json=" + jsonForServer, verb: "PUT"})
+            .then(data => {
+                // "data" should contain the JSON of the Game object etc. from the server
+                let game = JSON.parse(data);
+                console.log(game);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
     var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
@@ -23,7 +49,7 @@ function displayUsername(playerNumber, username){
 
 
 function logIn() {
-    // var username = prompt("Please enter your username.");
+    var username = prompt("Please enter your username.");
     request({url: "/login_user?username=" + username, verb: "GET"})
             .then(username => {
                 console.log(username);

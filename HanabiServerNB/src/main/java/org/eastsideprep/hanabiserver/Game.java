@@ -14,6 +14,8 @@ import org.eastsideprep.hanabiserver.interfaces.GameInterface;
  * @author eoreizy
  */
 public class Game implements GameInterface {
+    
+    private int id;
 
     private ArrayList<Player> players;
     
@@ -85,12 +87,28 @@ public class Game implements GameInterface {
         }
     }
     
-    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+    Game(int id, ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+        this.id = id;
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;
         this.playedCardPiles = playedCards;
         
         this.remainingStrikes = 3;
+    }
+
+    @Override
+    public void AddPlayer(Player player) {
+        this.players.add(player);
+    }
+
+    @Override
+    public Player RemovePlayer(int id) {
+        return this.players.remove(id);
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
     }
 }

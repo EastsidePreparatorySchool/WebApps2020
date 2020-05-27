@@ -15,7 +15,13 @@ import org.eastsideprep.hanabiserver.*;
  */
 public interface GameInterface {
     
+    public int getId();
+    
     public ArrayList<Player> getPlayers();
+    
+    public void AddPlayer(Player player);
+    
+    public Player RemovePlayer(int id);
     
     public Player getPlayerAtId(int id);
     

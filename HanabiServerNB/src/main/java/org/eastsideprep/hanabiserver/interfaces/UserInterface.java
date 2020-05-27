@@ -19,7 +19,8 @@ public interface UserInterface {
         return "ok";
     }
     
-    public void joinGame(); 
+    public Integer getGameId();
     
+    public void setGameId(int id);
     
 }

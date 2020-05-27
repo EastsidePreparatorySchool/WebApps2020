@@ -10,27 +10,11 @@ package org.eastsideprep.hanabiserver;
  * @author mgoetzmann
  */
 public class Context {
+    
     public User user;
-    public Player player;
-    private Game game;
-    
-    public void enterGame(Game g) {
-        this.game = g;
-    }
-    
-    public Game leaveGame() {
-        Game temp = this.game;
-        this.game = null;
-        
-        return temp;
-    }
-    
-    public Game getGame() {
-        return this.game;
-    }
     
     public Context(User user){
         this.user = user;
     }
-    
+       
 }
