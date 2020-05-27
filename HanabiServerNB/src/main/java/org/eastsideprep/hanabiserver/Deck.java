@@ -28,8 +28,7 @@ public class Deck implements CardSpotInterface{
     public ArrayList<Card> getCards() {
         return cards;
     }
-    public Deck(ArrayList<CardInterface> cards){
-        this.cards = cards;
+
     public Card draw() {
         return cards.remove(0);
     }

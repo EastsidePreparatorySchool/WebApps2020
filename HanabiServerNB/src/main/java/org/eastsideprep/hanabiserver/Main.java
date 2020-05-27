@@ -30,7 +30,7 @@ public class Main {
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-    static ArrayList<Game> games1 = new ArrayList<>();
+    static ArrayList<GameData> games1 = new ArrayList<>();
     static int gameIdStep = 0;
     static GameControl gameControl = new GameControl();
 
@@ -111,7 +111,7 @@ public class Main {
                     throw new Exception();
                 }
             }
-            Game userGame = games.get(ctx.user.getGameId());
+            GameData userGame = games1.get(ctx.user.getGameId());
             //userGame.debug++;
 
             String gameJSON = gson.toJson(userGame);
@@ -141,7 +141,7 @@ public class Main {
             
             Context ctx = getContext(req);
             if (ctx == null) {return "";}
-            Game userGame = games.get(ctx.user.getGameId());
+            GameData userGame = games1.get(ctx.user.getGameId());
             
             if (turn.debug > 0) {
                 userGame.debug += turn.debug;
@@ -193,8 +193,8 @@ public class Main {
             players.add(new Player(user, new Hand(user.getName() + "\' hand")));
         });
 
-        Game game = new Game(gameIdStep, players, deck, playedCards, discards);
-        games.add(gameIdStep, game);
+        GameData game = new GameData(gameIdStep, players, deck, playedCards, discards);
+        games1.add(gameIdStep, game);
         gameIdStep++;
 
         users.forEach((user) -> {

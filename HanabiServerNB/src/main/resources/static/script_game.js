@@ -2,7 +2,7 @@ logIn();
 
 var game;
 setInterval(function () {
-    request({url: "/update", verb: "GET"}) // "PUT" verb does not work here. Debug at your own risk
+    request({url: "/update2", verb: "GET"}) // "PUT" verb does not work here. Debug at your own risk
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
                 game = JSON.parse(data);
@@ -212,7 +212,7 @@ function disable(num, id) {
     var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
-        if ((clueButtons[num][i]).localeCompare(id) != 0) {
+        if ((clueButtons[num][i]).localeCompare(id) !== 0) {
             document.getElementById(clueButtons[num][i]).setAttribute("disabled", "disabled");
         }
     }

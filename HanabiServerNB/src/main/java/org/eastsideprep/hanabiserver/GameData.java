@@ -10,12 +10,13 @@ import java.util.HashMap;
 
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 
 /**
  * 
  * @author eoreizy
  */
-public class Game implements GameInterface {
+public class GameData implements GameInterface {
     
     public int debug = 0;
     
@@ -32,8 +33,6 @@ public class Game implements GameInterface {
 //    private static int GameIdSettingValue=1; 
     private static AtomicInteger GameIdSettingValue2=new AtomicInteger(Integer.MIN_VALUE);
     
-    private String name;
-    
     private int gameID;
     
  //   private ArrayList<Card> deck; // Can be an instance of the Deck class
@@ -42,7 +41,7 @@ public class Game implements GameInterface {
     public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId){
         this.players = players;
         this.remainingStrikes = startingStrikes;
-        this.deck = new Deck(new ArrayList<CardInterface>());
+        this.deck = new Deck(new ArrayList<Card>());
         this.name = name;
         this.gameId = gameId;
         //do the stuff to fill the deck//
@@ -51,7 +50,7 @@ public class Game implements GameInterface {
     
     private Discard discardPile;
     
-    Game(String nm){ //whenever you call game, synchronize
+    GameData(String nm){ //whenever you call game, synchronize
         name=nm;
         gameID=GameIdSettingValue2.getAndDecrement();
 
@@ -67,8 +66,6 @@ public class Game implements GameInterface {
     @Override
     public Deck getDeck() {
         return deck;
-    public ArrayList<Card> getDeck() {
-        return (ArrayList<Card>) deck.getCards();
     }
 
     @Override
@@ -130,7 +127,7 @@ public class Game implements GameInterface {
         }
     }
     
-    Game(int id, ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+    GameData(int id, ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
         this.id = id;
         this.players = players;
         this.deck = deck;
@@ -142,7 +139,7 @@ public class Game implements GameInterface {
         gameID=GameIdSettingValue2.getAndDecrement();
     }
     
-    Game(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
+    GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;
