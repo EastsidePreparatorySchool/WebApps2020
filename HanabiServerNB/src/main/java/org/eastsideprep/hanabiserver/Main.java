@@ -5,6 +5,8 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -13,39 +15,51 @@ import spark.Request;
 import spark.Response;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
+import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
-
 public class Main {
-    
 
-    final static String[] CARD_COLORS = new String[] {"Purple", "Green", "Yellow", "Blue", "Red"};
+    final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
-    
+
     static ArrayList<Game> games = new ArrayList<>();
     static GameControl gameControl;
-    
+
     static ArrayList<Player> players = new ArrayList<>();
 
+    static ArrayList<GameControl> games;
+    
     public static void main(String[] args) {
         
 
         port(80);
-
+        
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
         User.setup(args);
+
+        games = new ArrayList<>();
+
+        //Making a test GameControl object
+        ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(new Player("Windows"));
+        testPlayers.add(new Player("MacOS"));
+        testPlayers.add(new Player("Linux"));
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        GameControl testGC = new GameControl(testGD);
+        games.add(testGC);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
             System.out.println("Hey we were invoked:");
             return "Hello world from code";
         });
-        
            
-           /*
+           
         get("/load", (Request req, Response res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
@@ -76,25 +90,33 @@ public class Main {
                 System.out.println(user);
                 map.put(tabid, ctx);
             }
-            System.out.println(tabid);
+
             return ctx.toString();
         });
-        
-*/
-        put("/update", (req, res) -> {
-            return "/update route";
-        });
-        
+
+        get("/update", "application/json", (req, res) -> {
+            String gameID = req.queryParams("gid");
+            System.out.println("Update requested by " + req.ip() + " for game " + gameID);
+
+            if (gameID != null) {
+                int gameID_int = Integer.parseInt(gameID);
+                GameControl game = games.get(gameID_int);
+                GameData gameData = game.getGameData();
+                return gameData;
+            } else {
+                System.out.println("returning games");
+                return games;
+            }
+        }, new JSONRT());
+
         put("/turn", (req, res) -> {
             return "/turn route";
         });
-        
-
         gameControl = new GameControl();
     }
-    
+
     public static void createGame() {
-        
+
         ArrayList<Card> tempDeck = new ArrayList<>();
         for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
             for (String cardColor : CARD_COLORS) {
@@ -105,17 +127,17 @@ public class Main {
         }
         Deck deck = new Deck(tempDeck);
         gameControl.shuffle(deck);
-        
+
         HashMap<String, PlayedCards> playedCards = new HashMap<>();
         for (String color : CARD_COLORS) {
             playedCards.put(color, new PlayedCards(color));
         }
-        
+
         Discard discards = new Discard();
-        
+
         Game game = new Game(players, deck, playedCards, discards);
         games.add(game); // "players" here needs to become a subset
-        
+
         players.forEach((player) -> {
             for (int i = 0; i < game.getMaxCardsInHand(); i++) {
                 player.AddCardToHand(deck.draw());

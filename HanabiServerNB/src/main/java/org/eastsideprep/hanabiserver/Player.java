@@ -17,8 +17,15 @@ public class Player implements PlayerInterface {
     // Private Variables
     private String myUsername;
     private Hand myHand;
+    private int myID;
+    private int inGameID;
     private ArrayList<Hint> myHints; // things I known about my cards
 
+    public Player(String username){
+        this.myUsername = username;
+        this.myHints = new ArrayList<Hint>();
+    }
+    
     @Override
     public void SendHint(Hint hint, Player toPlayer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
