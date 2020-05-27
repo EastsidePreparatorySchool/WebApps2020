@@ -5,24 +5,40 @@
  */
 package org.eastsideprep.hanabiserver;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.eastsideprep.hanabiserver.*;
 import org.eastsideprep.hanabiserver.interfaces.UserInterface;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import static spark.Spark.get;
+import static spark.Spark.put;
 import static spark.Spark.staticFiles;
 
 /**
  *
  * @author kuberti
  */
+
+// optional chat feature in lobby (Aybala) - msg class
+class Message {
+
+    public String username;
+    public String msg;
+    public String msgtime;
+}
+
 public class User implements UserInterface {
 
     String name;
+    
+    // optional chat feature
+    public static ArrayList<Message> msgs = new ArrayList<>();
 
     public static void setup(String[] args) {
         System.out.println("it's working");
@@ -82,6 +98,42 @@ public class User implements UserInterface {
         });
 
         //get("/user", "application/json", (req, res) -> user(req, res));
+        
+        // optional chat feature in lobby (Aybala)
+        put("/send", (req, res) -> {
+            System.out.println("Send message requested JAAAAAAAAAA");
+
+            String msg = req.queryParams("msg");
+            Message newMessage = new Message();
+            newMessage.username = getSession(req).attribute("username");
+            if (newMessage.username == null) {
+                String username = login(req, res);
+                newMessage.username = username;
+                getSession(req).attribute("username", username);
+                System.out.println("Got user!");
+            }
+            System.out.println(newMessage.username);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            newMessage.msgtime = dtf.format(LocalDateTime.now());
+            newMessage.msg = msg;
+
+            synchronized (msgs) {
+                msgs.add(newMessage);
+                System.out.println(msgs.toString());
+            }
+
+            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
+        });
+
+        get("/get", "application/json", (req, res) -> {
+            JSONRT rt = new JSONRT(); // created a response transformer object
+            synchronized (msgs) {
+                String result = rt.render(msgs); // rendered java objects into JSON string
+
+                return result;
+            }
+        }, new JSONRT());
+
     }
 
     public void setName(String name) {
@@ -114,7 +166,7 @@ public class User implements UserInterface {
         System.out.println("ctx in login=" +ctx);
         ctx.user.setName(eachUser);
         System.out.println("eachUser=" +eachUser);
-        return "ok";
+        return username;
     }
 
     /*

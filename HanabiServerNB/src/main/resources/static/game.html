@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hanabi Live Lobby</title>
+        <title>Hanabi Live</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="style_lobby.css">
+        <link rel="stylesheet" type="text/css" href="style_game.css">
     </head>
 
     <body>
@@ -12,10 +12,33 @@
         <p id="displayLogIn">Not Logged In</p> <button onclick="switchUser()">Switch User</button>
 
     <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
-        <h1>Welcome to Hanabi Live!</h1>
-        <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
-            Signed in as: 
-            <p id="displayusername">Not Logged In</p>
+        <div>Hanabi</div>
+
+        <!--made start button, someone else make actual functionality to start the game-->
+        <button onclick="startGame()">Click to start game</button>
+        <br>Clues left:
+        <p id="clues"></p>
+
+        <!--0 is the placeholder number for the clue counter, add clue variable-->
+        <script>
+            document.getElementById("clues").innerHTML = "0";
+        </script>
+
+
+        <button onclick = "selectPlay()" id = "playbutton">Play</button>
+        <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
+
+        <div id="selectors">
+            <br><br><br>
+            <button id = "select1" disabled = "disabled" onclick = "selectCard(1)">Select</button>
+            <br><br>
+            <button id = "select2" disabled = "disabled" onclick = "selectCard(2)">Select</button>
+            <br><br>
+            <button id = "select3" disabled = "disabled" onclick = "selectCard(3)">Select</button>
+            <br><br>
+            <button id = "select4" disabled = "disabled" onclick = "selectCard(4)">Select</button>
+            <br><br>
+            <button id = "select5" disabled = "disabled" onclick = "selectCard(5)">Select</button>  
         </div>
 
 
@@ -150,8 +173,14 @@
         <button onclick="sendMsg()">Send!</button>
 
         <button onclick="getNew()">Manual Get!</button><br><br> -->
+        
+        
+        <textarea readonly="readonly" id="chatbox" name="chatbox" rows="15" cols="75"></textarea>
+        <input id="msgBox" placeholder="enter value" type="text"><br>
+        <button onclick="sendMsg()">Send</button>
 
         <script src="common.js"></script>
-        <script src="script_lobby.js"></script>
+        <script src="script_game.js"></script>
     </body>
 </html>
+

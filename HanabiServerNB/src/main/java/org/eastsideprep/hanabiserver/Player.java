@@ -17,6 +17,8 @@ public class Player implements PlayerInterface {
     // Private Variables
     private String myUsername;
     private Hand myHand;
+    private int myID;
+    private int inGameID;
     private ArrayList<Hint> myHints; // things I known about my cards
 
     public Player(String username){
