@@ -101,12 +101,18 @@ public class User implements UserInterface {
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
-            System.out.println("Send message requested");
+            System.out.println("Send message requested JAAAAAAAAAA");
 
             String msg = req.queryParams("msg");
             Message newMessage = new Message();
-            newMessage.username = login(username);
-
+            newMessage.username = getSession(req).attribute("username");
+            if (newMessage.username == null) {
+                String username = login(req, res);
+                newMessage.username = username;
+                getSession(req).attribute("username", username);
+                System.out.println("Got user!");
+            }
+            System.out.println(newMessage.username);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             newMessage.msgtime = dtf.format(LocalDateTime.now());
             newMessage.msg = msg;
@@ -160,7 +166,7 @@ public class User implements UserInterface {
         System.out.println("ctx in login=" +ctx);
         ctx.user.setName(eachUser);
         System.out.println("eachUser=" +eachUser);
-        return "ok";
+        return username;
     }
 
     /*
