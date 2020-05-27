@@ -9,19 +9,19 @@ package org.eastsideprep.hanabiserver;
  *
  * @author mgoetzmann
  */
-
 public class Turn {
-    
-    int debug = 0;
-    
+
+    int debug;
+
+    // HINT & PLAY & DISCARD
     String turnType;
-    
-    public class data {
-        String color;
-        
-        String playerTo;
-        String hintType;
-        Object hint; // either int or String
-    }
-    
+
+    // HINT & PLAY
+    String color;
+
+    // HINT
+    String playerTo;
+    String hintType;
+    Object hint; // either int or String
+
 }

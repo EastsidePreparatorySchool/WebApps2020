@@ -6,7 +6,7 @@ setInterval(function () {
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
                 game = JSON.parse(data);
-                //console.log(game);
+                console.log(game);
             })
             .catch(error => {
                 console.log("error: " + error);
@@ -14,8 +14,9 @@ setInterval(function () {
 }, 1000);
 
 function completeTurn(jsonForServer) {
-    json = JSON.stringify(jsonForServer);
-    request({url: "/turn?json=" + json, verb: "GET"})
+    let turnJSON = JSON.stringify(jsonForServer);
+    console.log(turnJSON);
+    request({url: "/turn?json=" + turnJSON, verb: "GET"})
             .then(data => {
                 // "data" should contain the JSON of the Game object etc. from the server
                 console.log(game);

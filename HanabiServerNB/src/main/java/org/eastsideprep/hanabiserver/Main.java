@@ -103,9 +103,9 @@ public class Main {
         );
 
         get("/turn", (req, res) -> {
-            String turnJSON = req.attribute("json");
+            String turnJSON = req.queryParams("json");
+            System.out.println(turnJSON);
             Turn turn = gson.fromJson(turnJSON, Turn.class);
-            System.out.println(turn);
             
             Context ctx = getContext(req);
             if (ctx == null) {return "";}
