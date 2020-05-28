@@ -108,12 +108,9 @@ public class Main {
         get("/turn", (req, res) -> {
             String turnJSON = req.queryParams("turn");
             String cardJSON = req.queryParams("card");
-            System.out.println(turnJSON + " | " + cardJSON);
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
-            
-            System.out.println("GGGG");
             
             Context ctx = getContext(req);
             if (ctx == null) {return "";}
