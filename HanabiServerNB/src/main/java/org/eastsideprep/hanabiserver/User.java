@@ -102,21 +102,10 @@ public class User implements UserInterface {
             System.out.println("Send message requested JAAAAAAAAAA");
 
             String msg = req.queryParams("msg");
+            
             Message newMessage = new Message();
-            newMessage.username = username(req);
 
-            String username = req.queryParams("username");
-            String tabid = req.queryParams("tabid");
-            HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
-            Context ctx = map.get(tabid);
-            String eachUser = username + tabid;
-            System.out.println("username in login=" + username);
-            System.out.println("tabid in login=" + tabid);
-            System.out.println("ctx in login=" + ctx);
-            ctx.user.setName(eachUser);
-            String userName = ctx.user.getName();
-            // String username = getSession(req).attribute("username");
-            newMessage.username = userName;
+            newMessage.username = "Aybala"; 
 
             System.out.println(newMessage.username);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");

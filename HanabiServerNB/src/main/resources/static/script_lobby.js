@@ -1,7 +1,7 @@
 logIn();
 
 function logIn() {
-    request({url: "/login", method: "GET"})
+    request({url: "/login" , method: "GET"})
             .then(username => {
                 console.log(username);
                 document.getElementById("displayusername").innerHTML = "Logged in as " + username + ".";
@@ -25,15 +25,15 @@ function getGames(f) {
 }
 
 function getGamesUpdateTable() {
-    getMessages(function (data) {
-        var table = document.getElementById("gameTable");
-        let games = JSON.parse(data);
-        for (var i = 0; i < messages.length; i++) {
-            var row = table.insertRow(0);
-            row.insertCell(0).innerHTML = games[i];
-            row.insertCell(1).innerHTML = "<a href='game.html'>Join Game</a>";
-        }
-    });
+//    getMessages(function (data) {
+//        var table = document.getElementById("gameTable");
+//        let games = JSON.parse(data);
+//        for (var i = 0; i < messages.length; i++) {
+//            var row = table.insertRow(0);
+//            row.insertCell(0).innerHTML = games[i];
+//            row.insertCell(1).innerHTML = "<a href='game.html'>Join Game</a>";
+//        }
+//    });
 }
 
 setInterval(function () {
