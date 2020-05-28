@@ -5,17 +5,10 @@
  */
 package org.eastsideprep.hanabiserver;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import spark.Request;
 import spark.Response;
-import org.eastsideprep.hanabiserver.interfaces.CardInterface;
-import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
-import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -140,7 +133,7 @@ public class Main {
             // Get user ID and requested game ID
             String userID = req.queryParams("usr_id");
             String gameID = req.queryParams("game_id");
-
+            
             for (User user
                     : lobbyUsers) { // Find this user in the lobby
                 if (user.GetID().equals(userID)) {
