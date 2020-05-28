@@ -34,8 +34,8 @@ class Message {
 
 public class User implements UserInterface {
 
-    String name;
-    String usernameForMsg;
+    String username;
+    String tabid;
 
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
@@ -88,7 +88,7 @@ public class User implements UserInterface {
                 map.put(tabid, ctx);
             }
             System.out.println(tabid);
-            String username = ctx.user.getName();
+            String username = ctx.user.getUsername() + ctx.user.getTabId();
             System.out.println("user=" + username);
 
             if (username == null) {
@@ -99,15 +99,33 @@ public class User implements UserInterface {
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
-            System.out.println("Send message requested JAAAAAAAAAA");
+            System.out.println("put send");
 
-            String msg = req.queryParams("msg");
-            
+            String msg = req.queryParams("msg");           
             Message newMessage = new Message();
 
-            newMessage.username = "Aybala"; 
+//       
+            spark.Session s = req.session();
 
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+            }
+
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+//
+
+            String username = ctx.user.getUsername();                       
+            
+            newMessage.username = username;           
             System.out.println(newMessage.username);
+            
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             newMessage.msgtime = dtf.format(LocalDateTime.now());
             newMessage.msg = msg;
@@ -131,12 +149,20 @@ public class User implements UserInterface {
 
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return this.username;
+    }
+    
+    public void setTabId(String tabid) {
+        this.tabid = tabid;
     }
 
-    public String getName() {
-        return name;
+    public String getTabId() {
+        return tabid;
     }
 
     public static String loginextra(Request req, Response res) {
@@ -159,7 +185,8 @@ public class User implements UserInterface {
         System.out.println("username in login=" + username);
         System.out.println("tabid in login=" + tabid);
         System.out.println("ctx in login=" + ctx);
-        ctx.user.setName(eachUser);
+        ctx.user.setTabId(tabid);
+        ctx.user.setUsername(username);
         System.out.println("eachUser=" + eachUser);
         return username;
     }
