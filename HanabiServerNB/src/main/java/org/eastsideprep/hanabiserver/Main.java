@@ -24,11 +24,19 @@ public class Main {
     final static boolean DEBUG = true;
     
  //    static ArrayList<GameData> games = new ArrayList<>();
+    final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+
+    final static int CARD_NUMBERS = 5;
+    final static int CARD_DUPLICATES = 3;
+
+//    static ArrayList<GameData> gameControls = new ArrayList<>();
     static GameControl gameControl;
 
     static ArrayList<Player> players = new ArrayList<>();
+    static ArrayList<User> lobbyUsers = new ArrayList<>();
 
-    static ArrayList<GameControl> games;
+    static ArrayList<GameControl> gameControls;
+    static ArrayList<Game> games;
 
     public static void main(String[] args) {
 
@@ -38,7 +46,7 @@ public class Main {
         staticFiles.location("static");
         User.setup(args);
 
-        games = new ArrayList<>();
+        gameControls = new ArrayList<>();
 
         //Making a test GameControl object
         ArrayList<Player> testPlayers = new ArrayList<>();
@@ -47,7 +55,7 @@ public class Main {
         testPlayers.add(new Player("Linux"));
         GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
-        games.add(testGC);
+        gameControls.add(testGC);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -78,7 +86,8 @@ public class Main {
 
             // no context? no problem.
             if (ctx == null) {
-                User user = new User();
+                // TODO: fix this user generation
+                User user = new User("GenericUserName", "GenericUserID");
                 ctx = new Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
@@ -94,13 +103,13 @@ public class Main {
 
             if (gameID != null) {
                 int gameID_int = Integer.parseInt(gameID);
-                GameControl game = games.get(gameID_int);
+                GameControl game = gameControls.get(gameID_int);
                 GameData gameData = game.getGameData();
                 System.out.println("returning gamedata");
                 return gameData;
             } else {
                 System.out.println("returning games");
-                return games;
+                return gameControls;
             }
         }, new JSONRT());
 
@@ -126,6 +135,31 @@ public class Main {
                
             return "";
         });
+        
+        // TODO: handle expected params
+        put("/enter_game", (req, res) -> {
+            // Get user ID and requested game ID
+            String userID = req.queryParams("usr_id");
+            String gameID = req.queryParams("game_id");
+
+            for (User user
+                    : lobbyUsers) { // Find this user in the lobby
+                if (user.GetID().equals(userID)) {
+                    for (Game game
+                            : games) { // Find this game
+                        if (game.GetGameID().equals(gameID)) {
+                            players.add(new Player(user)); // Create a new player with this user and add them to the game
+                            lobbyUsers.remove(user); // Remove user from lobby
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            return "Entered user " + userID + " into game " + gameID;
+        });
+//        gameControl = new GameControl();
     }
     
     public static Context getContext(Request req) {
