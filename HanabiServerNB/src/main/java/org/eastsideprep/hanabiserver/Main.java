@@ -21,12 +21,9 @@ import static spark.Spark.*;
 //HANABI SERVER NB
 public class Main {
 
-    final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
-
-    final static int CARD_NUMBERS = 5;
-    final static int CARD_DUPLICATES = 3;
-
-//    static ArrayList<GameData> games = new ArrayList<>();
+    final static boolean DEBUG = true;
+    
+ //    static ArrayList<GameData> games = new ArrayList<>();
     static GameControl gameControl;
 
     static ArrayList<Player> players = new ArrayList<>();
@@ -99,6 +96,7 @@ public class Main {
                 int gameID_int = Integer.parseInt(gameID);
                 GameControl game = games.get(gameID_int);
                 GameData gameData = game.getGameData();
+                System.out.println("returning gamedata");
                 return gameData;
             } else {
                 System.out.println("returning games");
@@ -106,41 +104,44 @@ public class Main {
             }
         }, new JSONRT());
 
-        put("/turn", (req, res) -> {
-            return "/turn route";
+        get("/turn", (req, res) -> {
+            String turnJSON = req.queryParams("turn");
+            String cardJSON = req.queryParams("card");
+            System.out.println(turnJSON + " | " + cardJSON);
+
+            Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
+            Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
+            
+            System.out.println("GGGG");
+            
+            Context ctx = getContext(req);
+            if (ctx == null) {return "";}
+            
+            if (DEBUG) {
+             GameData userGame = games.get(turn.gameId).getGameData();
+             userGame.debugNum++;
+            }
+            
+            //TODO: implement non-debug game object modification
+               
+            return "";
         });
-//        gameControl = new GameControl();
     }
-
-    public static void createGame() {
-
-        ArrayList<Card> tempDeck = new ArrayList<>();
-        for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
-            for (String cardColor : CARD_COLORS) {
-                for (int i = 0; i < CARD_DUPLICATES; i++) {
-                    tempDeck.add(new Card(cardColor, cardNumber));
-                }
-            }
+    
+    public static Context getContext(Request req) {
+        spark.Session s = req.session();
+        if (s.isNew()) {
+            s.attribute("map", new HashMap<String, Context>());
         }
-        Deck deck = new Deck(tempDeck);
-        gameControl.shuffle(deck);
-
-        HashMap<String, PlayedCards> playedCards = new HashMap<>();
-        for (String color : CARD_COLORS) {
-            playedCards.put(color, new PlayedCards(color));
+        HashMap<String, Context> map = s.attribute("map");
+        System.out.println("map =" + map);
+        String tabid = req.headers("tabid");
+        if (tabid == null) {
+            tabid = "default";
+            System.out.println(tabid);
         }
+        Context ctx = map.get(tabid);
 
-        Discard discards = new Discard();
-
-        GameData game = new GameData(players, deck, playedCards, discards);
-        GameControl gc = new GameControl(game);
-        games.add(gc); // "players" here needs to become a subset
-
-        players.forEach((player) -> {
-            for (int i = 0; i < game.getMaxCardsInHand(); i++) {
-                player.AddCardToHand(deck.draw());
-            }
-        });
-
+        return ctx;
     }
 }
