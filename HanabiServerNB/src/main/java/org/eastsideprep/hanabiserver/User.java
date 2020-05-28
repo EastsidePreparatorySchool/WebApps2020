@@ -185,7 +185,7 @@ public class User implements UserInterface {
     }
 
     private static String login(Request req, Response res) {
-        String red = "http://localhost:80";
+        String red = "http://localhost:80/game.html";
         //logger.info("ChatServer: redirecting: " + red);
         res.redirect(red, 302);
         String username = req.queryParams("username");
