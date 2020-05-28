@@ -10,7 +10,7 @@ setInterval(function () {
                 .catch(error => {
                     console.log("error: " + error);
                 });
-        let card = JSON.stringify({color:"Purple", number:2, played: false, discarded:false});
+        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
         let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
         request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
                 .then(data => {

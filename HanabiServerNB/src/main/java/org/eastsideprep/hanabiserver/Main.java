@@ -36,7 +36,6 @@ public class Main {
     static ArrayList<User> lobbyUsers = new ArrayList<>();
 
     static ArrayList<GameControl> gameControls;
-    static ArrayList<Game> games;
 
     public static void main(String[] args) {
 
@@ -50,9 +49,9 @@ public class Main {
 
         //Making a test GameControl object
         ArrayList<Player> testPlayers = new ArrayList<>();
-        testPlayers.add(new Player("Windows"));
-        testPlayers.add(new Player("MacOS"));
-        testPlayers.add(new Player("Linux"));
+        testPlayers.add(new Player(new User("bar", "foo"), "Windows"));
+        testPlayers.add(new Player(new User("bar", "foo"), "MacOS"));
+        testPlayers.add(new Player(new User("bar", "foo"), "Linux"));
         GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
@@ -127,7 +126,7 @@ public class Main {
             if (ctx == null) {return "";}
             
             if (DEBUG) {
-             GameData userGame = games.get(turn.gameId).getGameData();
+             GameData userGame = gameControls.get(turn.gameId).getGameData();
              userGame.debugNum++;
             }
             
@@ -145,9 +144,9 @@ public class Main {
             for (User user
                     : lobbyUsers) { // Find this user in the lobby
                 if (user.GetID().equals(userID)) {
-                    for (Game game
-                            : games) { // Find this game
-                        if (game.GetGameID().equals(gameID)) {
+                    for (GameControl game
+                            : gameControls) { // Find this game
+                        if (gameID.equals(game.getGameData().getid())) {
                             players.add(new Player(user)); // Create a new player with this user and add them to the game
                             lobbyUsers.remove(user); // Remove user from lobby
                             break;

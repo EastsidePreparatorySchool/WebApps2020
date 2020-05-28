@@ -26,9 +26,15 @@ public class Player implements PlayerInterface {
         myUser = user;
     }
 
-    public Player(String username){
+    public Player(String username){ // This functionality has been moved to the User class
         this.myUser.setName(username);
         this.myHints = new ArrayList<Hint>();
+    }
+    
+    public Player(User user, String username) {
+        myUser = user;
+        myUser.setName(username);
+        this.myHints = new ArrayList<>();
     }
     
     @Override
