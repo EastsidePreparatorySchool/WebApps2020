@@ -1,16 +1,7 @@
-let id = uuidv4();
-if (sessionStorage.getItem("tabid") === null) {
-    console.log(id)
-    sessionStorage.setItem("tabid", id);
-}
+console.log("Hello world!");
 
-request({url: "/session"})
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+var appShowing = false;
+
 
 function plus(a, b, f) {
     request({url: "/plus?p1=" + a + "&p2=" + b, verb: "GET"})
@@ -26,11 +17,20 @@ function plus(a, b, f) {
 
 function updateMessages(f) {
     request({url: "/update_messages", verb: "GET"}).then(data => {
-        console.log("Success! Updating Messages");
-
-        let table = JSON.parse(data);
-        if (table["msg"] !== "") {
-            f(table);
+        if (data !== "###UnknownUserNoLogin###") {
+            if (!appShowing) {
+                document.getElementById("loginBox").style.display = "none";
+                document.getElementById("app").style.display = "block";
+                appShowing = true;
+            }
+            console.log("Success! Updating Messages");
+            f(data);
+        } else {
+            if(appShowing) {
+                document.getElementById("loginBox").style.display = "block";
+                document.getElementById("app").style.display = "none";
+                appShowing = false;
+            }
         }
     }).catch(error => {
         console.log("Something borked: " + error);
@@ -44,35 +44,30 @@ function sendMessage(msg) {
         console.log("Something borked: " + error);
     });
 }
-function loginUser(username) {
-    console.log("Login user " + username);
-
-    //let json = JSON.stringify({"username":username, "timestamp":new Date().getTime()});
-    let json = username;
-    console.log(json);
-
-    if (username == "DEFAULT") {
-        // If you wanted to login without EPSAuth
-//        request({url: "/login_user?username=", verb: "GET"}).then(data => {
-//            console.log("Success! Logged in user automatically");
+//function loginUser(username) {
+//    console.log("Login user " + username);
+//    request({url: "/login_user?username=" + username, verb: "PUT"}).then(data => {
+//        console.log("Success! Logged in user");
+//        document.getElementById("loginBox").style.display = "none";
+//        document.getElementById("app").style.display = "block";
+//    }).catch(error => {
+//        console.log("Something borked: " + error);
+//    });
+//}
+//function loginWith365() {
+//    console.log("Login user with 365");
+//    request({url: "/login_365", verb: "GET"}).then(data => {
+//        if (data === "365progress") {
+//            console.log("Success! Logged in user");
 //            document.getElementById("loginBox").style.display = "none";
 //            document.getElementById("app").style.display = "block";
-//        }).catch(error => {
-//            console.log("Something borked: "+error);
-//        });
-
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("app").style.display = "block";
-    } else {
-        request({url: "/login_user?username=" + json, verb: "PUT"}).then(data => {
-            console.log("Success! Logged in user");
-            document.getElementById("loginBox").style.display = "none";
-            document.getElementById("app").style.display = "block";
-        }).catch(error => {
-            console.log("Something borked: " + error);
-        });
-    }
-}
+//        } else {
+//            console.log("Something went wrong with redirect");
+//        }
+//    }).catch(error => {
+//        console.log("Something borked: " + error);
+//    });
+//}
 
 
 function plus_from_input() {
@@ -83,30 +78,12 @@ function plus_from_input() {
         document.getElementById("result").value = data;
     });
 }
-
-function displayHeaders() {
-    request({url: "/headers", verb: "GET"}).then(data => {
-        console.log("Headers page accessed");
-
-        document.getElementById("result").value = data;
-    }).catch(error => {
-        console.log("Something borked: " + error);
-    });
-}
-
-function displayTabContext() {
-    request({url: "/context", verb: "GET"}).then(data => {
-        console.log("Context page accessed");
-
-        document.getElementById("result").value = data;
-    }).catch(error => {
-        console.log("Something borked: " + error);
-    });
-}
-
 function updateMessagesTextArea() {
-    updateMessages(function (table) {
-        document.getElementById("result").value += "\n" + table["msg"] + " -" + table["username"];
+    updateMessages(function (data) {
+        var msgData = JSON.parse(data);
+        msgData.forEach(msg => {
+            document.getElementById("result").value += msg["userName"] + ": " + msg["messageString"] + "\n";
+        });
     });
 }
 function sendMessageAndUpdateTextArea() {
@@ -127,13 +104,6 @@ var updateMessageInverval = setInterval(function () {
     updateMessagesTextArea();
 }, 500);
 
-function uuidv4() { // Generate random identity
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
 
-loginUser("DEFAULT");
 
 

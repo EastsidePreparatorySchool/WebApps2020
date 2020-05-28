@@ -5,33 +5,30 @@
  */
 package org.eastsideprep.hanabiserver;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import spark.Request;
 import spark.Response;
-import org.eastsideprep.hanabiserver.interfaces.CardInterface;
-import org.eastsideprep.hanabiserver.interfaces.CardSpotInterface;
-import org.eclipse.jetty.http.HttpStatus;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
 public class Main {
 
+    final static boolean DEBUG = true;
+    
+ //    static ArrayList<GameData> games = new ArrayList<>();
     final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
 
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
 
-//    static ArrayList<GameData> games = new ArrayList<>();
+//    static ArrayList<GameData> gameControls = new ArrayList<>();
     static GameControl gameControl;
 
     static ArrayList<Player> players = new ArrayList<>();
+    static ArrayList<User> lobbyUsers = new ArrayList<>();
 
-    static ArrayList<GameControl> games;
+    static ArrayList<GameControl> gameControls;
 
     public static void main(String[] args) {
 
@@ -41,16 +38,16 @@ public class Main {
         staticFiles.location("static");
         User.setup(args);
 
-        games = new ArrayList<>();
+        gameControls = new ArrayList<>();
 
         //Making a test GameControl object
         ArrayList<Player> testPlayers = new ArrayList<>();
-        testPlayers.add(new Player("Windows"));
-        testPlayers.add(new Player("MacOS"));
-        testPlayers.add(new Player("Linux"));
+        testPlayers.add(new Player(new User("bar", "foo"), "Windows"));
+        testPlayers.add(new Player(new User("bar", "foo"), "MacOS"));
+        testPlayers.add(new Player(new User("bar", "foo"), "Linux"));
         GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
-        games.add(testGC);
+        gameControls.add(testGC);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -81,7 +78,8 @@ public class Main {
 
             // no context? no problem.
             if (ctx == null) {
-                User user = new User();
+                // TODO: fix this user generation
+                User user = new User("GenericUserName", "GenericUserID");
                 ctx = new Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
@@ -97,50 +95,79 @@ public class Main {
 
             if (gameID != null) {
                 int gameID_int = Integer.parseInt(gameID);
-                GameControl game = games.get(gameID_int);
+                GameControl game = gameControls.get(gameID_int);
                 GameData gameData = game.getGameData();
+                System.out.println("returning gamedata");
                 return gameData;
             } else {
                 System.out.println("returning games");
-                return games;
+                return gameControls;
             }
         }, new JSONRT());
 
-        put("/turn", (req, res) -> {
-            return "/turn route";
+        get("/turn", (req, res) -> {
+            String turnJSON = req.queryParams("turn");
+            String cardJSON = req.queryParams("card");
+            System.out.println(turnJSON + " | " + cardJSON);
+
+            Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
+            Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
+            
+            System.out.println("GGGG");
+            
+            Context ctx = getContext(req);
+            if (ctx == null) {return "";}
+            
+            if (DEBUG) {
+             GameData userGame = gameControls.get(turn.gameId).getGameData();
+             userGame.debugNum++;
+            }
+            
+            //TODO: implement non-debug game object modification
+               
+            return "";
+        });
+        
+        // TODO: handle expected params
+        put("/enter_game", (req, res) -> {
+            // Get user ID and requested game ID
+            String userID = req.queryParams("usr_id");
+            String gameID = req.queryParams("game_id");
+            
+            for (User user
+                    : lobbyUsers) { // Find this user in the lobby
+                if (user.GetID().equals(userID)) {
+                    for (GameControl game
+                            : gameControls) { // Find this game
+                        if (gameID.equals(game.getGameData().getid())) {
+                            players.add(new Player(user)); // Create a new player with this user and add them to the game
+                            lobbyUsers.remove(user); // Remove user from lobby
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            return "Entered user " + userID + " into game " + gameID;
         });
 //        gameControl = new GameControl();
     }
-
-    public static void createGame() {
-
-        ArrayList<Card> tempDeck = new ArrayList<>();
-        for (int cardNumber = 1; cardNumber <= CARD_NUMBERS; cardNumber++) {
-            for (String cardColor : CARD_COLORS) {
-                for (int i = 0; i < CARD_DUPLICATES; i++) {
-                    tempDeck.add(new Card(cardColor, cardNumber));
-                }
-            }
+    
+    public static Context getContext(Request req) {
+        spark.Session s = req.session();
+        if (s.isNew()) {
+            s.attribute("map", new HashMap<String, Context>());
         }
-        Deck deck = new Deck(tempDeck);
-        gameControl.shuffle(deck);
-
-        HashMap<String, PlayedCards> playedCards = new HashMap<>();
-        for (String color : CARD_COLORS) {
-            playedCards.put(color, new PlayedCards(color));
+        HashMap<String, Context> map = s.attribute("map");
+        System.out.println("map =" + map);
+        String tabid = req.headers("tabid");
+        if (tabid == null) {
+            tabid = "default";
+            System.out.println(tabid);
         }
+        Context ctx = map.get(tabid);
 
-        Discard discards = new Discard();
-
-        GameData game = new GameData(players, deck, playedCards, discards);
-        GameControl gc = new GameControl(game);
-        games.add(gc); // "players" here needs to become a subset
-
-        players.forEach((player) -> {
-            for (int i = 0; i < game.getMaxCardsInHand(); i++) {
-                player.AddCardToHand(deck.draw());
-            }
-        });
-
+        return ctx;
     }
 }

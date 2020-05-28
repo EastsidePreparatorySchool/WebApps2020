@@ -6,63 +6,62 @@
 package org.eastsideprep.chatserver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import spark.Request;
-import spark.Response;
 import static spark.Spark.*;
+
+class Message {
+
+    public String userName;
+    public String messageString;
+
+    public Message(String fromUser, String msgString) {
+        userName = fromUser;
+        messageString = msgString;
+    }
+}
 
 // @Author: Kenneth Y.
 public class Main {
 
-    static JSONRT gson = new JSONRT();
-
-    public static final ArrayList<String> allMessagesArrayList
+    public static final ArrayList<Message> allMessagesArrayList
             = new ArrayList<>();
+
+    private boolean goodLogin = false;
 
     public static void main(String[] args) {
         // tell spark where to find all the HTML and JS
         staticFiles.location("/");
         port(80);
 
-        // Manually Populate
-        allMessagesArrayList.add("Message 1");
-        allMessagesArrayList.add("Second Message");
-        allMessagesArrayList.add("Something else");
-
-        // TODO: better handle displaying shown messages
+//        // Manually Populate
+//        allMessagesArrayList.add("Message 1");
+//        allMessagesArrayList.add("Second Message");
+//        allMessagesArrayList.add("Something else");
         // get all new messages
-        get("/update_messages", "application/json", (req, res) -> {
+        get("/update_messages", (req, res) -> {
             System.out.println("Update messages requested: ");
 
             String msgs = "";
 
-            synchronized (allMessagesArrayList) {
-                if (getSeenIndex(req) != null) {
+            if (user(req).equals("unknown")) {
+                msgs = "###UnknownUserNoLogin###";
+            } else {
+                synchronized (allMessagesArrayList) {
                     int lastSeenIndex = getSeenIndex(req) + 1;
-                    final List<String> newMsgs
+                    final List<Message> newMsgs
                             = allMessagesArrayList.subList(
                                     lastSeenIndex, allMessagesArrayList.size());
 
                     if (newMsgs.size() > 0) {
-                        msgs = String.join("\n", newMsgs);
-                        msgs += "\n";
+//                    msgs = String.join("\n", newMsgs);
+//                    msgs += "\n";
+                        msgs = new JSONRT().render(newMsgs);
                         setSeenAttribute(req, allMessagesArrayList.size() - 1);
                     }
-                    return new Message(msgs, getSession(req).attribute("user"));
                 }
             }
 
-            return new Message(msgs, "whack");
-        }, new JSONRT());
-
-        get("/headers", (Request req, Response res) -> {
-            System.out.println("Headers requested");
-            String result = "";
-
-            result = req.headers().stream().map((s) -> s + ":" + req.headers(s) + "<br>").reduce(result, String::concat);
-
-            return result; // TODO: Print this to client HTML
+            return msgs;
         });
 
         // Send message
@@ -72,49 +71,48 @@ public class Main {
             String msg = req.queryParams("msg");
 
             synchronized (allMessagesArrayList) {
-                allMessagesArrayList.add("From User " + user(req) + " on "
-                        + req.session().id() + ":");
-                allMessagesArrayList.add(msg);
+//                allMessagesArrayList.add("From User " + user(req) + " on "
+//                        + req.session().id() + ":");
+//                allMessagesArrayList.add(msg);
+                allMessagesArrayList.add(new Message(user(req), msg));
             }
 
-//            HashMap<String, Context> cm = req.session().attribute("map");
-//            cm.get(req.headers("tabid")).messagesSent++;
-//            cm.get(req.headers("tabid")).messages.add(msg);
-                       
             return msg;
         });
 
         // Login route
         put("/login_user", (req, res) -> {
-            // For custom username
             System.out.println("Login user requested");
 
-            String usernameJSON = req.queryParams("username");
-
-            String username = gson.render(usernameJSON);
+            String username = req.queryParams("username");
 
             login(req, username);
 
             return username;
         });
-        
-        get("/login_epsauth", (req, res) -> {
-            System.out.println("Login user with EPSAuth requested");
+        get("/get_headers", (req, res) -> {
+           System.out.println("Getting EPSAuth headers");
+           String headersOut = "";
+           headersOut = req.headers().stream().
+                    map((header) -> header+": "+req.headers(header)+"\n").
+                    reduce(headersOut,
+                    String::concat);
+           
+           return headersOut;
+        });
+        get("/login_365", (req, res) -> {
+            System.out.println("Login user with 365 requested");
 
-            // Learned the code to access EPSAuth from Kenneth
-            //
-            String back = "http://" + req.host() + "/complete_login_epsauth"; // URL to return and complete the login
-            String url = "http://epsauth.azurewebsites.net/login?url=" + back 
+            String back = "http://" + req.host() + "/complete_login_365";
+            String url = "http://epsauth.azurewebsites.net/login?url=" + back
                     + "&loginparam=useremail";
 
             res.redirect(url);
-            //
 
-            return "ok";
+            return "365progress";
         });
-        
-        get("/complete_login_epsauth", (req, res) -> {
-            System.out.println("Complete login from EPSAuth");
+        get("/complete_login_365", (req, res) -> {
+            System.out.println("Complete login from 365");
 
             String useremail = req.queryParams("useremail");
 
@@ -124,42 +122,6 @@ public class Main {
 
             return "";
         });
-        
-        get("/session", (req, res) -> {
-            spark.Session s = req.session();
-
-            if (s.isNew()) {
-                s.attribute("map", new HashMap<String, Context>());
-            }
-
-            HashMap<String, Context> map = s.attribute("map");
-
-            String tabid = req.headers("tabid");
-            if (tabid == null) {
-                tabid = "default";
-            }
-            Context ctx = map.get(tabid);
-
-            if (ctx == null) {
-                ctx = new Context();
-                map.put(tabid, ctx);
-            }
-            
-            return ctx.toString(); // Return a hashcode that is arbitrary for our purposes
-        });
-        
-//        get("/context", (req, res) -> {
-//            System.out.println("Context requested");
-//            HashMap<String, Context> cm = req.session().attribute("map");
-//            
-//            String contextStr = "";
-//            
-//            contextStr += cm.get(req.headers("tabid")).username +"\n";
-//            contextStr += "With " + cm.get(req.headers("tabid")).messagesSent + " sent\n";
-//            contextStr = cm.get(req.headers("tabid")).messages.stream().map((msg) -> msg + "\n").reduce(contextStr, String::concat);
-//            
-//            return contextStr;
-//        });
     }
 
     private static spark.Session getSession(spark.Request req) {
@@ -182,15 +144,12 @@ public class Main {
         getSession(req).attribute("seen", index);
     }
 
-    private static Integer getSeenIndex(spark.Request req) {
+    private static int getSeenIndex(spark.Request req) {
         return getSession(req).attribute("seen");
     }
 
     private static void login(spark.Request req, String username) {
         getSession(req).attribute("user", username);
-//        HashMap<String, Context> cm = req.session().attribute("map");
-//        cm.get(req.headers("tabid")).username = username;
-        System.out.println("Login success!");
     }
 
 }

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.eastsideprep.hanabiserver.*;
 import org.eastsideprep.hanabiserver.interfaces.UserInterface;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
@@ -37,6 +36,15 @@ public class User implements UserInterface {
     String username;
     String tabid;
 
+    private String Name;
+    private String ID;
+    private String InGameID;
+    
+    public User(String name, String id) {
+        Name = name;
+        ID = id;
+    }
+        
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
 
@@ -81,20 +89,23 @@ public class User implements UserInterface {
 
             // no context? no problem.
             if (ctx == null) {
-                User user = new User();
+                // TODO: fix this user generation
+                User user = new User("GenericUserName", "GenericUserID");
                 ctx = new org.eastsideprep.hanabiserver.Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
                 map.put(tabid, ctx);
             }
             System.out.println(tabid);
+           // String username = ctx.user.getName();
             String username = ctx.user.getUsername() + ctx.user.getTabId();
             System.out.println("user=" + username);
 
             if (username == null) {
-                username = "unknown"; // default name
+                username = "unknown"; // default Name
             }
             return ctx.toString();
+
         });
         
         // optional chat feature in lobby (Aybala)
@@ -211,7 +222,7 @@ public class User implements UserInterface {
          System.out.println("user=" +user);
          
         if (user == null) {
-            user = "unknown"; // default name
+            user = "unknown"; // default Name
         }
         return user;
         //how to merge together
@@ -235,6 +246,26 @@ public class User implements UserInterface {
     @Override
     public void joinGame() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void SetInGameID(String gameID) {
+        InGameID = gameID;
+    }
+
+    @Override
+    public String GetName() {
+        return Name;
+    }
+
+    @Override
+    public String GetID() {
+        return ID;
+    }
+
+    @Override
+    public String GetInGameID() {
+        return InGameID;
     }
 
 }

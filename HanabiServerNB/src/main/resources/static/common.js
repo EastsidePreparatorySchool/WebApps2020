@@ -12,7 +12,7 @@ function request(obj) {
         };
         xhr.onerror = () => reject(xhr.statusText);
         xhr.setRequestHeader("tabid", sessionStorage.getItem("tabid")); 
-        console.log(sessionStorage);
+        //console.log(sessionStorage);
         xhr.send(obj.body);
     });
 };

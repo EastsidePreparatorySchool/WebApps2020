@@ -1,3 +1,34 @@
+let DEBUG = true;
+let game;
+setInterval(function () {
+    if (DEBUG) {
+        request({url: "/update?gid=" + 0, method: "GET"})
+                .then(data => {
+                    game = data;
+                    console.log(game);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
+        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
+    } else {
+        request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log(a);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
+    }
+}, 1000);
 
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
@@ -15,8 +46,8 @@ function RandomizeCards() { //function to randomize cards from 1-5 and colors wi
     }
 }
 
-function displayUsername(playerNumber, username){
-    document.getElementById("playerLabel"+playerNumber).innerHTML = username;
+function displayUsername(playerNumber, username) {
+    document.getElementById("playerLabel" + playerNumber).innerHTML = username;
 }
 
 //0 is neither 1 is play 2 is discard
@@ -79,14 +110,14 @@ var selectedCard = 0;
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
-    if(playdiscard === 1) {
+    if (playdiscard === 1) {
         play(id);
     } else if (playdiscard === 2) {
         discard(id);
     }
     playdiscard = 0;
     blurButtons();
-    
+
 }
 
 var pile = 0;
@@ -102,13 +133,13 @@ function play(id) {
 
     //remove card
     //hand.remove(id)
-    
+
     //add value to pile
     //pile.value++;
-    
+
     //draw new card
     //hand.draw();
-    
+
     //end turn
     pile = 0;
 }
@@ -155,13 +186,13 @@ function sendMsg() {
 function getNew() {
     request({url: "/get", method: "GET"})
             .then(data => {
-                var messages = JSON.parse(JSON.parse(data)); 
+                var messages = JSON.parse(JSON.parse(data));
                 var msgOutput = "";
-                for(var i = 0; i < messages.length; i++) {
-                    var msg = messages[i]; 
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = messages[i];
                     msgOutput += msg.username + ": " + msg.msg + "\n";  // formatting output properly       
-                }       
-                
+                }
+
                 document.getElementById("chatbox").value = msgOutput; // displaying formatted output in text area
             })
             .catch(error => {
