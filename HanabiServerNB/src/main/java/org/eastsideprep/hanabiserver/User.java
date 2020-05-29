@@ -23,7 +23,6 @@ import static spark.Spark.staticFiles;
  *
  * @author kuberti
  */
-
 // optional chat feature in lobby (Aybala) - msg class
 class Message {
 
@@ -34,6 +33,9 @@ class Message {
 
 public class User implements UserInterface {
 
+    String username;
+    String tabid;
+
     private String Name;
     private String ID;
     private String InGameID;
@@ -43,7 +45,6 @@ public class User implements UserInterface {
         ID = id;
     }
         
-    
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
 
@@ -63,64 +64,79 @@ public class User implements UserInterface {
 
             return result;
         });
-//        get("/load", (Request req, Response res) -> {
-//            // Open new, independent tab
-//            spark.Session s = req.session();
-//
-//            // if the session is new, make sure it has a context map
-//            if (s.isNew()) {
-//                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
-//            }
-//
-//            // now we can safely access the context map whether the session is new or not
-//            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
-//            System.out.println("map =" + map);
-//
-//            // find the context that goes with the tab
-//            String tabid = req.headers("tabid");
-//            if (tabid == null) {
-//                tabid = "default";
-//                System.out.println(tabid);
-//            }
-//            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-//            System.out.println("tabid =" + tabid);
-//
-//            // no context? no problem.
-//            if (ctx == null) {
-//                // TODO: fix this user generation
-//                User user = new User("GenericUserName", "GenericUserID");
-//                ctx = new org.eastsideprep.hanabiserver.Context(user);
-//                System.out.println("context=" + ctx);
-//                System.out.println(user);
-//                map.put(tabid, ctx);
-//            }
-//            System.out.println(tabid);
-//            String username = ctx.user.getName();
-//            System.out.println("user=" + username);
-//
-//            if (username == null) {
-//                username = "unknown"; // default Name
-//            }
-//            return ctx.toString();
-//
-//        });
 
-        //get("/user", "application/json", (req, res) -> user(req, res));
+        get("/load", (Request req, Response res) -> {
+            // Open new, independent tab
+            spark.Session s = req.session();
+
+            // if the session is new, make sure it has a context map
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+            }
+
+            // now we can safely access the context map whether the session is new or not
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+            System.out.println("map =" + map);
+
+            // find the context that goes with the tab
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+                System.out.println(tabid);
+            }
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+            System.out.println("tabid =" + tabid);
+
+            // no context? no problem.
+            if (ctx == null) {
+                // TODO: fix this user generation
+                User user = new User("GenericUserName", "GenericUserID");
+                ctx = new org.eastsideprep.hanabiserver.Context(user);
+                System.out.println("context=" + ctx);
+                System.out.println(user);
+                map.put(tabid, ctx);
+            }
+            System.out.println(tabid);
+           // String username = ctx.user.getName();
+            String username = ctx.user.getUsername() + ctx.user.getTabId();
+            System.out.println("user=" + username);
+
+            if (username == null) {
+                username = "unknown"; // default Name
+            }
+            return ctx.toString();
+
+        });
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
-            System.out.println("Send message requested JAAAAAAAAAA");
+            System.out.println("put send");
 
-            String msg = req.queryParams("msg");
+            String msg = req.queryParams("msg");           
             Message newMessage = new Message();
-            newMessage.username = getSession(req).attribute("username");
-            if (newMessage.username == null) {
-                String username = login(req, res);
-                newMessage.username = username;
-                getSession(req).attribute("username", username);
-                System.out.println("Got user!");
+
+//       
+            spark.Session s = req.session();
+
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
             }
+
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+//
+
+            String username = ctx.user.getUsername();                       
+            
+            newMessage.username = username;           
             System.out.println(newMessage.username);
+            
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             newMessage.msgtime = dtf.format(LocalDateTime.now());
             newMessage.msg = msg;
@@ -130,7 +146,7 @@ public class User implements UserInterface {
                 System.out.println(msgs.toString());
             }
 
-            return HttpStatus.ACCEPTED_202; // returning that our request was accepted
+            return "hi";
         });
 
         get("/get", "application/json", (req, res) -> {
@@ -144,12 +160,20 @@ public class User implements UserInterface {
 
     }
 
-    public void setName(String name) {
-        this.Name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return this.username;
+    }
+    
+    public void setTabId(String tabid) {
+        this.tabid = tabid;
     }
 
-    public String getName() {
-        return Name;
+    public String getTabId() {
+        return tabid;
     }
 
     public static String loginextra(Request req, Response res) {
@@ -161,7 +185,7 @@ public class User implements UserInterface {
     }
 
     private static String login(Request req, Response res) {
-        String red = "http://localhost:80";
+        String red = "http://localhost:80/game.html";
         //logger.info("ChatServer: redirecting: " + red);
         res.redirect(red, 302);
         String username = req.queryParams("username");
@@ -169,13 +193,15 @@ public class User implements UserInterface {
         HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
         Context ctx = map.get(tabid);
         String eachUser = username + tabid;
-        System.out.println("username in login=" +username);
+        System.out.println("username in login=" + username);
         System.out.println("tabid in login=" + tabid);
-        System.out.println("ctx in login=" +ctx);
-        ctx.user.setName(eachUser);
-        System.out.println("eachUser=" +eachUser);
+        System.out.println("ctx in login=" + ctx);
+        ctx.user.setTabId(tabid);
+        ctx.user.setUsername(username);
+        System.out.println("eachUser=" + eachUser);
         return username;
     }
+
 
     /*
      static String user(spark.Request req, Response res) {
@@ -202,7 +228,6 @@ public class User implements UserInterface {
         //how to merge together
     }
      */
-
     static spark.Session getSession(spark.Request req) {
         spark.Session s = req.session(true); // true means if there is none, make one
         return s;

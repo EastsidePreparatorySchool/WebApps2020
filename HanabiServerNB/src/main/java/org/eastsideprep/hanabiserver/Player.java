@@ -27,13 +27,13 @@ public class Player implements PlayerInterface {
     }
 
     public Player(String username){ // This functionality has been moved to the User class
-        this.myUser.setName(username);
+        this.myUser.setUsername(username);
         this.myHints = new ArrayList<Hint>();
     }
     
     public Player(User user, String username) {
         myUser = user;
-        myUser.setName(username);
+        myUser.setUsername(username);
         this.myHints = new ArrayList<>();
     }
     

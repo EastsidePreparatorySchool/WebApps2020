@@ -1,3 +1,24 @@
+// DO NOT USE THIS FILE ANYMORE, SWITCH TO HANABISERVERNB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 logIn();
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
