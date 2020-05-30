@@ -29,7 +29,8 @@ public interface PlayerInterface {
     public void AddCardToHand(Card card);
     
     // ID and properties
-    public String GetUsername();
+    public User GetUser();
+//    public String GetUsername();
 
     public Hand GetHand();
     

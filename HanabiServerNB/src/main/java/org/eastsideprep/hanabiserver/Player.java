@@ -59,18 +59,25 @@ public class Player implements PlayerInterface {
 
     @Override
     public void ReceiveHint(Hint hint) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Hint myHint: myHints) {
+            if (myHint.equals(hint)) {
+                System.out.println("User "+myUser.GetID()+" already has this hint");
+                break;
+            }
+        }
+        myHints.add(hint);
     }
 
     @Override
     public void AddCardToHand(Card card) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 
-    @Override
-    public String GetUsername() {
-        return myUser.GetName();
-    }
+//    @Override
+//    public String GetUsername() {
+//        return myUser.GetName();
+//    }
 
     @Override
     public Hand GetHand() {
@@ -80,6 +87,11 @@ public class Player implements PlayerInterface {
     @Override
     public ArrayList<Hint> GetReceivedHints() {
         return myHints;
+    }
+
+    @Override
+    public User GetUser() {
+        return myUser;
     }
     
 }
