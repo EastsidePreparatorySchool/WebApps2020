@@ -93,7 +93,7 @@ public class Main {
             String gameID = req.queryParams("gid");
             System.out.println("Update requested by " + req.ip() + " for game " + gameID);
 
-            if (gameID != null) {
+            if (gameID != null) { // Check for corresponding Game
                 int gameID_int = Integer.parseInt(gameID);
                 GameControl game = gameControls.get(gameID_int);
                 GameData gameData = game.getGameData();
