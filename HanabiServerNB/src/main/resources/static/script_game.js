@@ -1,28 +1,32 @@
 let DEBUG = true;
 let game;
+let debugDiv = document.getElementById("debug");
+
 setInterval(function () {
     if (DEBUG) {
         request({url: "/update?gid=" + 0, method: "GET"})
                 .then(data => {
                     game = data;
-                    console.log(game);
+                    render_update(data);
+                    console.log("Update received");
                 })
                 .catch(error => {
                     console.log("error: " + error);
                 });
-        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
-        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
-        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
+//        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+//        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+//        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+//                .then(data => {
+//                    console.log(data);
+//                })
+//                .catch(error => {
+//                    console.log("error: " + error);
+//                });
     } else {
         request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
-                    console.log(a);
+                    console.log("update received");
+                    render_update(data);
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -237,3 +241,34 @@ function test(){
     
 }
 
+function render_update(data){
+    let update_data = JSON.parse(data);
+    //console.log(update_data);
+    //debugDiv.innerHTML = data;
+    //debugDiv.innerHTML = update_data.players[0].myUser.username;
+    render_user_cards(update_data.players);
+}
+
+function render_user_cards(playerArr){
+    console.log("rendering usernames");
+    for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
+        
+        let cp = playerArr[numPlayer];
+        
+        console.log('at player ' + numPlayer);
+        document.getElementById("playerLabel"+ (numPlayer + 2)).innerText = cp.myUser.username;
+        
+        for (var i = 0; i <= 2; i++) {
+            let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));
+            console.log(playerArr[numPlayer]);
+            card.innerText = cp.myHand.cards[i].number;
+            card.style.color = cp.myHand.cards[i].color;
+            card.style.fontSize = "90px";
+            card.style.textAlign = "center";
+            card.style.lineHeight = "100px";
+            card.style.fontFamily = "sans-serif";
+            card.style.fontWeight = "700";
+        }
+        
+    }
+}
