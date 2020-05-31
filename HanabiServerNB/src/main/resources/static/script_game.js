@@ -234,6 +234,8 @@ function test(){
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
+    setTimeout(giveClue(1, 1), 300);
+    console.log("giving clue");
     
 }
 
