@@ -234,6 +234,9 @@ function test(){
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
+    //no client code for giving clue
+   // setTimeout(giveClue(1, 1), 300);
+    //console.log("giving clue");
     
 }
 
