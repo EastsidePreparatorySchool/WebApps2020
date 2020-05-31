@@ -21,11 +21,6 @@ public class GameControl implements GameControlInterface {
     public GameData getGameData(){
         return gameData;
     }
-    
-    @Override
-    public void shuffle(CardSpotInterface spot) {
-        Collections.shuffle(spot.getCards());
-    }
 
     @Override
     public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo) {
