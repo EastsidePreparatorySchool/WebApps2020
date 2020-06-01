@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.eastsideprep.hanabiserver.interfaces.GameInterface;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
+import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
 
 /**
  *
@@ -18,18 +19,22 @@ import org.eastsideprep.hanabiserver.interfaces.CardInterface;
  */
 public class GameData implements GameInterface {
 
-    private int gameId;
-
+    public int debugNum;
+    
     private String name;
 
     private ArrayList<Player> players;
 
     private int remainingStrikes;
+    
+    public String[] cardColors = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+    public int cardNumbers = 5;
+    public int cardDuplicates = 2;
 
 //    private static int GameIdSettingValue=1; 
     private static AtomicInteger GameIdSettingValue2 = new AtomicInteger(Integer.MIN_VALUE);
 
-    private int gameID;
+    private int gameId;
 
     //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
@@ -41,6 +46,7 @@ public class GameData implements GameInterface {
         this.name = name;
         this.gameId = gameId;
         //do the stuff to fill the deck//
+        this.deck = this.createDeck(); // Shuffled & everything
     }
     private HashMap<String, PlayedCards> playedCardPiles;
 
@@ -48,9 +54,9 @@ public class GameData implements GameInterface {
 
     GameData(String nm) { //whenever you call game, synchronize
         name = nm;
-        gameID = GameIdSettingValue2.getAndDecrement();
+        gameId = GameIdSettingValue2.getAndDecrement();
 
-        // gameID=GameIdSettingValue;
+        // gameId=GameIdSettingValue;
         // GameIdSettingValue+=1;
     }
 
@@ -97,7 +103,7 @@ public class GameData implements GameInterface {
     }
 
     public int getid() {
-        return gameID;
+        return gameId;
     }
 
     public String getname() {
@@ -124,6 +130,39 @@ public class GameData implements GameInterface {
             return 3;
         }
     }
+    
+    private Deck createDeck() {
+        ArrayList<Card> tempDeck = new ArrayList<>();
+        for (int cardNumber = 1; cardNumber <= cardNumbers; cardNumber++) {
+            for (String cardColor : cardColors) {
+                for (int i = 0; i < cardDuplicates; i++) {
+                    tempDeck.add(new Card(cardColor, cardNumber));
+                }
+            }
+        }
+        Deck completedDeck = new Deck(tempDeck);
+        GameControlInterface.shuffle(completedDeck);
+        return completedDeck;
+    }
+    
+    public void dealHands() {
+        for (int i = 0; i < getMaxHandSize(); i++) {
+            players.forEach((player) -> {
+            player.AddCardToHand(deck.draw());
+        });
+        }
+    }
+    
+    private int getMaxHandSize() {
+        if (players.size() <= 3) {
+            return 5;
+        } else if (players.size() <= 5) {
+            return 4;
+        } else {
+            return 3;
+        }
+    }
+            
 
     GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
         this.players = players;
@@ -133,7 +172,7 @@ public class GameData implements GameInterface {
 
         this.remainingStrikes = 3;
 
-        gameID = GameIdSettingValue2.getAndDecrement();
+        gameId = GameIdSettingValue2.getAndDecrement();
     }
 
     GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
@@ -144,6 +183,6 @@ public class GameData implements GameInterface {
 
         this.remainingStrikes = 3;
         this.name = name;
-        gameID = GameIdSettingValue2.getAndDecrement();
+        gameId = GameIdSettingValue2.getAndDecrement();
     }
 }

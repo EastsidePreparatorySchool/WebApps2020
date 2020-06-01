@@ -6,6 +6,7 @@
 package org.eastsideprep.hanabiserver.interfaces;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -15,7 +16,9 @@ import java.util.HashMap;
 public interface GameControlInterface {
     
     // Shuffle the cards currently in a spot
-    public void shuffle(CardSpotInterface spot); 
+    public static void shuffle(CardSpotInterface spot) {
+        Collections.shuffle(spot.getCards());
+    }; 
     
     // Move a card from one spot to another
     public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo);
