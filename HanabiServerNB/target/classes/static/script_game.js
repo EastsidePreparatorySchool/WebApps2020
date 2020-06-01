@@ -225,3 +225,17 @@ x.addEventListener("keyup", function (event) {
         x.value = "";
     }
 });
+
+function test(){
+    //add way to give clue
+    setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
+    console.log("updating cards");
+    setTimeout(discard("purple", 3), 300);
+    console.log("discarding cards");
+    setTimeout(play(1), 300);
+    console.log("playing card");
+    setTimeout(giveClue(1, 1), 300);
+    console.log("giving clue");
+    
+}
+
