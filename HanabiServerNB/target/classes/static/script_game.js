@@ -272,3 +272,8 @@ function render_user_cards(playerArr){
         
     }
 }
+    setTimeout(giveClue(1, 1), 300);
+    console.log("giving clue");
+    
+}
+
