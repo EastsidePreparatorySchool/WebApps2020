@@ -130,8 +130,22 @@ function selectPile(num) {
 function play(id) {
     //select pile
     unblurPileButtons();
-
-    //remove card
+    
+    selectPile(pile);
+    
+    
+    var pile="fillme";
+    var player="fillme";
+    request({url: "/play_card?pile=" + pile+"&player="+player, verb: "PUT"})
+            .then(data => {
+                // console.log(a);
+            })
+            .catch(error => {
+                console.log("error, play route not working: " + error);
+            });
+            //
+            //
+ //remove card
     //hand.remove(id)
 
     //add value to pile

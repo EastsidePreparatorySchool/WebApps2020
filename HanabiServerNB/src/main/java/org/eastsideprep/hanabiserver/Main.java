@@ -201,6 +201,18 @@ public class Main {
             return "Could not find user " + givenHint.playerToId;
         });
 //        gameControl = new GameControl();
+        
+         put("/play_card", (req, res) -> {
+            Context ctx = getContext(req);
+            
+            String pilecolor = req.queryParams("pile");
+            
+         //   ctx.
+            
+                    
+                    
+            return null;
+         });
     }
 
     public static Context getContext(Request req) {
