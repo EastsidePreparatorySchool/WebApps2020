@@ -4,15 +4,15 @@ let debugDiv = document.getElementById("debug");
 
 setInterval(function () {
     if (DEBUG) {
-        request({ url: "/update?gid=" + 0, method: "GET" })
-            .then(data => {
-                game = JSON.parse(data);
-                render_update(data);
-                console.log("Update requested");
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
+        request({url: "/update?gid=" + 0, method: "GET"})
+                .then(data => {
+                    game = JSON.parse(data);
+                    render_update(data);
+                    console.log("Update requested");
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
         //        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
         //        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
         //        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
@@ -23,14 +23,14 @@ setInterval(function () {
         //                    console.log("error: " + error);
         //                });
     } else {
-        request({ url: "/update?gid=" + a, method: "GET" }) // "a" needs to be a game ID
-            .then(data => {
-                console.log("update received");
-                render_update(data);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
+        request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log("update received");
+                    render_update(data);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
     }
 }, 1000);
 
@@ -155,24 +155,24 @@ function discard(card, gameID, playerID) {
     //TODO: end turn
     card = JSON.stringify(card);
     if (!DEBUG) {
-        request({ url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT" }) // "a" needs to be a game ID
-            .then(data => {
-                console.log("Discarded:");
-                console.log(data);
-            })
-            .catch(error => {
-                console.log("Discard error: " + error);
-            });
+        request({url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log("Discarded:");
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("Discard error: " + error);
+                });
     } else {
         console.log("DISCARDING IS WORKING (debug)");
-        request({ url: "/discard?to_discard=" + card + "&game_id=" + 0 + "&player_id=" + 0, method: "PUT" }) // "a" needs to be a game ID
-            .then(data => {
-                console.log("Discarded:");
-                console.log(data);
-            })
-            .catch(error => {
-                console.log("Discard error: " + error);
-            });
+        request({url: "/discard?to_discard=" + card + "&game_id=" + 0 + "&player_id=" + 0, method: "PUT"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log("Discarded:");
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("Discard error: " + error);
+                });
     }
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
@@ -247,9 +247,9 @@ function giveClue() {
     //     }
     // }
 
-    var hintObject = { isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent };
+    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
-    request({ url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT" }).then(data => {
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
         console.log("Sent: " + JSON.stringify(hintObject));
     }).catch(error => {
         console.log("Error: " + error);
@@ -264,30 +264,30 @@ function giveClue() {
 function sendMsg() {
     console.log("made it sendMsg");
     var a = document.getElementById("msgBox").value;
-    request({ url: "/send?msg=" + a, method: "PUT" })
-        .then(data => {
-            console.log(a);
-        })
-        .catch(error => {
-            console.log("error: " + error);
-        });
+    request({url: "/send?msg=" + a, method: "PUT"})
+            .then(data => {
+                console.log(a);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
 }
 
 function getNew() {
-    request({ url: "/get", method: "GET" })
-        .then(data => {
-            var messages = JSON.parse(JSON.parse(data));
-            var msgOutput = "";
-            for (var i = 0; i < messages.length; i++) {
-                var msg = messages[i];
-                msgOutput += msg.username + ": " + msg.msg + "\n";  // formatting output properly       
-            }
+    request({url: "/get", method: "GET"})
+            .then(data => {
+                var messages = JSON.parse(JSON.parse(data));
+                var msgOutput = "";
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = messages[i];
+                    msgOutput += msg.username + ": " + msg.msg + "\n";  // formatting output properly       
+                }
 
-            document.getElementById("chatbox").value = msgOutput; // displaying formatted output in text area
-        })
-        .catch(error => {
-            console.log("error: " + error);
-        });
+                document.getElementById("chatbox").value = msgOutput; // displaying formatted output in text area
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
 }
 
 setInterval(getNew, 300);
@@ -295,14 +295,14 @@ setInterval(getNew, 300);
 logIn();
 
 function logIn() {
-    request({ url: "/login_user?username=" + username, method: "GET" })
-        .then(username => {
-            //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-            console.log(username);
-        })
-        .catch(error => {
-            console.log("error: " + error);
-        });
+    request({url: "/login_user?username=" + username, method: "GET"})
+            .then(username => {
+                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                console.log(username);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
 }
 
 // sends message by just pressing enter
@@ -320,15 +320,21 @@ function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     console.log("updating cards");
+
     setTimeout(discard(game.players[0].myHand.cards[0]), 300);
     console.log("discarding cards");
+
     setTimeout(play(1), 300);
     console.log("playing card");
-    // Giving clue is done manually (it relies on input buttons)
-    //// no client code for giving clue
-    //// setTimeout(giveClue(), 300);
-    //// console.log("giving clue");
 
+
+    setTimeout(() => {
+        playerToGiveClue = 0;
+        isClueColor = false;
+        clueContent = 5;
+        giveClue();
+    }, 300);
+    console.log("Gave clue to player 0");
 }
 
 function render_update(data) {
