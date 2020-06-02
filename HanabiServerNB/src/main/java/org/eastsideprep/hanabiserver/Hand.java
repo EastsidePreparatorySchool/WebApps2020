@@ -20,7 +20,13 @@ public class Hand implements HandInterface {
     //bec we have multiple hands
 
     Hand(String name) {
-        name = Name;
+        Name = Name;
+        cards = new ArrayList<>();
+    }
+    
+    Hand() {
+        cards = new ArrayList<>();
+        Name = "not set";
     }
 
     @Override
@@ -51,5 +57,9 @@ public class Hand implements HandInterface {
     @Override
     public ArrayList<Card> getCards() {
         return cards;
+    }
+    
+    public void addCard(Card c){
+        cards.add(c);
     }
 }
