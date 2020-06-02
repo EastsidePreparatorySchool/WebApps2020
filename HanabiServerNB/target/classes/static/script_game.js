@@ -179,11 +179,12 @@ function discard(card, gameID, playerID) {
 }
 setInterval(getNew, 300);
 
+// storing ids of all clue giving buttons
+var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    // storing ids of all clue giving buttons
-    var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
+    
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -191,6 +192,44 @@ function disable(num, id) {
         }
     }
     console.log(id);
+}
+
+// reset disabled clue buttons
+function reenableClueBtns() {
+    for(var i=0; i< clueButtons.length; i++) {
+        var clueBtnIDs = clueButtons[i];
+        for(var j=0; j < clueBtnIDs.length; j++) {
+            document.getElementById(clueButtons[i][j]).removeAttribute("disabled");
+        }
+    }
+}
+
+// send clues to server
+// TODO: confirm player ID. assuming player order in game data matches display ID
+function giveClue() {
+    var toPlayer = -1;
+    for(var i=0; i<clueButtons[0].length;i++) {
+        if (!document.getElementById(clueButtons[0][i]).disabled) {
+            toPlayer++;
+            break;
+        }
+    }
+
+    var hintIndex=0;
+    for(var i=0; i< clueButtons[1].length;i++) {
+        hintIndex++;
+        if(!document.getElementById(clueButtons[0][i]).disabled) {
+            break;
+        }
+    }
+
+    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
+    print("Sending hint: "+JSON.stringify(hintObject));
+    request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
+        console.log("Sent: "+JSON.stringify(hintObject));
+    }).catch(error => {
+        console.log("Error: "+error);
+    })
 }
 
 
@@ -259,9 +298,10 @@ function test() {
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
-    //no client code for giving clue
-    // setTimeout(giveClue(1, 1), 300);
-    //console.log("giving clue");
+    // Giving clue is done manually (it relies on input buttons)
+    //// no client code for giving clue
+    //// setTimeout(giveClue(), 300);
+    //// console.log("giving clue");
 
 }
 

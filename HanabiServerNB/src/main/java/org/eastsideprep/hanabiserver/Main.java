@@ -212,6 +212,8 @@ public class Main {
                         }
 
                         if (validHint) {
+                            // set the from ID based on context
+                            givenHint.playerFromId = getContext(req).user.GetID();
                             player.ReceiveHint(givenHint);
                             return "Gave hint to user " + playerUser.GetID();
                         } else {
