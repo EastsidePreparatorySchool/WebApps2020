@@ -104,19 +104,27 @@ function selectDiscard() {
 }
 
 //stores information about the selected card
-var selectedCard = 0;
+var selectedCard = -1;
 
 //id tells you which button you pressed (1-5)
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
-    if (playdiscard === 1) {
+    selectedCard = id;
+    if (playdiscard === 1 && pile !== 0) {
         play(id);
+        pile = 0;
+        selectedCard = -1;
+        playdiscard = 0;
+        blurButtons();
     } else if (playdiscard === 2) {
         discard(id);
+        playdiscard = 0;
+        blurButtons();
     }
-    playdiscard = 0;
-    blurButtons();
+
+
+
 
 }
 
@@ -126,26 +134,34 @@ function selectPile(txt) {
     blurPileButtons();
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
+
+    if (playdiscard === 1 && pile !== 0 && selectedCard !== -1) {
+        play(selectedCard);
+        pile = 0;
+        selectedCard = -1;
+    }
+
+
 }
 function play(id) {
     //select pile
     unblurPileButtons();
-    
-    
-    var gameID="hmm";
-    var cardindex=id;
-    var player="fillme";
-    request({url: "/play_card?pile=" + pile+"&playerID="+player+"&cardnumber="+cardindex+"&gameID="+gameID, verb: "PUT"})
+
+
+    var gameID = "hmm";
+    var cardindex = id;
+    var player = "fillme";
+    request({url: "/play_card?pile=" + pile + "&playerID=" + player + "&cardnumber=" + cardindex + "&gameID=" + gameID, verb: "PUT"})
             .then(data => {
-                
+
             })
             .catch(error => {
                 console.log("error, play route not working: " + error);
             });
-            //
-            //
-            
- //remove card
+    //
+    //
+
+    //remove card
     //hand.remove(id)
 
     //add value to pile                  Don't worry, handeled by server as long as update 
@@ -221,7 +237,7 @@ logIn();
 function logIn() {
     request({url: "/login_user?username=" + username, method: "GET"})
             .then(username => {
-              //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
                 console.log(username);
             })
             .catch(error => {
@@ -240,7 +256,7 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(){
+function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     console.log("updating cards");
@@ -249,8 +265,8 @@ function test(){
     setTimeout(play(1), 300);
     console.log("playing card");
     //no client code for giving clue
-   // setTimeout(giveClue(1, 1), 300);
+    // setTimeout(giveClue(1, 1), 300);
     //console.log("giving clue");
-    
+
 }
 
