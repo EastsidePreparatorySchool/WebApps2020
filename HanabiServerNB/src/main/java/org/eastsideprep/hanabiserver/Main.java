@@ -41,11 +41,38 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
+        
+        
+        Player p1 = new Player(new User("bar", "foo"), "Windows");
+        Player p2 = new Player(new User("bar", "foo"), "MacOS");
+        Player p3 = new Player(new User("bar", "foo"), "Linux");
+        Player p4 = new Player(new User("blah", "blah1"), "RaspbianOS");
+        
+        p1.AddCardToHand(new Card("blue", 2));
+        p1.AddCardToHand(new Card("red", 4));
+        p1.AddCardToHand(new Card("yellow", 5));
+        
+        p2.AddCardToHand(new Card("orange", 5));
+        p2.AddCardToHand(new Card("purple", 1));
+        p2.AddCardToHand(new Card("blue", 1));
+        
+        p3.AddCardToHand(new Card("red", 3));
+        p3.AddCardToHand(new Card("red", 2));
+        p3.AddCardToHand(new Card("blue", 2));
+        
+        p4.AddCardToHand(new Card("orange", 5));
+        p4.AddCardToHand(new Card("yellow", 4));
+        p4.AddCardToHand(new Card("purple", 3));
+        
         ArrayList<Player> testPlayers = new ArrayList<>();
-        testPlayers.add(new Player(new User("bar", "foo"), "Windows"));
-        testPlayers.add(new Player(new User("bar", "foo"), "MacOS"));
-        testPlayers.add(new Player(new User("bar", "foo"), "Linux"));
-        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        testPlayers.add(p1);
+        testPlayers.add(p2);
+        testPlayers.add(p3);
+        testPlayers.add(p4);
+        
+        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
+        
+        GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -98,10 +125,10 @@ public class Main {
                 int gameID_int = Integer.parseInt(gameID);
                 GameControl game = gameControls.get(gameID_int);
                 GameData gameData = game.getGameData();
-                System.out.println("returning gamedata");
+                //System.out.println("returning gamedata");
                 return gameData;
             } else {
-                System.out.println("returning games");
+                System.out.println("returning all games");
                 return gameControls;
             }
         }, new JSONRT());
@@ -109,12 +136,12 @@ public class Main {
         get("/turn", (req, res) -> {
             String turnJSON = req.queryParams("turn");
             String cardJSON = req.queryParams("card");
-            System.out.println(turnJSON + " | " + cardJSON);
+            //System.out.println(turnJSON + " | " + cardJSON);
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
 
-            System.out.println("GGGG");
+            //System.out.println("GGGG");
 
             Context ctx = getContext(req);
             if (ctx == null) {
@@ -209,7 +236,7 @@ public class Main {
             s.attribute("map", new HashMap<String, Context>());
         }
         HashMap<String, Context> map = s.attribute("map");
-        System.out.println("map =" + map);
+        //System.out.println("map =" + map);
         String tabid = req.headers("tabid");
         if (tabid == null) {
             tabid = "default";
