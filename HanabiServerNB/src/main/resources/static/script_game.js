@@ -122,10 +122,6 @@ function selectCard(id) {
         playdiscard = 0;
         blurButtons();
     }
-
-
-
-
 }
 
 var pile = 0;
@@ -140,8 +136,6 @@ function selectPile(txt) {
         pile = 0;
         selectedCard = -1;
     }
-
-
 }
 function play(id) {
     //select pile
