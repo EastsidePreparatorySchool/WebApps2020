@@ -205,14 +205,31 @@ function reenableClueBtns() {
 }
 
 // send clues to server
-// TODO: player identification???
+// TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
-    var toPlayer = "";
+    var toPlayer = -1;
     for(var i=0; i<clueButtons[0].length;i++) {
         if (!document.getElementById(clueButtons[0][i]).disabled) {
-            toPlayer = clueButtons[0][i];
+            toPlayer++;
+            break;
         }
     }
+
+    var hintIndex=0;
+    for(var i=0; i< clueButtons[1].length;i++) {
+        hintIndex++;
+        if(!document.getElementById(clueButtons[0][i]).disabled) {
+            break;
+        }
+    }
+
+    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
+    print("Sending hint: "+JSON.stringify(hintObject));
+    request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
+        console.log("Sent: "+JSON.stringify(hintObject));
+    }).catch(error => {
+        console.log("Error: "+error);
+    })
 }
 
 
@@ -281,9 +298,10 @@ function test() {
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
-    //no client code for giving clue
-    // setTimeout(giveClue(1, 1), 300);
-    //console.log("giving clue");
+    // Giving clue is done manually (it relies on input buttons)
+    //// no client code for giving clue
+    //// setTimeout(giveClue(), 300);
+    //// console.log("giving clue");
 
 }
 
