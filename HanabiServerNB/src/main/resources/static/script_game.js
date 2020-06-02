@@ -121,8 +121,8 @@ function selectCard(id) {
 }
 
 var pile = 0;
-function selectPile(num) {
-    pile = num;
+function selectPile(txt) {
+    pile = txt;
     blurPileButtons();
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
@@ -131,25 +131,25 @@ function play(id) {
     //select pile
     unblurPileButtons();
     
-    selectPile(pile);
     
-    
-    var pile="fillme";
+    var gameID="hmm";
+    var cardindex=id;
     var player="fillme";
-    request({url: "/play_card?pile=" + pile+"&player="+player, verb: "PUT"})
+    request({url: "/play_card?pile=" + pile+"&playerID="+player+"&cardnumber="+cardindex+"&gameID="+gameID, verb: "PUT"})
             .then(data => {
-                // console.log(a);
+                
             })
             .catch(error => {
                 console.log("error, play route not working: " + error);
             });
             //
             //
+            
  //remove card
     //hand.remove(id)
 
-    //add value to pile
-    //pile.value++;
+    //add value to pile                  Don't worry, handeled by server as long as update 
+    //pile.value++;                      function works. Right?
 
     //draw new card
     //hand.draw();

@@ -40,12 +40,20 @@ public class Main {
 
         gameControls = new ArrayList<>();
 
+        //adding cardpiles
+        HashMap<String, PlayedCards> cardpiles = new HashMap();
+        cardpiles.put("blue", new PlayedCards("blue"));
+        cardpiles.put("green", new PlayedCards("green"));
+        cardpiles.put("yellow", new PlayedCards("yellow"));
+        cardpiles.put("red", new PlayedCards("red"));
+        cardpiles.put("purple", new PlayedCards("purple"));
+        
         //Making a test GameControl object
         ArrayList<Player> testPlayers = new ArrayList<>();
         testPlayers.add(new Player(new User("bar", "foo"), "Windows"));
         testPlayers.add(new Player(new User("bar", "foo"), "MacOS"));
         testPlayers.add(new Player(new User("bar", "foo"), "Linux"));
-        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0, cardpiles);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -201,18 +209,38 @@ public class Main {
             return "Could not find user " + givenHint.playerToId;
         });
 //        gameControl = new GameControl();
-        
-         put("/play_card", (req, res) -> {
+
+        put("/play_card", (req, res) -> {
             Context ctx = getContext(req);
-            
+
             String pilecolor = req.queryParams("pile");
-            
-         //   ctx.
-            
-                    
-                    
+            int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
+            int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
+            String PlayerID = req.queryParams("playerID");           //need way to get playerID
+
+            for (GameControl game
+                    : gameControls) {
+                if (game.getGameData().getid() == gamID) {
+                    for (Player player
+                            : game.getGameData().getPlayers()) {
+                        if (player.GetUser().GetID().equals(PlayerID)) { //check if they are both strings
+                            Card x = player.GetHand().getCards().remove(cardindex);
+                            //doesn't check right now to see if card can be played
+                            //card added to played card pile
+                            game.getGameData().getPlayedCardPile(pilecolor).getCards().add(x);
+                            //new card added to hand from deck
+                            if (game.getGameData().getDeck().getCards().size() > 0) {
+                                Card i=game.getGameData().getDeck().getCards().remove(0);
+                                player.GetHand().getCards().add(i);
+                            }
+                        }
+                    }
+                }
+            }
+            //   ctx.
+
             return null;
-         });
+        });
     }
 
     public static Context getContext(Request req) {

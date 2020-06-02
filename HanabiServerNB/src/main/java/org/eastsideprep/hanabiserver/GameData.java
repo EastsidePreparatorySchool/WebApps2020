@@ -38,8 +38,9 @@ public class GameData implements GameInterface {
 
     //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
-
-    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId) {
+    private HashMap<String, PlayedCards> playedCardPiles;
+    
+    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId, HashMap<String, PlayedCards> p) {
         this.players = players;
         this.remainingStrikes = startingStrikes;
         this.deck = new Deck(new ArrayList<Card>());
@@ -47,8 +48,9 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
+        playedCardPiles=p;
     }
-    private HashMap<String, PlayedCards> playedCardPiles;
+
 
     private Discard discardPile;
 
