@@ -154,11 +154,12 @@ function discard(card) {
 }
 setInterval(getNew, 300);
 
+// storing ids of all clue giving buttons
+var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    // storing ids of all clue giving buttons
-    var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
+    
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -166,6 +167,27 @@ function disable(num, id) {
         }
     }
     console.log(id);
+}
+
+// reset disabled clue buttons
+function reenableClueBtns() {
+    for(var i=0; i< clueButtons.length; i++) {
+        var clueBtnIDs = clueButtons[i];
+        for(var j=0; j < clueBtnIDs.length; j++) {
+            document.getElementById(clueButtons[i][j]).removeAttribute("disabled");
+        }
+    }
+}
+
+// send clues to server
+// TODO: player identification???
+function giveClue() {
+    var toPlayer = "";
+    for(var i=0; i<clueButtons[0].length;i++) {
+        if (!document.getElementById(clueButtons[0][i]).disabled) {
+            toPlayer = clueButtons[0][i];
+        }
+    }
 }
 
 
@@ -207,7 +229,7 @@ logIn();
 function logIn() {
     request({url: "/login_user?username=" + username, method: "GET"})
             .then(username => {
-              //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
                 console.log(username);
             })
             .catch(error => {
@@ -226,7 +248,7 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(){
+function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     console.log("updating cards");
@@ -235,8 +257,8 @@ function test(){
     setTimeout(play(1), 300);
     console.log("playing card");
     //no client code for giving clue
-   // setTimeout(giveClue(1, 1), 300);
+    // setTimeout(giveClue(1, 1), 300);
     //console.log("giving clue");
-    
+
 }
 
