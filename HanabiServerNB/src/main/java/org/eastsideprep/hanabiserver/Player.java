@@ -18,8 +18,8 @@ public class Player implements PlayerInterface {
 //    private String myUsername;
     private User myUser;
     private Hand myHand;
-    private int myID;
-    private int inGameID;
+    public int myID;
+    //private int inGameID; // DEPRECIATED
     private ArrayList<Hint> myHints; // things I known about my cards
     
     public Player(User user) {
