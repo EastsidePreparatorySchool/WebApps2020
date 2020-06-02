@@ -224,7 +224,7 @@ function giveClue() {
     }
 
     var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
-    print("Sending hint: "+JSON.stringify(hintObject));
+    console.log("Sending hint: "+JSON.stringify(hintObject));
     request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
         console.log("Sent: "+JSON.stringify(hintObject));
     }).catch(error => {
