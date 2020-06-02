@@ -49,10 +49,14 @@ public class GameData implements GameInterface {
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
         playedCardPiles=p;
+        
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).myID = i;
+        }
     }
 
 
-    private Discard discardPile;
+    private Discard discardPile = new Discard();
 
     GameData(String nm) { //whenever you call game, synchronize
         name = nm;

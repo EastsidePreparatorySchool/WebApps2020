@@ -14,25 +14,25 @@ import org.eastsideprep.hanabiserver.interfaces.HintInterface;
 public class Hint implements HintInterface {
 
     Boolean isColor;
-    
-    int playerFromId;
-    int playerToId;
-    
+
+    String playerFromId;
+    String playerToId;
+
     String hintContent;
 
-    public Hint(String _hintContent, int _playerFromId, int _playerToId){
+    public Hint(String _hintContent, String _playerFromId, String _playerToId) {
         hintContent = _hintContent;
         playerFromId = _playerFromId;
         playerToId = _playerToId;
         isColor = findIsColor(_hintContent);
-        
+
     }
-    
+
     @Override
     public String toString() {
         return hintContent;
     }
-    
+
     @Override
     public Boolean getIsColor() {
         return isColor;
@@ -44,15 +44,15 @@ public class Hint implements HintInterface {
     }
 
     @Override
-    public int getPlayerFrom() {
+    public String getPlayerFrom() {
         return playerFromId;
     }
 
     @Override
-    public int getPlayerTo() {
+    public String getPlayerTo() {
         return playerToId;
     }
-    
+
     private Boolean findIsColor(String _hintContent) {
         try {
             Integer.parseInt(_hintContent);
