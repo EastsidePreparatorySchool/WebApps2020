@@ -18,6 +18,4 @@ public interface HandInterface extends CardSpotInterface {
     
     public void draw(Card Card); 
     
-    public CardInterface discard(int pos);
-    
 }

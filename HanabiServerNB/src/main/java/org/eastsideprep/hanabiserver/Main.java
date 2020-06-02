@@ -136,13 +136,10 @@ public class Main {
         get("/turn", (req, res) -> {
             String turnJSON = req.queryParams("turn");
             String cardJSON = req.queryParams("card");
-            //System.out.println(turnJSON + " | " + cardJSON);
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
-
-            //System.out.println("GGGG");
-
+            
             Context ctx = getContext(req);
             if (ctx == null) {
                 return "";
@@ -227,7 +224,30 @@ public class Main {
 
             return "Could not find user " + givenHint.playerToId;
         });
-//        gameControl = new GameControl();
+        
+        
+        put("/discard", "application/json", (req, res) -> {
+            System.out.println("Discarding...");
+            
+            int gameId = Integer.parseInt(req.queryParams("game_id"));
+            int playerId = Integer.parseInt(req.queryParams("player_id"));
+            
+            String toDiscard = req.queryParams("to_discard");
+            Card discard = JSONRT.gson.fromJson(toDiscard, Card.class);
+
+            GameControl game = gameControls.get(gameId);
+            Player player = game.getGameData().getPlayerAtId(playerId);
+            Hand playerHand = player.GetHand();
+            
+          
+            for (Card card : playerHand.getCards()) {
+                if (card.color.equals(discard.color) && card.number == discard.number) {
+                    return playerHand.discard(card, game.getGameData());
+                }
+            }
+
+            return "Could not find either: Game " + gameId + " | Player @ Id " + playerId + " | Card " + toDiscard;
+        }, new JSONRT());
     }
 
     public static Context getContext(Request req) {
