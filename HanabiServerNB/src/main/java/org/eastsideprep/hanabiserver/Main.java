@@ -8,16 +8,16 @@ package org.eastsideprep.hanabiserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import spark.Request;
-import spark.Response;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
 public class Main {
 
     final static boolean DEBUG = true;
-    
- //    static ArrayList<GameData> games = new ArrayList<>();
-    final static String[] CARD_COLORS = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+
+    //    static ArrayList<GameData> games = new ArrayList<>();
+    final static String[] CARD_COLORS
+            = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
 
     final static int CARD_NUMBERS = 5;
     final static int CARD_DUPLICATES = 3;
@@ -55,7 +55,7 @@ public class Main {
             return "Hello world from code";
         });
 
-        get("/load", (Request req, Response res) -> {
+        get("/load", (req, res) -> {
             // Open new, independent tab
             spark.Session s = req.session();
 
@@ -91,9 +91,10 @@ public class Main {
 
         get("/update", "application/json", (req, res) -> {
             String gameID = req.queryParams("gid");
-            System.out.println("Update requested by " + req.ip() + " for game " + gameID);
+            System.out.println("Update requested by " + req.ip() + " for game "
+                    + gameID);
 
-            if (gameID != null) {
+            if (gameID != null) { // Check for cor responding Game
                 int gameID_int = Integer.parseInt(gameID);
                 GameControl game = gameControls.get(gameID_int);
                 GameData gameData = game.getGameData();
@@ -112,48 +113,96 @@ public class Main {
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
-            
+
             System.out.println("GGGG");
-            
+
             Context ctx = getContext(req);
-            if (ctx == null) {return "";}
-            
-            if (DEBUG) {
-             GameData userGame = gameControls.get(turn.gameId).getGameData();
-             userGame.debugNum++;
+            if (ctx == null) {
+                return "";
             }
-            
+
+            if (DEBUG) {
+                GameData userGame = gameControls.get(turn.gameId).getGameData();
+                userGame.debugNum++;
+            }
+
             //TODO: implement non-debug game object modification
-               
             return "";
         });
-        
-        // TODO: handle expected params
+
         put("/enter_game", (req, res) -> {
             // Get user ID and requested game ID
             String userID = req.queryParams("usr_id");
             String gameID = req.queryParams("game_id");
-            
+
             for (User user
                     : lobbyUsers) { // Find this user in the lobby
                 if (user.GetID().equals(userID)) {
                     for (GameControl game
                             : gameControls) { // Find this game
                         if (gameID.equals(game.getGameData().getid())) {
-                            players.add(new Player(user)); // Create a new player with this user and add them to the game
-                            lobbyUsers.remove(user); // Remove user from lobby
-                            break;
+                            if (players.size() < 6) {
+                                players.add(new Player(user)); // Create a new player with this user and add them to the game
+                                lobbyUsers.remove(user); // Remove user from lobby
+                                return "Entered user " + userID + " into game "
+                                        + gameID;
+                            } else {
+                                return "Game " + gameID + " at max capacity";
+                            }
                         }
                     }
-                    break;
+                    return "Could not find game " + gameID;
                 }
             }
-            
-            return "Entered user " + userID + " into game " + gameID;
+            return "Could not find user " + userID;
+        });
+        put("/give_hint", (req, res) -> {
+            String hintParam = req.queryParams("hint");
+
+            Hint givenHint = JSONRT.gson.fromJson(hintParam, Hint.class);
+
+            // Find this usesr and give them this hint
+            for (GameControl game
+                    : gameControls) {
+                for (Player player
+                        : game.getGameData().getPlayers()) {
+                    final User playerUser = player.GetUser();
+
+                    if (playerUser.GetID().equals(givenHint.playerToId)) {
+                        // Validate Hint
+                        boolean validHint = false;
+                        for (Card card
+                                : player.GetHand().getCards()) {
+                            if (givenHint.isColor) {
+                                if (card.color.equals(givenHint.hintContent)) {
+                                    validHint = true;
+                                    break;
+                                }
+                            } else {
+                                if (card.number == Integer.parseInt(
+                                        givenHint.hintContent)) {
+                                    validHint = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (validHint) {
+                            player.ReceiveHint(givenHint);
+                            return "Gave hint to user " + playerUser.GetID();
+                        } else {
+                            return "Hint to user " + playerUser.GetID()
+                                    + " was invalid";
+                        }
+                    }
+                }
+            }
+
+            return "Could not find user " + givenHint.playerToId;
         });
 //        gameControl = new GameControl();
     }
-    
+
     public static Context getContext(Request req) {
         spark.Session s = req.session();
         if (s.isNew()) {
