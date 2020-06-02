@@ -9,7 +9,7 @@ package org.eastsideprep.hanabiserver;
  *
  * @author aturkarslan
  */
-import com.google.gson.*;
+import com.google.gson.Gson;
 import spark.*;
 
 public class JSONRT implements ResponseTransformer {
