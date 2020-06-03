@@ -1,4 +1,4 @@
-let DEBUG = false;
+let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
 
@@ -266,46 +266,35 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-function getUsername() {           
-    request({url: "/getUsername", method: "GET"})
-            .then(username => {
-                console.log("function getUsername(): " + username);
-                return username;
-            })
-            .catch(error => {
-                console.log("function getUsername(): error: " + error);
-            });
-}
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();    
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
 
-function LogIn() {
-    console.log("function LogIn():");
-    switchUser();
-            
-    request({url: "/getUsername", method: "GET"})
-            .then(username => {
-                console.log("function LogIn(): Inside request!");
-                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log("function LogIn(): " + username);
-            })
-            .catch(error => {
-                console.log("function LogIn(): error: " + error);
-            });
-}
-
-function switchUser(){
-    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
-}
-
-// sends message by just pressing enter
-var x = document.getElementById("msgBox");
-//taken from w3schools
-x.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        sendMsg();
-        x.value = "";
-    }
-});
 
 function test() {
     //add way to give clue
@@ -334,6 +323,7 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
+    getUsername();
 }
 
 function render_user_cards(playerArr) {
@@ -356,6 +346,5 @@ function render_user_cards(playerArr) {
             card.style.fontFamily = "sans-serif";
             card.style.fontWeight = "700";
         }
-
     }
 }
