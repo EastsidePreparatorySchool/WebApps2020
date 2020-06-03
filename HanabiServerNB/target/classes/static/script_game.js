@@ -266,29 +266,35 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-logIn();
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();    
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
 
-function logIn() {
-    request({url: "/login_user?username=" + username, method: "GET"})
-            .then(username => {
-                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log(username);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
-
-// sends message by just pressing enter
-var x = document.getElementById("msgBox");
-//taken from w3schools
-x.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        sendMsg();
-        x.value = "";
-    }
-});
 
 function test() {
     //add way to give clue
@@ -298,10 +304,16 @@ function test() {
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
+
+    //no client code for giving clue
+    // setTimeout(giveClue(1, 1), 300);
+    //console.log("giving clue");
+
     // Giving clue is done manually (it relies on input buttons)
     //// no client code for giving clue
     //// setTimeout(giveClue(), 300);
     //// console.log("giving clue");
+
 
 }
 
@@ -311,6 +323,7 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
+    getUsername();
 }
 
 function render_user_cards(playerArr) {
@@ -333,6 +346,5 @@ function render_user_cards(playerArr) {
             card.style.fontFamily = "sans-serif";
             card.style.fontWeight = "700";
         }
-
     }
 }
