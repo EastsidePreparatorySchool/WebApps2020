@@ -8,27 +8,23 @@
     </head>
 
     <body>
-        <div>TODO: Code the server</div>
-        <p id="displayLogIn">Not Logged In</p> 
-        <button onclick="switchUser()">Log In/Switch User</button>
+        <p id="displayLogIn">Logged in as : [<script>getUsername(); return false;</script>]</p>
+        <button onclick="LogIn(); return false;">Log In/Switch User</button> 
         
          <button onclick="test()">Test Game</button>
 
-    <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
+        <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
         <div>Hanabi</div>
 
         <!--made start button, someone else make actual functionality to start the game-->
         <button onclick="startGame()">Click to start game</button>
-        
-       
-
-
+           
         <div id="interactives">
             <button onclick = "selectPlay()" id = "playbutton">Play</button>
             <button onclick = "selectDiscard()" id = "discardbutton">Discard</button>
             <div id="cards">
                 <div id="player1Cards" class="boxed block" style="color:black; height:180px; width:310px;">
-                    <h2 id="playerLabel1">Your cards</h2>
+                    <h2 id="playerLabel1">Your Cards</h2>
                     <div id="player1Card1" class="boxed inline-block" style="color:black">0</div>
                     <div id="player1Card2" class="boxed inline-block" style="color:black">0</div>
                     <div id="player1Card3" class="boxed inline-block" style="color:black">0</div>
@@ -169,7 +165,7 @@
         <button onclick="getNew()">Manual Get!</button><br><br> -->
 
         <div id="chatstuff">
-            <textarea readonly="readonly" id="chatbox" name="chatbox" rows="7" cols="40"></textarea><br>
+            <textarea readonly="readonly" id="chatbox" name="chatbox" rows="7" cols="28"></textarea><br>
             <input id="msgBox" placeholder="enter text here" type="text">
             <button onclick="sendMsg()">Send</button>
         </div>
@@ -178,4 +174,3 @@
         <script src="script_game.js"></script>
     </body>
 </html>
-

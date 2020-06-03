@@ -18,5 +18,6 @@ org\eastsideprep\hanabiserver\interfaces\GameInterface.class
 org\eastsideprep\hanabiserver\Main.class
 org\eastsideprep\hanabiserver\Discard.class
 org\eastsideprep\hanabiserver\User.class
+org\eastsideprep\hanabiserver\Turn.class
 org\eastsideprep\hanabiserver\GameControl.class
 org\eastsideprep\hanabiserver\Player.class

@@ -32,9 +32,9 @@ function updateUser() {
  * 
  */
 
-function switchUser(){
-   window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
-}
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
 
 function getheaders() {
     request({url: "getheaders", verb: "GET"})

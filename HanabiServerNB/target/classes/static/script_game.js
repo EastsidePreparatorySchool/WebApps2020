@@ -1,4 +1,4 @@
-let DEBUG = true;
+let DEBUG = false;
 let game;
 setInterval(function () {
     if (DEBUG) {
@@ -202,17 +202,34 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-logIn();
-
-function logIn() {
-    request({url: "/login_user?username=" + username, method: "GET"})
+function getUsername() {           
+    request({url: "/getUsername", method: "GET"})
             .then(username => {
-              //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log(username);
+                console.log("function getUsername(): " + username);
+                return username;
             })
             .catch(error => {
-                console.log("error: " + error);
+                console.log("function getUsername(): error: " + error);
             });
+}
+
+function LogIn() {
+    console.log("function LogIn():");
+    switchUser();
+            
+    request({url: "/getUsername", method: "GET"})
+            .then(username => {
+                console.log("function LogIn(): Inside request!");
+                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                console.log("function LogIn(): " + username);
+            })
+            .catch(error => {
+                console.log("function LogIn(): error: " + error);
+            });
+}
+
+function switchUser(){
+    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
 }
 
 // sends message by just pressing enter
@@ -226,7 +243,7 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(){
+function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     console.log("updating cards");
@@ -234,8 +251,9 @@ function test(){
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
-    setTimeout(giveClue(1, 1), 300);
-    console.log("giving clue");
-    
+    //no client code for giving clue
+    // setTimeout(giveClue(1, 1), 300);
+    //console.log("giving clue");
+
 }
 
