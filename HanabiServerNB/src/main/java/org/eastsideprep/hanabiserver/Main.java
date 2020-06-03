@@ -129,6 +129,13 @@ public class Main {
             //TODO: implement non-debug game object modification
             return "";
         });
+        
+        get("/info", (req, res) -> {
+            String playerId = req.queryParams("iD");
+            Player player = JSONRT.gson.fromJson(playerId, Player.class);
+
+            return player;
+        });
 
         put("/enter_game", (req, res) -> {
             // Get user ID and requested game ID

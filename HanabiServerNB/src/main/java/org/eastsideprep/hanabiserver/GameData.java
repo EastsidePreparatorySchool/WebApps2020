@@ -62,6 +62,7 @@ public class GameData implements GameInterface {
 
     @Override
     public ArrayList<Player> getPlayers() {
+        System.out.println(players);
         return players;
     }
 
@@ -75,6 +76,7 @@ public class GameData implements GameInterface {
 //    }
     @Override
     public Player getPlayerAtId(int id) {
+        System.out.println(players.get(id));
         return players.get(id);
     }
 

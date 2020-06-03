@@ -18,7 +18,7 @@ public class Player implements PlayerInterface {
 //    private String myUsername;
     private User myUser;
     private Hand myHand;
-    private int myID;
+    public int myID;
     private int inGameID;
     private ArrayList<Hint> myHints; // things I known about my cards
     
@@ -35,6 +35,7 @@ public class Player implements PlayerInterface {
         myUser = user;
         myUser.setUsername(username);
         this.myHints = new ArrayList<>();
+        
     }
     
     @Override
