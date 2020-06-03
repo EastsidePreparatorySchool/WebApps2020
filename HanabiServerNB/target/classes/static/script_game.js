@@ -108,38 +108,62 @@ function selectDiscard() {
 }
 
 //stores information about the selected card
-var selectedCard = 0;
+var selectedCard = -1;
 
 //id tells you which button you pressed (1-5)
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
-    if (playdiscard === 1) {
+    selectedCard = id;
+    if (playdiscard === 1 && pile !== 0) {
         play(id);
+        pile = 0;
+        selectedCard = -1;
+        playdiscard = 0;
+        blurButtons();
     } else if (playdiscard === 2) {
         discard(id);
+        playdiscard = 0;
+        blurButtons();
     }
-    playdiscard = 0;
-    blurButtons();
-
 }
 
 var pile = 0;
-function selectPile(num) {
-    pile = num;
+function selectPile(txt) {
+    pile = txt;
     blurPileButtons();
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
+
+    if (playdiscard === 1 && pile !== 0 && selectedCard !== -1) {
+        play(selectedCard);
+        pile = 0;
+        selectedCard = -1;
+    }
 }
 function play(id) {
     //select pile
     unblurPileButtons();
 
+
+    var gameID = "hmm";
+    var cardindex = id;
+    var player = "fillme";
+    request({url: "/play_card?pile=" + pile + "&playerID=" + player + "&cardnumber=" + cardindex + "&gameID=" + gameID, verb: "PUT"})
+            .then(data => {
+
+            })
+            .catch(error => {
+                console.log("error, play route not working: " + error);
+            });
+    //
+    //
+
     //remove card
     //hand.remove(id)
 
-    //add value to pile
-    //pile.value++;
+    //add value to pile                  Don't worry, handeled by server as long as update 
+    //pile.value++;                      function works. Right?
 
     //draw new card
     //hand.draw();
