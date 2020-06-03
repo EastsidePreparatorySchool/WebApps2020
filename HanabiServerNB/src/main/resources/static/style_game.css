@@ -90,6 +90,12 @@ and open the template in the editor.
     background-color: lightgoldenrodyellow;
 }
 
+#debug {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+
 #cardsleft {
     position:absolute;
     right: 25px;

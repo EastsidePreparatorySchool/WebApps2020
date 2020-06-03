@@ -17,7 +17,7 @@ public class Discard implements CardSpotInterface {
 
     private final String name = "Discard Pile"; //figure we'll have only 1
     
-    private ArrayList<Card> cards;
+    private ArrayList<Card> cards = new ArrayList<>();
     
     @Override
     public String getName() {
