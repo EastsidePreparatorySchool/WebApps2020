@@ -8,6 +8,7 @@ package org.eastsideprep.hanabiserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -65,6 +66,10 @@ public class Main {
         p4.AddCardToHand(new Card("purple", 3));
         
         ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(new Player(new User("bar", "foo"), "Windows", testPlayers.size()));
+        testPlayers.add(new Player(new User("bar", "foo"), "MacOS", testPlayers.size()));
+        testPlayers.add(new Player(new User("bar", "foo"), "Linux", testPlayers.size()));
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
         testPlayers.add(p1);
         testPlayers.add(p2);
         testPlayers.add(p3);
@@ -75,6 +80,7 @@ public class Main {
         GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
+
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -153,6 +159,8 @@ public class Main {
             //TODO: implement non-debug game object modification
             return "";
         });
+       
+       
 
         put("/enter_game", (req, res) -> {
             // Get user ID and requested game ID
@@ -268,4 +276,5 @@ public class Main {
 
         return ctx;
     }
-}
+    
+   
