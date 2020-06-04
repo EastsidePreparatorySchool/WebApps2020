@@ -40,39 +40,59 @@ function displayUsername(playerNumber, username) {
     document.getElementById("playerLabel" + playerNumber).innerHTML = username
 }
 
-function createNewGame(){
-    var gameName = prompt("Please enter your game name", "Game Name");
-    if(gameName != null){
-        var table = document.getElementById("gameTable"); //adds new row with game name and Join Game in appropriate sections
+//function to call for screenflash when strike number decreases
+//pass current strike count and unupdated strike count to function and it will trigger a screen flash when it detects the strike count to be more than it was
+//could remove the if statement and the parameters if you just need the screen to flash whenever the function is called
+function strikeFlash(previousStrike, strikeCount) {
+    if (strikeCount > previousStrike) {
         
+        
+        var flashArea = document.getElementById('backgroundFlash');
+        setTimeout(function () {
+            flashArea.style.display = (flashArea.style.display == 'none' ? '' : 'none');
+        }, 0);
+        setTimeout(function () {
+            flashArea.style.display = (flashArea.style.display == 'none' ? '' : 'none');
+        }, 200);
+        
+        
+
+    }
+}
+
+function createNewGame() {
+    var gameName = prompt("Please enter your game name", "Game Name");
+    if (gameName != null) {
+        var table = document.getElementById("gameTable"); //adds new row with game name and Join Game in appropriate sections
+
         var row = table.insertRow(1); //creates row and cells needed to make new game
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
-        
+
         var gameLink = document.createElement('a'); //creates link to join new game
         var linkText = document.createTextNode("Join Game");
         gameLink.appendChild(linkText);
         gameLink.href = "game.html"
-        
-        
+
+
         cell1.innerHTML = gameName;// sets info of cells, cell1 has link to game, cell 2 has the name the user entered
-        cell2.appendChild(gameLink); 
-        
-       // var date = today.getMonth()+'/'+today.getDate()+'/'+today.getFullYear();
-       // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        cell2.appendChild(gameLink);
+
+        // var date = today.getMonth()+'/'+today.getDate()+'/'+today.getFullYear();
+        // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         cell3.innerHTML = new Date();
-        
-        
+
+
         //updating gameCounter to reflect number of active games
         var gameCounter = document.getElementById("gameCounter");
         var activeGames = parseInt(gameCounter.innerHTML, 10);
-        gameCounter.innerHTML = activeGames+1;
-       
-        
-        
-        
-        
+        gameCounter.innerHTML = activeGames + 1;
+
+
+
+
+
     }
 }
 

@@ -8,6 +8,7 @@ package org.eastsideprep.hanabiserver.interfaces;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import org.eastsideprep.hanabiserver.Card;
 
 /**
  *
@@ -21,6 +22,12 @@ public interface GameControlInterface {
     }; 
     
     // Move a card from one spot to another
-    public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo);
+    public static Card moveCard(Card card, CardSpotInterface spotFrom, CardSpotInterface spotTo) {
+        if (spotFrom.getCards().remove(card)) {
+            spotTo.getCards().add(card);
+            return card;
+        }
+        return null;
+    };
     
 }

@@ -17,8 +17,8 @@ public interface HintInterface {
     
     Boolean isNumber();
     
-    int getPlayerFrom();
+    String getPlayerFrom();
     
-    int getPlayerTo();
+    String getPlayerTo();
     
 }

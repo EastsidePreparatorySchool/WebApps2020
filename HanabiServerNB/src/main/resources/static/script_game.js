@@ -155,6 +155,7 @@ function play(id) {
 }
 
 
+function discard(card, gameID, playerID) {
 
     //remove card
     //add card to discard pile
@@ -165,9 +166,13 @@ function play(id) {
         request({url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT"}) // "a" needs to be a game ID
                 .then(data => {
                     console.log("Discarded:");
+
                     discarded = true;
                     console.log(data);
                     return discarded;
+
+                    console.log(data);
+
                 })
                 .catch(error => {
                     console.log("Discard error: " + error);
@@ -231,7 +236,7 @@ function giveClue() {
             break;
         }
     }
-    
+
 
     var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
     print("Sending hint: "+JSON.stringify(hintObject));
@@ -330,10 +335,55 @@ function test(updated, discarded) {
     }
     setTimeout(play(1), 300);
     console.log("playing card");
+
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();    
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
+
+
+function test() {
+    //add way to give clue
+    setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
+    console.log("updating cards");
+    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
+    console.log("discarding cards");
+    setTimeout(play(1), 300);
+    console.log("playing card");
+
+    //no client code for giving clue
+    // setTimeout(giveClue(1, 1), 300);
+    //console.log("giving clue");
+
     // Giving clue is done manually (it relies on input buttons)
     //// no client code for giving clue
     //// setTimeout(giveClue(), 300);
     //// console.log("giving clue");
+
 
 }
 
@@ -343,6 +393,8 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
+    getUsername();
+
 }
 
 function render_user_cards(playerArr) {

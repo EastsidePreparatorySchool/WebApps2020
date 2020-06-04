@@ -47,10 +47,14 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
+        
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).myID = i;
+        }
     }
     private HashMap<String, PlayedCards> playedCardPiles;
 
-    private Discard discardPile;
+    private Discard discardPile = new Discard();
 
     GameData(String nm) { //whenever you call game, synchronize
         name = nm;
