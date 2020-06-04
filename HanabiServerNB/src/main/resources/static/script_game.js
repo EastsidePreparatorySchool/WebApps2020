@@ -3,13 +3,6 @@ let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
 
-var player1 = document.getElementById("playerLabel1");
-var player2 =  document.getElementById("playerLabel2");
-var player3 = document.getElementById("playerLabel3");
-var player4 = document.getElementById("playerLabel4");
-var player5 = document.getElementById("playerLabel5"); 
-var playerId = getPlayeriD();
-console.log(playerId);
 var updated = false;
 var discarded = false;
 
@@ -161,16 +154,6 @@ function play(id) {
     pile = 0;
 }
 
-function getPlayeriD() {
-    request({url: "/info", method: "GET"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("player=" + data);
-            
-                })
-                .catch(error => {
-                    console.log("Error retrieving player " + error);
-                });
-                }
 
 
     //remove card
@@ -248,6 +231,7 @@ function giveClue() {
             break;
         }
     }
+    
 
     var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
     print("Sending hint: "+JSON.stringify(hintObject));

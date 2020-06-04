@@ -162,15 +162,17 @@ function play(id) {
 }
 
 function getPlayeriD() {
-    request({url: "/info", method: "GET"}) // "a" needs to be a game ID
+    if (DEBUG) {
+        request({url: "/info", method: "GET"})
                 .then(data => {
-                    console.log("player=" + data);
-            
+                    playerid = JSON.parse(data);
+                    console.log(playerid);
                 })
                 .catch(error => {
-                    console.log("Error retrieving player " + error);
+                    console.log("error: " + error);
                 });
-                }
+            }
+            }
 
 
     //remove card
@@ -248,6 +250,7 @@ function giveClue() {
             break;
         }
     }
+    
 
     var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
     print("Sending hint: "+JSON.stringify(hintObject));

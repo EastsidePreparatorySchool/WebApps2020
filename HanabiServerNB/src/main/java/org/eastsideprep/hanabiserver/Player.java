@@ -31,7 +31,8 @@ public class Player implements PlayerInterface {
         this.myHints = new ArrayList<Hint>();
     }
     
-    public Player(User user, String username) {
+    public Player(User user, String username, int playerID) {
+        myID = playerID;
         myUser = user;
         myUser.setUsername(username);
         this.myHints = new ArrayList<>();
