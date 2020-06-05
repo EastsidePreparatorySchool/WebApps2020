@@ -3,14 +3,6 @@ let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
 
-
-var player1 = document.getElementById("playerLabel1");
-var player2 =  document.getElementById("playerLabel2");
-var player3 = document.getElementById("playerLabel3");
-var player4 = document.getElementById("playerLabel4");
-var player5 = document.getElementById("playerLabel5"); 
-var playerId = getPlayeriD();
-console.log(playerId);
 var updated = false;
 var discarded = false;
 
@@ -163,22 +155,8 @@ function play(id) {
 }
 
 
-function getPlayeriD() {
-    if (DEBUG) {
-        request({url: "/info", method: "GET"})
-                .then(data => {
-                    playerid = JSON.parse(data);
-                    console.log(playerid);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
-            }
-            }
-
-
-
 function discard(card, gameID, playerID) {
+
     //remove card
     //add card to discard pile
     //draw new card
@@ -194,6 +172,7 @@ function discard(card, gameID, playerID) {
                     return discarded;
 
                     console.log(data);
+
                 })
                 .catch(error => {
                     console.log("Discard error: " + error);
@@ -356,6 +335,7 @@ function test(updated, discarded) {
     }
     setTimeout(play(1), 300);
     console.log("playing card");
+
 //function getUsername() {           
 //    request({url: "/getUsername", method: "GET"})
 //            .then(username => {
@@ -404,6 +384,7 @@ function test() {
     //// setTimeout(giveClue(), 300);
     //// console.log("giving clue");
 
+
 }
 
 function render_update(data) {
@@ -412,7 +393,6 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
-
     getUsername();
 
 }
