@@ -15,6 +15,7 @@ org\eastsideprep\hanabiserver\interfaces\CardSpotInterface.class
 org\eastsideprep\hanabiserver\PlayedCards.class
 org\eastsideprep\hanabiserver\JSONRT.class
 org\eastsideprep\hanabiserver\interfaces\GameInterface.class
+org\eastsideprep\hanabiserver\Main.class
 org\eastsideprep\hanabiserver\Discard.class
 org\eastsideprep\hanabiserver\User.class
 org\eastsideprep\hanabiserver\Turn.class
