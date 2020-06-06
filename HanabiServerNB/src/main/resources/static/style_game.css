@@ -100,6 +100,7 @@ and open the template in the editor.
     position:absolute;
     right: 25px;
     bottom: 75px;
+    line-height: 2px;
 }
 
 #cluecounter {
@@ -210,5 +211,5 @@ and open the template in the editor.
 #chatstuff {
     position:absolute;
     bottom: 30px;
-    right: 230px;
+    right: 485px;
 }

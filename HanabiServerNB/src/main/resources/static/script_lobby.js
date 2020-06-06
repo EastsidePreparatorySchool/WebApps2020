@@ -1,17 +1,34 @@
-logIn();
 
-function logIn() {
-    request({url: "/login" , method: "GET"})
-            .then(username => {
-                console.log(username);
-                // TODO in later sprint: get username to appear here
-               // document.getElementById("displayusername").innerHTML = "Logged in as " + username + ".";
-               // console.log(document.getElementById("displayusername").value);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogInLobby").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();
+//    getUsername();
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
+
 
 // template functions for updating available games in lobby
 function getGames(f) {
