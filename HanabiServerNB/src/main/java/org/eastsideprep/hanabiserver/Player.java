@@ -19,8 +19,6 @@ public class Player implements PlayerInterface {
     private User myUser;
     private Hand myHand;
     public int myID;
-    private int inGameID;
-    //private int inGameID; // DEPRECIATED
 
     private ArrayList<Hint> myHints; // things I known about my cards
     
@@ -35,15 +33,16 @@ public class Player implements PlayerInterface {
         this.myHand = new Hand();
     }
     
-    public Player(User user, String username, int playerID) {
-        myID = playerID;
-        myUser = user;
-        myUser.setUsername(username);
-        this.myHints = new ArrayList<>();
-
-        this.myHand = new Hand();
-
-    }
+    // Depricated: user is set from the User class
+//    public Player(User user, String username, int playerID) {
+//        myID = playerID;
+//        myUser = user;
+//        myUser.setUsername(username);
+//        this.myHints = new ArrayList<>();
+//
+//        this.myHand = new Hand();
+//
+//    }
     public Player(User user, int playerID) {
         myID = playerID;
         myUser = user;

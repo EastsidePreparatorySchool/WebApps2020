@@ -1,22 +1,15 @@
 
 let DEBUG = true;
 let game;
+let thisGameID = 0;
 let debugDiv = document.getElementById("debug");
 
-
-var player1 = document.getElementById("playerLabel1");
-var player2 =  document.getElementById("playerLabel2");
-var player3 = document.getElementById("playerLabel3");
-var player4 = document.getElementById("playerLabel4");
-var player5 = document.getElementById("playerLabel5"); 
-var playerId = getPlayeriD();
-console.log(playerId);
 var updated = false;
 var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid=" + 0, method: "GET"})
+        request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
                     game = JSON.parse(data);
                     render_update(data);
@@ -35,7 +28,7 @@ setInterval(function () {
         //                    console.log("error: " + error);
         //                });
     } else {
-        request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
+        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
                     console.log("update received");
                     render_update(data);
@@ -163,22 +156,8 @@ function play(id) {
 }
 
 
-function getPlayeriD() {
-    if (DEBUG) {
-        request({url: "/info", method: "GET"})
-                .then(data => {
-                    playerid = JSON.parse(data);
-                    console.log(playerid);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
-            }
-            }
-
-
-
 function discard(card, gameID, playerID) {
+
     //remove card
     //add card to discard pile
     //draw new card
@@ -194,6 +173,7 @@ function discard(card, gameID, playerID) {
                     return discarded;
 
                     console.log(data);
+
                 })
                 .catch(error => {
                     console.log("Discard error: " + error);
@@ -209,8 +189,13 @@ function discard(card, gameID, playerID) {
                     console.log("Discard error: " + error);
                 });
     }
-    document.getElementById("playbutton").removeAttribute('disabled');
-    document.getElementById("discardbutton").removeAttribute('disabled');
+
+}
+
+
+
+document.getElementById("playbutton").removeAttribute('disabled');
+document.getElementById("discardbutton").removeAttribute('disabled');
 
 setInterval(getNew, 300);
 
@@ -226,7 +211,7 @@ function disable(num, id) {
 
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
-        if (i != id) {
+        if (i !== id) {
             document.getElementById(clueButtons[num][i]).setAttribute("disabled", "disabled");
         }
     }
@@ -284,9 +269,10 @@ function giveClue() {
 
     var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
-    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
-        console.log("Sent: " + JSON.stringify(hintObject));
-    }).catch(error => {
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"})
+            .then(data => {
+                console.log("Sent: " + JSON.stringify(hintObject));
+            }).catch(error => {
         console.log("Error: " + error);
     });
 
@@ -327,18 +313,8 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-logIn();
 
-function logIn() {
-    request({url: "/login_user?username=" + username, method: "GET"})
-            .then(username => {
-                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log(username);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
+
 
 // sends message by just pressing enter
 var x = document.getElementById("msgBox");
@@ -353,62 +329,45 @@ x.addEventListener("keyup", function (event) {
 
 function test(updated, discarded) {
     /*
-    var c = document.getElementById("msgbox");
-    var testctx = c.getContext("2d");
+     var c = document.getElementById("msgbox");
+     var testctx = c.getContext("2d");
      * 
      */
 
-    
+
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
     console.log("updated =" + updated);
-    if (updated === true){
-     console.log("updating cards");
+    if (updated === true) {
+        console.log("updating cards");
     }
     setTimeout(discard(game.players[0].myHand.cards[0]), 300);
     console.log("dicarded = " + discarded);
-    
-    if (discarded === true){
+
+    if (discarded === true) {
         console.log("discarding cards");
         /*
-       testctx.beginPath();
-      testctx.lineWidth = "6";
-      testctx.strokeStyle = "green";
-      testctx.rect(5, 5, 290, 140);
-      testctx.stroke();
+         testctx.beginPath();
+         testctx.lineWidth = "6";
+         testctx.strokeStyle = "green";
+         testctx.rect(5, 5, 290, 140);
+         testctx.stroke();
          * 
          */
     }
     setTimeout(play(1), 300);
     console.log("playing card");
-//function getUsername() {           
-//    request({url: "/getUsername", method: "GET"})
-//            .then(username => {
-//                console.log("function getUsername(): " + username);
-//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-//            })
-//            .catch(error => {
-//                console.log("function getUsername(): error: " + error);
-//            });
-//}
-//
-//function LogIn() {
-//    console.log("function LogIn():");
-//    
-//    switchUser();    
-//    request({url: "/getUsername", method: "GET"})
-//            .then(username => {
-//                console.log("function getUsername(): " + username);
-//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-//            })
-//            .catch(error => {
-//                console.log("function getUsername(): error: " + error);
-//            });
-//}
-//
-//function switchUser(){
-//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
-//}
+
+    setTimeout(() => {
+        playerToGiveClue = 0;
+        isClueColor = false;
+        clueContent = 5;
+        giveClue();
+    }, 300);
+    console.log("Gave clue to player 0");
+}
+
+
 
 
 function test() {
@@ -438,7 +397,6 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
-
     getUsername();
 
 }

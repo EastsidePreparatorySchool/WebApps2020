@@ -1,6 +1,7 @@
 
 let DEBUG = true;
 let game;
+let thisGameID = 0;
 let debugDiv = document.getElementById("debug");
 
 var updated = false;
@@ -8,7 +9,7 @@ var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid=" + 0, method: "GET"})
+        request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
                     game = JSON.parse(data);
                     render_update(data);
@@ -27,7 +28,7 @@ setInterval(function () {
         //                    console.log("error: " + error);
         //                });
     } else {
-        request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
+        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
                     console.log("update received");
                     render_update(data);
@@ -210,7 +211,7 @@ function disable(num, id) {
 
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
-        if (i != id) {
+        if (i !== id) {
             document.getElementById(clueButtons[num][i]).setAttribute("disabled", "disabled");
         }
     }
@@ -268,9 +269,10 @@ function giveClue() {
 
     var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
-    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
-        console.log("Sent: " + JSON.stringify(hintObject));
-    }).catch(error => {
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"})
+            .then(data => {
+                console.log("Sent: " + JSON.stringify(hintObject));
+            }).catch(error => {
         console.log("Error: " + error);
     });
 

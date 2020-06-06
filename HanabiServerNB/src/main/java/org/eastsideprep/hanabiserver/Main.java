@@ -46,6 +46,8 @@ public class Main {
         Player p2 = new Player(new User("bar2", "foo2"), 2);
         Player p3 = new Player(new User("bar3", "foo3"), 3);
         Player p4 = new Player(new User("blah4", "blah4"), 4);
+        Player p5 = new Player(new User("Windows", "foo"), 5);
+        Player p6 = new Player(new User("macOS", "fooy"), 6);
 
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
@@ -59,21 +61,28 @@ public class Main {
         p3.AddCardToHand(new Card("red", 2));
         p3.AddCardToHand(new Card("blue", 2));
 
-        p4.AddCardToHand(new Card("orange", 5));
+        p4.AddCardToHand(new Card("orange", 4));
         p4.AddCardToHand(new Card("yellow", 4));
         p4.AddCardToHand(new Card("purple", 3));
+        
+        p5.AddCardToHand(new Card("red", 5));
+        p5.AddCardToHand(new Card("yellow", 3));
+        p5.AddCardToHand(new Card("blue", 3));
+        
+        p6.AddCardToHand(new Card("blue", 5));
+        p6.AddCardToHand(new Card("red", 4));
+        p6.AddCardToHand(new Card("purple", 1));
 
         ArrayList<Player> testPlayers = new ArrayList<>();
-        testPlayers.add(new Player(new User("bar", "foo"), "Windows", testPlayers.size()));
-        testPlayers.add(new Player(new User("bar", "foo"), "MacOS", testPlayers.size()));
-        testPlayers.add(new Player(new User("bar", "foo"), "Linux", testPlayers.size()));
         testPlayers.add(p1);
         testPlayers.add(p2);
         testPlayers.add(p3);
         testPlayers.add(p4);
+        testPlayers.add(p5);
+        testPlayers.add(p6);
 
 //        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
+        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
