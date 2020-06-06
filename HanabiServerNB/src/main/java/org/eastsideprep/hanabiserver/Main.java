@@ -41,38 +41,37 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        
-        
         Player p1 = new Player(new User("bar", "foo"), "Windows");
         Player p2 = new Player(new User("bar", "foo"), "MacOS");
         Player p3 = new Player(new User("bar", "foo"), "Linux");
         Player p4 = new Player(new User("blah", "blah1"), "RaspbianOS");
-        
+
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
         p1.AddCardToHand(new Card("yellow", 5));
-        
+
         p2.AddCardToHand(new Card("orange", 5));
         p2.AddCardToHand(new Card("purple", 1));
         p2.AddCardToHand(new Card("blue", 1));
-        
+
         p3.AddCardToHand(new Card("red", 3));
         p3.AddCardToHand(new Card("red", 2));
         p3.AddCardToHand(new Card("blue", 2));
-        
+
         p4.AddCardToHand(new Card("orange", 5));
         p4.AddCardToHand(new Card("yellow", 4));
         p4.AddCardToHand(new Card("purple", 3));
-        
+
         ArrayList<Player> testPlayers = new ArrayList<>();
         testPlayers.add(p1);
         testPlayers.add(p2);
         testPlayers.add(p3);
         testPlayers.add(p4);
-        
+
         System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        
-        GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0);
+
+        GameData testGD = new GameData(testPlayers, 5, 30,
+                "everyones favorite hanabi gamE", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -139,7 +138,7 @@ public class Main {
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
-            
+
             Context ctx = getContext(req);
             if (ctx == null) {
                 return "";
@@ -184,6 +183,7 @@ public class Main {
             String hintParam = req.queryParams("hint");
 
             Hint givenHint = JSONRT.gson.fromJson(hintParam, Hint.class);
+            System.out.println("Received Hint: " + givenHint.toString());
 
             // Find this usesr and give them this hint
             for (GameControl game
@@ -213,7 +213,8 @@ public class Main {
 
                         if (validHint) {
                             // set the from ID based on context
-                            givenHint.playerFromId = getContext(req).user.GetID();
+                            givenHint.playerFromId = getContext(req).user.
+                                    GetID();
                             player.ReceiveHint(givenHint);
                             return "Gave hint to user " + playerUser.GetID();
                         } else {
@@ -226,29 +227,30 @@ public class Main {
 
             return "Could not find user " + givenHint.playerToId;
         });
-        
-        
+
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");
-            
+
             int gameId = Integer.parseInt(req.queryParams("game_id"));
             int playerId = Integer.parseInt(req.queryParams("player_id"));
-            
+
             String toDiscard = req.queryParams("to_discard");
             Card discard = JSONRT.gson.fromJson(toDiscard, Card.class);
 
             GameControl game = gameControls.get(gameId);
             Player player = game.getGameData().getPlayerAtId(playerId);
             Hand playerHand = player.GetHand();
-            
-          
-            for (Card card : playerHand.getCards()) {
-                if (card.color.equals(discard.color) && card.number == discard.number) {
+
+            for (Card card
+                    : playerHand.getCards()) {
+                if (card.color.equals(discard.color) && card.number
+                        == discard.number) {
                     return playerHand.discard(card, game.getGameData());
                 }
             }
 
-            return "Could not find either: Game " + gameId + " | Player @ Id " + playerId + " | Card " + toDiscard;
+            return "Could not find either: Game " + gameId + " | Player @ Id "
+                    + playerId + " | Card " + toDiscard;
         }, new JSONRT());
     }
 

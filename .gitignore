@@ -14,5 +14,4 @@ HanabiClient/*
 PersonServer/*
 SQLiteTest/*
 
-ChatServer/target/classes/.netbeans_automatic_build
-ChatServer/target/test-classes/.netbeans_automatic_build
+*.netbeans_automatic_build
