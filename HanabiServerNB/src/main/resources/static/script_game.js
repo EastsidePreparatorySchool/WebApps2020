@@ -2,6 +2,8 @@ let DEBUG = false;
 let game;
 let debugDiv = document.getElementById("debug");
 
+let MYDATA;
+
 let a = new URLSearchParams(window.location.search).get('id');
 
 setInterval(function () {
@@ -321,7 +323,7 @@ function test() {
 
 function render_update(data) {
     let update_data = JSON.parse(data);
-    console.log(update_data);
+    //console.log(update_data);
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
@@ -335,9 +337,7 @@ function render_user_cards(playerArr) {
         let cp = playerArr[numPlayer];
 
         //console.log('at player ' + numPlayer);
-        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
 
-        document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
 
         usrfromserver = playerusername.split('"')[1];
 
@@ -346,10 +346,17 @@ function render_user_cards(playerArr) {
             console.log(cp.myUser.username + ' is me');
             document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "";
 
-        } else {
+            MYDATA = cp;
+            
+            render_my_cards()
 
+        } else {
+            
+            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+
+            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
             for (var i = 0; i <= 2; i++) {
-                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number); 
+                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
             }
 
         }
@@ -366,4 +373,21 @@ function render_card(element_id, color, number) {
     card.style.lineHeight = "100px";
     card.style.fontFamily = "sans-serif";
     card.style.fontWeight = "700";
+}
+
+function render_my_cards() {
+    console.log(MYDATA);
+    
+    let hints = MYDATA.myHints;
+    
+    let hand = MYDATA.myHand;
+    
+    //figure out what the hints mean
+    
+    render_card("player1Card1", "black", "?");
+    
+    render_card("player1Card2", "black", "?");
+    
+    render_card("player1Card3", "black", "?");
+    
 }
