@@ -8,6 +8,7 @@ package org.eastsideprep.hanabiserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -41,38 +42,47 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        
-        
-        Player p1 = new Player(new User("bar", "foo"), "Windows");
-        Player p2 = new Player(new User("bar", "foo"), "MacOS");
-        Player p3 = new Player(new User("bar", "foo"), "Linux");
-        Player p4 = new Player(new User("blah", "blah1"), "RaspbianOS");
-        
+        Player p1 = new Player(new User("bar1", "foo1"), 1);
+        Player p2 = new Player(new User("bar2", "foo2"), 2);
+        Player p3 = new Player(new User("bar3", "foo3"), 3);
+        Player p4 = new Player(new User("blah4", "blah4"), 4);
+        Player p5 = new Player(new User("Windows", "foo"), 5);
+        Player p6 = new Player(new User("macOS", "fooy"), 6);
+
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
         p1.AddCardToHand(new Card("yellow", 5));
-        
+
         p2.AddCardToHand(new Card("orange", 5));
         p2.AddCardToHand(new Card("purple", 1));
         p2.AddCardToHand(new Card("blue", 1));
-        
+
         p3.AddCardToHand(new Card("red", 3));
         p3.AddCardToHand(new Card("red", 2));
         p3.AddCardToHand(new Card("blue", 2));
-        
-        p4.AddCardToHand(new Card("orange", 5));
+
+        p4.AddCardToHand(new Card("orange", 4));
         p4.AddCardToHand(new Card("yellow", 4));
         p4.AddCardToHand(new Card("purple", 3));
-        
+
+        p5.AddCardToHand(new Card("red", 5));
+        p5.AddCardToHand(new Card("yellow", 3));
+        p5.AddCardToHand(new Card("blue", 3));
+
+        p6.AddCardToHand(new Card("blue", 5));
+        p6.AddCardToHand(new Card("red", 4));
+        p6.AddCardToHand(new Card("purple", 1));
+
         ArrayList<Player> testPlayers = new ArrayList<>();
         testPlayers.add(p1);
         testPlayers.add(p2);
         testPlayers.add(p3);
         testPlayers.add(p4);
-        
-        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        
-        GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0);
+        testPlayers.add(p5);
+        testPlayers.add(p6);
+
+//        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
+        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
         
@@ -167,7 +177,7 @@ public class Main {
 
             Turn turn = JSONRT.gson.fromJson(turnJSON, Turn.class);
             Card card = JSONRT.gson.fromJson(turnJSON, Card.class);
-            
+
             Context ctx = getContext(req);
             if (ctx == null) {
                 return "";
@@ -210,73 +220,103 @@ public class Main {
         });
         put("/give_hint", (req, res) -> {
             String hintParam = req.queryParams("hint");
+            String gameIdString = req.queryParams("gid");
 
             Hint givenHint = JSONRT.gson.fromJson(hintParam, Hint.class);
+            System.out.println("Received Hint:");
+            System.out.println("\tTo:\t\t" + givenHint.playerToId);
+            System.out.println("\tIs Color:\t" + givenHint.isColor);
+            System.out.println("\tContent:\t" + givenHint.hintContent);
 
-            // Find this usesr and give them this hint
-            for (GameControl game
-                    : gameControls) {
-                for (Player player
-                        : game.getGameData().getPlayers()) {
-                    final User playerUser = player.GetUser();
+            Player target;
 
-                    if (playerUser.GetID().equals(givenHint.playerToId)) {
-                        // Validate Hint
-                        boolean validHint = false;
-                        for (Card card
-                                : player.GetHand().getCards()) {
-                            if (givenHint.isColor) {
-                                if (card.color.equals(givenHint.hintContent)) {
-                                    validHint = true;
-                                    break;
-                                }
-                            } else {
-                                if (card.number == Integer.parseInt(
-                                        givenHint.hintContent)) {
-                                    validHint = true;
-                                    break;
-                                }
+            try {
+                final GameData targetGameData
+                        = gameControls.get(Integer.parseInt(gameIdString)).
+                                getGameData();
+                target = targetGameData.getPlayerAtId(Integer.parseInt(
+                        givenHint.playerToId));
+
+                if (target != null) {
+                    User playerUser = target.GetUser();
+
+                    // Validate Hint
+                    boolean validHint = false;
+                    for (Card card
+                            : target.GetHand().getCards()) {
+                        if (givenHint.isColor) {
+                            if (card.color.equals(givenHint.hintContent)) {
+                                validHint = true;
+                                break;
+                            }
+                        } else {
+                            if (card.number == Integer.parseInt(
+                                    givenHint.hintContent)) {
+                                validHint = true;
+                                break;
                             }
                         }
-
-                        if (validHint) {
-                            // set the from ID based on context
-                            givenHint.playerFromId = getContext(req).user.GetID();
-                            player.ReceiveHint(givenHint);
-                            return "Gave hint to user " + playerUser.GetID();
-                        } else {
-                            return "Hint to user " + playerUser.GetID()
-                                    + " was invalid";
-                        }
                     }
-                }
-            }
 
-            return "Could not find user " + givenHint.playerToId;
+                    if (validHint) {
+                        // set the from ID based on context
+                        for (Player player
+                                : targetGameData.getPlayers()) {
+                            if (player.GetUser().equals(getContext(req).user)) {
+                                givenHint.playerFromId = Integer.toString(
+                                        player.myID);
+                                target.ReceiveHint(givenHint);
+                                final String msg
+                                        = "Gave hint to user " + playerUser.
+                                                GetID();
+                                System.out.println(msg);
+                                return msg;
+                            }
+                        }
+                        return "User " + getContext(req).user
+                                + " is not in game "
+                                + gameIdString + ". Can't give hint!";
+                    } else {
+                        return "Hint to player " + target.myID
+                                + " was invalid";
+                    }
+                } else {
+                    final String errMsg
+                            = "Target player " + givenHint.playerToId
+                            + " not found!";
+                    System.out.println(errMsg);
+                    return errMsg;
+                }
+            } catch (Exception e) {
+                String errMsg = "Invalid hint params!: " + e.toString();
+                System.out.println(errMsg);
+                return errMsg;
+            }
         });
-        
-        
+
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");
-            
+
             int gameId = Integer.parseInt(req.queryParams("game_id"));
             int playerId = Integer.parseInt(req.queryParams("player_id"));
-            
+
             String toDiscard = req.queryParams("to_discard");
             Card discard = JSONRT.gson.fromJson(toDiscard, Card.class);
 
             GameControl game = gameControls.get(gameId);
             Player player = game.getGameData().getPlayerAtId(playerId);
             Hand playerHand = player.GetHand();
-            
-          
-            for (Card card : playerHand.getCards()) {
-                if (card.color.equals(discard.color) && card.number == discard.number) {
+
+            for (Card card
+                    : playerHand.getCards()) {
+                if (card.color.equals(discard.color) && card.number
+                        == discard.number) {
                     return playerHand.discard(card, game.getGameData());
                 }
             }
 
-            return "Could not find either: Game " + gameId + " | Player @ Id " + playerId + " | Card " + toDiscard;
+            return "Could not find either: Game " + gameId + " | Player @ Id "
+                    + playerId + " | Card " + toDiscard;
         }, new JSONRT());
     }
 

@@ -67,15 +67,16 @@ request({url: "/load"})
         });
 
 
-getUsername();
-
 
 function getUsername() {
     request({url: "/getUsername", method: "GET"})
             .then(username => {
                 console.log("function getUsername(): " + username);
-                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                playerusername = username;
+                if (username === "null") {
+                    document.getElementById("displayLogIn").innerText = "Not logged in.";
+                } else {
+                    document.getElementById("displayLogIn").innerText = "Logged in as " + username + ".";
+                }
             })
             .catch(error => {
                 console.log("function getUsername(): error: " + error);
@@ -84,18 +85,15 @@ function getUsername() {
 
 function LogIn() {
     console.log("function LogIn():");
-
-    switchUser();
-    request({url: "/getUsername", method: "GET"})
-            .then(username => {
-                console.log("function getUsername(): " + username);
-                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-            })
-            .catch(error => {
-                console.log("function getUsername(): error: " + error);
-            });
-}
-
-function switchUser() {
     window.location.href = '/loginextra?tabid=' + sessionStorage.getItem("tabid");
 }
+
+
+//
+// run this once
+//
+
+getUsername();
+
+
+
