@@ -1,4 +1,4 @@
-
+let xyz = 1;
 let DEBUG = true;
 let game;
 let thisGameID = 0;
@@ -251,21 +251,7 @@ function reenableClueBtns() {
 // send clues to server
 // TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
-    // var toPlayer = -1;
-    // for (var i = 0; i < clueButtons[0].length; i++) {
-    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
-    //         toPlayer++;
-    //         break;
-    //     }
-    // }
 
-    // var hintIndex = 0;
-    // for (var i = 0; i < clueButtons[1].length; i++) {
-    //     hintIndex++;
-    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
-    //         break;
-    //     }
-    // }
 
     var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
@@ -277,6 +263,7 @@ function giveClue() {
     });
 
     reenableClueBtns();
+
 }
 
 
@@ -328,12 +315,6 @@ x.addEventListener("keyup", function (event) {
 });
 
 function test(updated, discarded) {
-    /*
-     var c = document.getElementById("msgbox");
-     var testctx = c.getContext("2d");
-     * 
-     */
-
 
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
@@ -346,6 +327,7 @@ function test(updated, discarded) {
 
     if (discarded === true) {
         console.log("discarding cards");
+
         /*
          testctx.beginPath();
          testctx.lineWidth = "6";
@@ -390,6 +372,7 @@ function test() {
     }, 300);
     console.log("Gave clue to player 0");
 }
+
 
 function render_update(data) {
     let update_data = JSON.parse(data);
