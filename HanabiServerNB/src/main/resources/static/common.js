@@ -1,3 +1,5 @@
+let playerusername;
+
 function request(obj) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
@@ -72,7 +74,8 @@ function getUsername() {
     request({url: "/getUsername", method: "GET"})
             .then(username => {
                 console.log("function getUsername(): " + username);
-                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";        
+                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                playerusername = username;
             })
             .catch(error => {
                 console.log("function getUsername(): error: " + error);

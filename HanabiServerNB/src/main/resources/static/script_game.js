@@ -1,6 +1,8 @@
-let DEBUG = true;
+let DEBUG = false;
 let game;
 let debugDiv = document.getElementById("debug");
+
+let a = new URLSearchParams(window.location.search).get('id');
 
 setInterval(function () {
     if (DEBUG) {
@@ -184,7 +186,7 @@ var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    
+
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -196,9 +198,9 @@ function disable(num, id) {
 
 // reset disabled clue buttons
 function reenableClueBtns() {
-    for(var i=0; i< clueButtons.length; i++) {
+    for (var i = 0; i < clueButtons.length; i++) {
         var clueBtnIDs = clueButtons[i];
-        for(var j=0; j < clueBtnIDs.length; j++) {
+        for (var j = 0; j < clueBtnIDs.length; j++) {
             document.getElementById(clueButtons[i][j]).removeAttribute("disabled");
         }
     }
@@ -208,27 +210,27 @@ function reenableClueBtns() {
 // TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
     var toPlayer = -1;
-    for(var i=0; i<clueButtons[0].length;i++) {
+    for (var i = 0; i < clueButtons[0].length; i++) {
         if (!document.getElementById(clueButtons[0][i]).disabled) {
             toPlayer++;
             break;
         }
     }
 
-    var hintIndex=0;
-    for(var i=0; i< clueButtons[1].length;i++) {
+    var hintIndex = 0;
+    for (var i = 0; i < clueButtons[1].length; i++) {
         hintIndex++;
-        if(!document.getElementById(clueButtons[0][i]).disabled) {
+        if (!document.getElementById(clueButtons[0][i]).disabled) {
             break;
         }
     }
 
-    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
-    print("Sending hint: "+JSON.stringify(hintObject));
-    request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
-        console.log("Sent: "+JSON.stringify(hintObject));
+    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0, -4)};
+    print("Sending hint: " + JSON.stringify(hintObject));
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
+        console.log("Sent: " + JSON.stringify(hintObject));
     }).catch(error => {
-        console.log("Error: "+error);
+        console.log("Error: " + error);
     })
 }
 
@@ -319,7 +321,7 @@ function test() {
 
 function render_update(data) {
     let update_data = JSON.parse(data);
-    //console.log(update_data);
+    console.log(update_data);
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
@@ -327,24 +329,41 @@ function render_update(data) {
 }
 
 function render_user_cards(playerArr) {
-    console.log("rendering usernames");
+    //console.log("rendering usernames");
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
 
         let cp = playerArr[numPlayer];
 
-        console.log('at player ' + numPlayer);
+        //console.log('at player ' + numPlayer);
         document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
 
-        for (var i = 0; i <= 2; i++) {
-            let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));
-            console.log(playerArr[numPlayer]);
-            card.innerText = cp.myHand.cards[i].number;
-            card.style.color = cp.myHand.cards[i].color;
-            card.style.fontSize = "90px";
-            card.style.textAlign = "center";
-            card.style.lineHeight = "100px";
-            card.style.fontFamily = "sans-serif";
-            card.style.fontWeight = "700";
+        document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
+
+        usrfromserver = playerusername.split('"')[1];
+
+        if (usrfromserver.split('@')[0] === cp.myUser.username) {
+
+            console.log(cp.myUser.username + ' is me');
+            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "";
+
+        } else {
+
+            for (var i = 0; i <= 2; i++) {
+                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number); 
+            }
+
         }
     }
+}
+
+function render_card(element_id, color, number) {
+    let card = document.getElementById(element_id);
+    //console.log(playerArr[numPlayer]);
+    card.innerText = number;
+    card.style.color = color;
+    card.style.fontSize = "90px";
+    card.style.textAlign = "center";
+    card.style.lineHeight = "100px";
+    card.style.fontFamily = "sans-serif";
+    card.style.fontWeight = "700";
 }

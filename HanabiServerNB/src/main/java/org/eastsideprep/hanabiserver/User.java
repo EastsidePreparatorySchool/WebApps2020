@@ -125,7 +125,6 @@ public class User implements UserInterface {
             }
 
             org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-//
             return ctx.user.getUsername();
         }, new JSONRT());
         
