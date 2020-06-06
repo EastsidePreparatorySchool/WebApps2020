@@ -96,14 +96,14 @@ and open the template in the editor.
     bottom: 10px;
 }
 
-#cardsleft {
+#formatCardsLeft {
     position:absolute;
     right: 25px;
     bottom: 75px;
     line-height: 2px;
 }
 
-#cluecounter {
+#formatClueCounter {
     position: absolute;
     right: 25px;
     bottom: 25px;
