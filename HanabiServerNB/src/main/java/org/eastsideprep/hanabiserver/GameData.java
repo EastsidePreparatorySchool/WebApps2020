@@ -20,26 +20,29 @@ import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
 public class GameData implements GameInterface {
 
     public int debugNum;
-    
+
     private String name;
 
     private ArrayList<Player> players;
 
     private int remainingStrikes;
-    
-    public String[] cardColors = new String[]{"Purple", "Green", "Yellow", "Blue", "Red"};
+
+    public String[] cardColors = new String[]{"Purple", "Green", "Yellow",
+        "Blue", "Red"};
     public int cardNumbers = 5;
     public int cardDuplicates = 2;
 
 //    private static int GameIdSettingValue=1; 
-    private static AtomicInteger GameIdSettingValue2 = new AtomicInteger(Integer.MIN_VALUE);
+    private static AtomicInteger GameIdSettingValue2 = new AtomicInteger(
+            Integer.MIN_VALUE);
 
     private int gameId;
 
     //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
 
-    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId) {
+    public GameData(ArrayList<Player> players, int startingStrikes,
+            int deckVolume, String name, int gameId) {
         this.players = players;
         this.remainingStrikes = startingStrikes;
         this.deck = new Deck(new ArrayList<Card>());
@@ -47,8 +50,10 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
-        
-        for (int i = 0; i < players.size(); i++) {
+
+        for (int i = 0;
+                i < players.size();
+                i++) {
             players.get(i).myID = i;
         }
     }
@@ -80,8 +85,14 @@ public class GameData implements GameInterface {
 //    }
     @Override
     public Player getPlayerAtId(int id) {
-        System.out.println(players.get(id));
-        return players.get(id);
+        for (Player player
+                : players) {
+            if (player.myID == id) {
+                System.out.println(player.myID);
+                return player;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -102,7 +113,8 @@ public class GameData implements GameInterface {
     @Override
     public ArrayList<Hint> getAllSentHints() {
         ArrayList<Hint> hints = new ArrayList<Hint>();
-        for (Player p : players) {
+        for (Player p
+                : players) {
             hints.addAll(p.GetReceivedHints());
         }
         return hints;
@@ -136,12 +148,17 @@ public class GameData implements GameInterface {
             return 3;
         }
     }
-    
+
     private Deck createDeck() {
         ArrayList<Card> tempDeck = new ArrayList<>();
-        for (int cardNumber = 1; cardNumber <= cardNumbers; cardNumber++) {
-            for (String cardColor : cardColors) {
-                for (int i = 0; i < cardDuplicates; i++) {
+        for (int cardNumber = 1;
+                cardNumber <= cardNumbers;
+                cardNumber++) {
+            for (String cardColor
+                    : cardColors) {
+                for (int i = 0;
+                        i < cardDuplicates;
+                        i++) {
                     tempDeck.add(new Card(cardColor, cardNumber));
                 }
             }
@@ -150,15 +167,17 @@ public class GameData implements GameInterface {
         GameControlInterface.shuffle(completedDeck);
         return completedDeck;
     }
-    
+
     public void dealHands() {
-        for (int i = 0; i < getMaxHandSize(); i++) {
+        for (int i = 0;
+                i < getMaxHandSize();
+                i++) {
             players.forEach((player) -> {
-            player.AddCardToHand(deck.draw());
-        });
+                player.AddCardToHand(deck.draw());
+            });
         }
     }
-    
+
     private int getMaxHandSize() {
         if (players.size() <= 3) {
             return 5;
@@ -168,9 +187,9 @@ public class GameData implements GameInterface {
             return 3;
         }
     }
-            
 
-    GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard) {
+    GameData(ArrayList<Player> players, Deck deck,
+            HashMap<String, PlayedCards> playedCards, Discard discard) {
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;
@@ -181,7 +200,9 @@ public class GameData implements GameInterface {
         gameId = GameIdSettingValue2.getAndDecrement();
     }
 
-    GameData(ArrayList<Player> players, Deck deck, HashMap<String, PlayedCards> playedCards, Discard discard, String name) {
+    GameData(ArrayList<Player> players, Deck deck,
+            HashMap<String, PlayedCards> playedCards, Discard discard,
+            String name) {
         this.players = players;
         this.deck = deck;
         this.discardPile = discard;

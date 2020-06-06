@@ -1,4 +1,4 @@
-
+let xyz = 1;
 let DEBUG = true;
 let game;
 let thisGameID = 0;
@@ -222,7 +222,7 @@ function disable(num, id) {
 function setPlayerToGiveClue(playerNum) {
     playerToGiveClue = playerNum;
 
-    disable(0, playerNum);
+    disable(0, playerNum - 1);
 }
 
 // set clue content
@@ -267,9 +267,9 @@ function giveClue() {
     //     }
     // }
 
-    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
+    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
-    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"})
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject) + "&gid=" + thisGameID, method: "PUT"})
             .then(data => {
                 console.log("Sent: " + JSON.stringify(hintObject));
             }).catch(error => {
@@ -328,12 +328,6 @@ x.addEventListener("keyup", function (event) {
 });
 
 function test(updated, discarded) {
-    /*
-     var c = document.getElementById("msgbox");
-     var testctx = c.getContext("2d");
-     * 
-     */
-
 
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
@@ -346,14 +340,7 @@ function test(updated, discarded) {
 
     if (discarded === true) {
         console.log("discarding cards");
-        /*
-         testctx.beginPath();
-         testctx.lineWidth = "6";
-         testctx.strokeStyle = "green";
-         testctx.rect(5, 5, 290, 140);
-         testctx.stroke();
-         * 
-         */
+
     }
     setTimeout(play(1), 300);
     console.log("playing card");
@@ -370,26 +357,7 @@ function test(updated, discarded) {
 
 
 
-function test() {
-    //add way to give clue
-    setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
-    console.log("updating cards");
 
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("discarding cards");
-
-    setTimeout(play(1), 300);
-    console.log("playing card");
-
-
-    setTimeout(() => {
-        playerToGiveClue = 0;
-        isClueColor = false;
-        clueContent = 5;
-        giveClue();
-    }, 300);
-    console.log("Gave clue to player 0");
-}
 
 function render_update(data) {
     let update_data = JSON.parse(data);
