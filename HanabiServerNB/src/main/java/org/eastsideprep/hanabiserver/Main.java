@@ -8,6 +8,7 @@ package org.eastsideprep.hanabiserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 //HANABI SERVER NB
@@ -41,10 +42,10 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        Player p1 = new Player(new User("bar", "foo"), "Windows");
-        Player p2 = new Player(new User("bar", "foo"), "MacOS");
-        Player p3 = new Player(new User("bar", "foo"), "Linux");
-        Player p4 = new Player(new User("blah", "blah1"), "RaspbianOS");
+        Player p1 = new Player(new User("bar1", "foo1"), 1);
+        Player p2 = new Player(new User("bar2", "foo2"), 2);
+        Player p3 = new Player(new User("bar3", "foo3"), 3);
+        Player p4 = new Player(new User("blah4", "blah4"), 4);
 
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
@@ -63,15 +64,16 @@ public class Main {
         p4.AddCardToHand(new Card("purple", 3));
 
         ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(new Player(new User("bar", "foo"), "Windows", testPlayers.size()));
+        testPlayers.add(new Player(new User("bar", "foo"), "MacOS", testPlayers.size()));
+        testPlayers.add(new Player(new User("bar", "foo"), "Linux", testPlayers.size()));
         testPlayers.add(p1);
         testPlayers.add(p2);
         testPlayers.add(p3);
         testPlayers.add(p4);
 
-        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-
-        GameData testGD = new GameData(testPlayers, 5, 30,
-                "everyones favorite hanabi gamE", 0);
+//        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
+        GameData testGD = new GameData(testPlayers, 5, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -241,10 +243,8 @@ public class Main {
             Player player = game.getGameData().getPlayerAtId(playerId);
             Hand playerHand = player.GetHand();
 
-            for (Card card
-                    : playerHand.getCards()) {
-                if (card.color.equals(discard.color) && card.number
-                        == discard.number) {
+            for (Card card : playerHand.getCards()) {
+                if (card.color.equals(discard.color) && card.number == discard.number) {
                     return playerHand.discard(card, game.getGameData());
                 }
             }

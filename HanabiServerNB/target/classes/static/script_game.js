@@ -1,6 +1,18 @@
+
 let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
+
+
+var player1 = document.getElementById("playerLabel1");
+var player2 =  document.getElementById("playerLabel2");
+var player3 = document.getElementById("playerLabel3");
+var player4 = document.getElementById("playerLabel4");
+var player5 = document.getElementById("playerLabel5"); 
+var playerId = getPlayeriD();
+console.log(playerId);
+var updated = false;
+var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
@@ -39,6 +51,8 @@ function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
     playerCard.style.color = newColor;
     playerCard.innerHTML = newNumber;
+    updated = true;
+    return updated;
 }
 
 function RandomizeCards() { //function to randomize cards from 1-5 and colors wise
@@ -148,6 +162,22 @@ function play(id) {
     pile = 0;
 }
 
+
+function getPlayeriD() {
+    if (DEBUG) {
+        request({url: "/info", method: "GET"})
+                .then(data => {
+                    playerid = JSON.parse(data);
+                    console.log(playerid);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
+            }
+            }
+
+
+
 function discard(card, gameID, playerID) {
     //remove card
     //add card to discard pile
@@ -158,6 +188,11 @@ function discard(card, gameID, playerID) {
         request({url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT"}) // "a" needs to be a game ID
                 .then(data => {
                     console.log("Discarded:");
+
+                    discarded = true;
+                    console.log(data);
+                    return discarded;
+
                     console.log(data);
                 })
                 .catch(error => {
@@ -176,7 +211,7 @@ function discard(card, gameID, playerID) {
     }
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
-}
+
 setInterval(getNew, 300);
 
 // storing ids of all clue giving buttons
@@ -316,6 +351,66 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
+function test(updated, discarded) {
+    /*
+    var c = document.getElementById("msgbox");
+    var testctx = c.getContext("2d");
+     * 
+     */
+
+    
+    setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
+    setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
+    console.log("updated =" + updated);
+    if (updated === true){
+     console.log("updating cards");
+    }
+    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
+    console.log("dicarded = " + discarded);
+    
+    if (discarded === true){
+        console.log("discarding cards");
+        /*
+       testctx.beginPath();
+      testctx.lineWidth = "6";
+      testctx.strokeStyle = "green";
+      testctx.rect(5, 5, 290, 140);
+      testctx.stroke();
+         * 
+         */
+    }
+    setTimeout(play(1), 300);
+    console.log("playing card");
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();    
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
+
+
 function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
@@ -343,6 +438,9 @@ function render_update(data) {
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
     render_user_cards(update_data.players);
+
+    getUsername();
+
 }
 
 function render_user_cards(playerArr) {

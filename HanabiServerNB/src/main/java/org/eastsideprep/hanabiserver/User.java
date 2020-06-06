@@ -39,21 +39,55 @@ public class User implements UserInterface {
     private String Name;
     private String ID;
     private int InGameID;
-    
+
     public User(String name, String id) {
         Name = name;
         ID = id;
     }
-        
+
     // optional chat feature
     public static ArrayList<Message> msgs = new ArrayList<>();
+
+    public static Context getCtx(spark.Request req) {
+        // Open new, independent tab
+        spark.Session s = req.session();
+
+        // if the session is new, make sure it has a context map
+        if (s.isNew()) {
+            s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+        }
+
+        // now we can safely access the context map whether the session is new or not
+        HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+        System.out.println("map =" + map);
+
+        // find the context that goes with the tab
+        String tabid = req.headers("tabid");
+        if (tabid == null) {
+            tabid = "default";
+            System.out.println(tabid);
+        }
+        org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+        System.out.println("tabid =" + tabid);
+
+        // no context? no problem.
+        if (ctx == null) {
+            // TODO: fix this user generation
+            User user = new User("GenericUserName", "GenericUserID");
+            ctx = new org.eastsideprep.hanabiserver.Context(user);
+            System.out.println("context=" + ctx);
+            System.out.println(user);
+            map.put(tabid, ctx);
+        }
+        return ctx;
+    }
 
     public static void setup(String[] args) {
         System.out.println("it's working");
         staticFiles.location("static");
-        get("getheaders", (req, res) -> getHeaders(req));
-        get("loginextra", (req, res) -> loginextra(req, res));
-        get("login", (req, res) -> login(req, res));
+        get("/getheaders", (req, res) -> getHeaders(req));
+        get("/loginextra", (req, res) -> loginextra(req, res));
+        get("/login", (req, res) -> login(req, res));
 
         get("/headers", (req, res) -> {
             String result = "";
@@ -66,77 +100,39 @@ public class User implements UserInterface {
         });
 
         get("/load", (Request req, Response res) -> {
-            // Open new, independent tab
-            spark.Session s = req.session();
-
-            // if the session is new, make sure it has a context map
-            if (s.isNew()) {
-                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
-            }
-
-            // now we can safely access the context map whether the session is new or not
-            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
-            System.out.println("map =" + map);
-
-            // find the context that goes with the tab
-            String tabid = req.headers("tabid");
-            if (tabid == null) {
-                tabid = "default";
-                System.out.println(tabid);
-            }
-            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-            System.out.println("tabid =" + tabid);
-
-            // no context? no problem.
-            if (ctx == null) {
-                // TODO: fix this user generation
-                User user = new User("GenericUserName", "GenericUserID");
-                ctx = new org.eastsideprep.hanabiserver.Context(user);
-                System.out.println("context=" + ctx);
-                System.out.println(user);
-                map.put(tabid, ctx);
-            }
-            System.out.println(tabid);
-           // String username = ctx.user.getName();
+            Context ctx = getCtx(req);
+            // String username = ctx.user.getName();
             String username = ctx.user.getUsername() + ctx.user.getTabId();
             System.out.println("user=" + username);
 
             if (username == null) {
                 username = "unknown"; // default Name
             }
-            return ctx.toString();
 
+            return ctx.toString();
         });
-        
+
+        get("/getUsername", "application/json", (req, res) -> {
+            System.out.println("get getUsername");
+
+            Context ctx = getCtx(req);
+            return ctx.user.getUsername();
+        }, new JSONRT());
+
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
             System.out.println("put send");
 
-            String msg = req.queryParams("msg");           
+            String msg = req.queryParams("msg");
             Message newMessage = new Message();
 
-//       
-            spark.Session s = req.session();
+            Context ctx = getCtx(req);
 
-            if (s.isNew()) {
-                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
-            }
+            String username = ctx.user.getUsername();
 
-            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
-
-            String tabid = req.headers("tabid");
-            if (tabid == null) {
-                tabid = "default";
-            }
-
-            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-//
-
-            String username = ctx.user.getUsername();                       
-            
-            newMessage.username = username;           
+            newMessage.username = username;
             System.out.println(newMessage.username);
-            
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             newMessage.msgtime = dtf.format(LocalDateTime.now());
             newMessage.msg = msg;
@@ -163,11 +159,11 @@ public class User implements UserInterface {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public String getUsername() {
         return this.username;
     }
-    
+
     public void setTabId(String tabid) {
         this.tabid = tabid;
     }
@@ -185,7 +181,7 @@ public class User implements UserInterface {
     }
 
     private static String login(Request req, Response res) {
-        String red = "http://localhost:80/game.html";
+        String red = "http://localhost:80/index.html";
         //logger.info("ChatServer: redirecting: " + red);
         res.redirect(red, 302);
         String username = req.queryParams("username");
