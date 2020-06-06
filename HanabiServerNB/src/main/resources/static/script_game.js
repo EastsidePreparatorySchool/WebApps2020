@@ -1,28 +1,32 @@
 let DEBUG = true;
 let game;
+let debugDiv = document.getElementById("debug");
+
 setInterval(function () {
     if (DEBUG) {
         request({url: "/update?gid=" + 0, method: "GET"})
                 .then(data => {
-                    game = data;
-                    console.log(game);
+                    game = JSON.parse(data);
+                    render_update(data);
+                    console.log("Update requested");
                 })
                 .catch(error => {
                     console.log("error: " + error);
                 });
-        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
-        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
-        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
+//        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+//        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+//        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+//                .then(data => {
+//                    console.log(data);
+//                })
+//                .catch(error => {
+//                    console.log("error: " + error);
+//                });
     } else {
         request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
-                    console.log(a);
+                    console.log("update received");
+                    render_update(data);
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -144,21 +148,43 @@ function play(id) {
     pile = 0;
 }
 
-function discard(card) {
+function discard(card, gameID, playerID) {
     //remove card
     //add card to discard pile
     //draw new card
-    //end turn
+    //TODO: end turn
+    card = JSON.stringify(card);
+    if (!DEBUG) {
+        request({url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log("Discarded:");
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("Discard error: " + error);
+                });
+    } else {
+        console.log("DISCARDING IS WORKING (debug)");
+        request({url: "/discard?to_discard=" + card + "&game_id=" + 0 + "&player_id=" + 0, method: "PUT"}) // "a" needs to be a game ID
+                .then(data => {
+                    console.log("Discarded:");
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("Discard error: " + error);
+                });
+    }
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
 }
 setInterval(getNew, 300);
 
+// storing ids of all clue giving buttons
+var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    // storing ids of all clue giving buttons
-    var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
+    
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -166,6 +192,44 @@ function disable(num, id) {
         }
     }
     console.log(id);
+}
+
+// reset disabled clue buttons
+function reenableClueBtns() {
+    for(var i=0; i< clueButtons.length; i++) {
+        var clueBtnIDs = clueButtons[i];
+        for(var j=0; j < clueBtnIDs.length; j++) {
+            document.getElementById(clueButtons[i][j]).removeAttribute("disabled");
+        }
+    }
+}
+
+// send clues to server
+// TODO: confirm player ID. assuming player order in game data matches display ID
+function giveClue() {
+    var toPlayer = -1;
+    for(var i=0; i<clueButtons[0].length;i++) {
+        if (!document.getElementById(clueButtons[0][i]).disabled) {
+            toPlayer++;
+            break;
+        }
+    }
+
+    var hintIndex=0;
+    for(var i=0; i< clueButtons[1].length;i++) {
+        hintIndex++;
+        if(!document.getElementById(clueButtons[0][i]).disabled) {
+            break;
+        }
+    }
+
+    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
+    print("Sending hint: "+JSON.stringify(hintObject));
+    request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
+        console.log("Sent: "+JSON.stringify(hintObject));
+    }).catch(error => {
+        console.log("Error: "+error);
+    })
 }
 
 
@@ -207,7 +271,7 @@ logIn();
 function logIn() {
     request({url: "/login_user?username=" + username, method: "GET"})
             .then(username => {
-              //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
                 console.log(username);
             })
             .catch(error => {
@@ -226,17 +290,49 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(){
+function test() {
     //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     console.log("updating cards");
-    setTimeout(discard("purple", 3), 300);
+    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
     console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
-    //no client code for giving clue
-   // setTimeout(giveClue(1, 1), 300);
-    //console.log("giving clue");
-    
+    // Giving clue is done manually (it relies on input buttons)
+    //// no client code for giving clue
+    //// setTimeout(giveClue(), 300);
+    //// console.log("giving clue");
+
 }
 
+function render_update(data) {
+    let update_data = JSON.parse(data);
+    //console.log(update_data);
+    //debugDiv.innerHTML = data;
+    //debugDiv.innerHTML = update_data.players[0].myUser.username;
+    render_user_cards(update_data.players);
+}
+
+function render_user_cards(playerArr) {
+    console.log("rendering usernames");
+    for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
+
+        let cp = playerArr[numPlayer];
+
+        console.log('at player ' + numPlayer);
+        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+
+        for (var i = 0; i <= 2; i++) {
+            let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));
+            console.log(playerArr[numPlayer]);
+            card.innerText = cp.myHand.cards[i].number;
+            card.style.color = cp.myHand.cards[i].color;
+            card.style.fontSize = "90px";
+            card.style.textAlign = "center";
+            card.style.lineHeight = "100px";
+            card.style.fontFamily = "sans-serif";
+            card.style.fontWeight = "700";
+        }
+
+    }
+}
