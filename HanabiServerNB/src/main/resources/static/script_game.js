@@ -188,8 +188,13 @@ function discard(card, gameID, playerID) {
                     console.log("Discard error: " + error);
                 });
     }
-    document.getElementById("playbutton").removeAttribute('disabled');
-    document.getElementById("discardbutton").removeAttribute('disabled');
+
+}
+
+
+
+document.getElementById("playbutton").removeAttribute('disabled');
+document.getElementById("discardbutton").removeAttribute('disabled');
 
 setInterval(getNew, 300);
 
@@ -198,7 +203,7 @@ var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    
+
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -210,9 +215,9 @@ function disable(num, id) {
 
 // reset disabled clue buttons
 function reenableClueBtns() {
-    for(var i=0; i< clueButtons.length; i++) {
+    for (var i = 0; i < clueButtons.length; i++) {
         var clueBtnIDs = clueButtons[i];
-        for(var j=0; j < clueBtnIDs.length; j++) {
+        for (var j = 0; j < clueBtnIDs.length; j++) {
             document.getElementById(clueButtons[i][j]).removeAttribute("disabled");
         }
     }
@@ -222,28 +227,28 @@ function reenableClueBtns() {
 // TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
     var toPlayer = -1;
-    for(var i=0; i<clueButtons[0].length;i++) {
+    for (var i = 0; i < clueButtons[0].length; i++) {
         if (!document.getElementById(clueButtons[0][i]).disabled) {
             toPlayer++;
             break;
         }
     }
 
-    var hintIndex=0;
-    for(var i=0; i< clueButtons[1].length;i++) {
+    var hintIndex = 0;
+    for (var i = 0; i < clueButtons[1].length; i++) {
         hintIndex++;
-        if(!document.getElementById(clueButtons[0][i]).disabled) {
+        if (!document.getElementById(clueButtons[0][i]).disabled) {
             break;
         }
     }
 
 
-    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0,-4)};
-    print("Sending hint: "+JSON.stringify(hintObject));
-    request({url: "/give_hint?hint="+JSON.stringify(hintObject), method: "PUT"}).then(data => {
-        console.log("Sent: "+JSON.stringify(hintObject));
+    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0, -4)};
+    print("Sending hint: " + JSON.stringify(hintObject));
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
+        console.log("Sent: " + JSON.stringify(hintObject));
     }).catch(error => {
-        console.log("Error: "+error);
+        console.log("Error: " + error);
     })
 }
 
@@ -281,18 +286,8 @@ function getNew() {
 
 setInterval(getNew, 300);
 
-logIn();
 
-function logIn() {
-    request({url: "/login_user?username=" + username, method: "GET"})
-            .then(username => {
-                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-                console.log(username);
-            })
-            .catch(error => {
-                console.log("error: " + error);
-            });
-}
+
 
 // sends message by just pressing enter
 var x = document.getElementById("msgBox");
@@ -307,63 +302,37 @@ x.addEventListener("keyup", function (event) {
 
 function test(updated, discarded) {
     /*
-    var c = document.getElementById("msgbox");
-    var testctx = c.getContext("2d");
+     var c = document.getElementById("msgbox");
+     var testctx = c.getContext("2d");
      * 
      */
 
-    
+
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
     console.log("updated =" + updated);
-    if (updated === true){
-     console.log("updating cards");
+    if (updated === true) {
+        console.log("updating cards");
     }
     setTimeout(discard(game.players[0].myHand.cards[0]), 300);
     console.log("dicarded = " + discarded);
-    
-    if (discarded === true){
+
+    if (discarded === true) {
         console.log("discarding cards");
         /*
-       testctx.beginPath();
-      testctx.lineWidth = "6";
-      testctx.strokeStyle = "green";
-      testctx.rect(5, 5, 290, 140);
-      testctx.stroke();
+         testctx.beginPath();
+         testctx.lineWidth = "6";
+         testctx.strokeStyle = "green";
+         testctx.rect(5, 5, 290, 140);
+         testctx.stroke();
          * 
          */
     }
     setTimeout(play(1), 300);
     console.log("playing card");
+}
 
-//function getUsername() {           
-//    request({url: "/getUsername", method: "GET"})
-//            .then(username => {
-//                console.log("function getUsername(): " + username);
-//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-//            })
-//            .catch(error => {
-//                console.log("function getUsername(): error: " + error);
-//            });
-//}
-//
-//function LogIn() {
-//    console.log("function LogIn():");
-//    
-//    switchUser();    
-//    request({url: "/getUsername", method: "GET"})
-//            .then(username => {
-//                console.log("function getUsername(): " + username);
-//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
-//            })
-//            .catch(error => {
-//                console.log("function getUsername(): error: " + error);
-//            });
-//}
-//
-//function switchUser(){
-//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
-//}
+
 
 
 function test() {
@@ -383,8 +352,6 @@ function test() {
     //// no client code for giving clue
     //// setTimeout(giveClue(), 300);
     //// console.log("giving clue");
-
-
 }
 
 function render_update(data) {

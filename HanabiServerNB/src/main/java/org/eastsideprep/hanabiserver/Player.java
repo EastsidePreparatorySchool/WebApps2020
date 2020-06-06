@@ -44,6 +44,14 @@ public class Player implements PlayerInterface {
         this.myHand = new Hand();
 
     }
+    public Player(User user, int playerID) {
+        myID = playerID;
+        myUser = user;
+        this.myHints = new ArrayList<>();
+
+        this.myHand = new Hand();
+
+    }
     
     @Override
     public void SendHint(Hint hint, Player toPlayer) {
