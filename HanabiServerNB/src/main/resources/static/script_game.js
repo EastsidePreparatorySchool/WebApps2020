@@ -1,6 +1,7 @@
 let xyz = 1;
 let DEBUG = true;
 let game;
+let thisGameID = 0;
 let debugDiv = document.getElementById("debug");
 
 var updated = false;
@@ -8,7 +9,7 @@ var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid=" + 0, method: "GET"})
+        request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
                     game = JSON.parse(data);
                     render_update(data);
@@ -17,17 +18,17 @@ setInterval(function () {
                 .catch(error => {
                     console.log("error: " + error);
                 });
-//        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
-//        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
-//        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
-//                .then(data => {
-//                    console.log(data);
-//                })
-//                .catch(error => {
-//                    console.log("error: " + error);
-//                });
+        //        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+        //        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+        //        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+        //                .then(data => {
+        //                    console.log(data);
+        //                })
+        //                .catch(error => {
+        //                    console.log("error: " + error);
+        //                });
     } else {
-        request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
+        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
                     console.log("update received");
                     render_update(data);
@@ -201,16 +202,40 @@ setInterval(getNew, 300);
 // storing ids of all clue giving buttons
 var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
 
+var playerToGiveClue;
+var isClueColor;
+var clueContent;
+
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
 
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
-        if ((clueButtons[num][i]).localeCompare(id) != 0) {
+        if (i !== id) {
             document.getElementById(clueButtons[num][i]).setAttribute("disabled", "disabled");
         }
     }
     console.log(id);
+}
+
+// set player to give clue
+function setPlayerToGiveClue(playerNum) {
+    playerToGiveClue = playerNum;
+
+    disable(0, playerNum);
+}
+
+// set clue content
+function setClueContent(type, value) {
+    isClueColor = type;
+    let colorValues = ["red", "green", "yellow", "blue", "purple"];
+    if (type) {
+        clueContent = colorValues[value];
+    } else {
+        clueContent = value;
+    }
+
+    disable(1, type ? value : 5 + value);
 }
 
 // reset disabled clue buttons
@@ -226,30 +251,32 @@ function reenableClueBtns() {
 // send clues to server
 // TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
-    var toPlayer = -1;
-    for (var i = 0; i < clueButtons[0].length; i++) {
-        if (!document.getElementById(clueButtons[0][i]).disabled) {
-            toPlayer++;
-            break;
-        }
-    }
+    // var toPlayer = -1;
+    // for (var i = 0; i < clueButtons[0].length; i++) {
+    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
+    //         toPlayer++;
+    //         break;
+    //     }
+    // }
 
-    var hintIndex = 0;
-    for (var i = 0; i < clueButtons[1].length; i++) {
-        hintIndex++;
-        if (!document.getElementById(clueButtons[0][i]).disabled) {
-            break;
-        }
-    }
+    // var hintIndex = 0;
+    // for (var i = 0; i < clueButtons[1].length; i++) {
+    //     hintIndex++;
+    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
+    //         break;
+    //     }
+    // }
 
-
-    var hintObject = {isColor: hintIndex > 5, playerFromId: "", playerToId: game.players[toPlayer].myUser.myID, hintContent: clueButtons[1][hintIndex].slice(0, -4)};
-    print("Sending hint: " + JSON.stringify(hintObject));
-    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"}).then(data => {
-        console.log("Sent: " + JSON.stringify(hintObject));
-    }).catch(error => {
+    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
+    console.log("Sending hint: " + JSON.stringify(hintObject));
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"})
+            .then(data => {
+                console.log("Sent: " + JSON.stringify(hintObject));
+            }).catch(error => {
         console.log("Error: " + error);
-    })
+    });
+
+    reenableClueBtns();
 }
 
 
@@ -317,6 +344,14 @@ function test(updated, discarded) {
     }
     setTimeout(play(1), 300);
     console.log("playing card");
+
+    setTimeout(() => {
+        playerToGiveClue = 0;
+        isClueColor = false;
+        clueContent = 5;
+        giveClue();
+    }, 300);
+    console.log("Gave clue to player 0");
 }
 
 
