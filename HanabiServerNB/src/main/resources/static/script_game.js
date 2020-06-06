@@ -1,4 +1,3 @@
-
 let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
@@ -10,27 +9,25 @@ setInterval(function () {
     if (DEBUG) {
         request({url: "/update?gid=" + 0, method: "GET"})
                 .then(data => {
-                    game = JSON.parse(data);
-                    render_update(data);
-                    console.log("Update requested");
+                    game = data;
+                    console.log(game);
                 })
                 .catch(error => {
                     console.log("error: " + error);
                 });
-//        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
-//        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
-//        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
-//                .then(data => {
-//                    console.log(data);
-//                })
-//                .catch(error => {
-//                    console.log("error: " + error);
-//                });
+        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log("error: " + error);
+                });
     } else {
         request({url: "/update?gid=" + a, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
-                    console.log("update received");
-                    render_update(data);
+                    console.log(a);
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -43,8 +40,6 @@ function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
     playerCard.style.color = newColor;
     playerCard.innerHTML = newNumber;
-    updated = true;
-    return updated;
 }
 
 function RandomizeCards() { //function to randomize cards from 1-5 and colors wise
@@ -188,17 +183,22 @@ function discard(card, gameID, playerID) {
                     console.log("Discard error: " + error);
                 });
     }
+function discard(card) {
+    //remove card
+    //add card to discard pile
+    //draw new card
+    //end turn
+
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
-
+}
 setInterval(getNew, 300);
 
-// storing ids of all clue giving buttons
-var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
 
 // disable the other clue buttons once one is clicked
 function disable(num, id) {
-    
+    // storing ids of all clue giving buttons
+    var clueButtons = [["P1clue", "P2clue", "P3clue", "P4clue", "P5clue"], ["redClue", "greenClue", "yellowClue", "blueClue", "purpleClue", "1clue", "2clue", "3clue", "4clue", "5clue"]];
     console.log(num);
     for (var i = 0; i < clueButtons[num].length; i++) {
         if ((clueButtons[num][i]).localeCompare(id) != 0) {
@@ -207,6 +207,7 @@ function disable(num, id) {
     }
     console.log(id);
 }
+
 
 // reset disabled clue buttons
 function reenableClueBtns() {
@@ -248,6 +249,7 @@ function giveClue() {
 }
 
 
+
 // optional chat feature (Aybala)
 
 function sendMsg() {
@@ -286,7 +288,7 @@ logIn();
 function logIn() {
     request({url: "/login_user?username=" + username, method: "GET"})
             .then(username => {
-                //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+              //  document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
                 console.log(username);
             })
             .catch(error => {
@@ -305,34 +307,12 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(updated, discarded) {
-    /*
-    var c = document.getElementById("msgbox");
-    var testctx = c.getContext("2d");
-     * 
-     */
-
-    
+function test(){
+    //add way to give clue
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
-    setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
-    console.log("updated =" + updated);
-    if (updated === true){
-     console.log("updating cards");
-    }
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("dicarded = " + discarded);
-    
-    if (discarded === true){
-        console.log("discarding cards");
-        /*
-       testctx.beginPath();
-      testctx.lineWidth = "6";
-      testctx.strokeStyle = "green";
-      testctx.rect(5, 5, 290, 140);
-      testctx.stroke();
-         * 
-         */
-    }
+    console.log("updating cards");
+    setTimeout(discard("purple", 3), 300);
+    console.log("discarding cards");
     setTimeout(play(1), 300);
     console.log("playing card");
 
@@ -395,28 +375,11 @@ function render_update(data) {
     render_user_cards(update_data.players);
     getUsername();
 
+
+    //no client code for giving clue
+   // setTimeout(giveClue(1, 1), 300);
+    //console.log("giving clue");
+    
+
 }
 
-function render_user_cards(playerArr) {
-    console.log("rendering usernames");
-    for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
-
-        let cp = playerArr[numPlayer];
-
-        console.log('at player ' + numPlayer);
-        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
-
-        for (var i = 0; i <= 2; i++) {
-            let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));
-            console.log(playerArr[numPlayer]);
-            card.innerText = cp.myHand.cards[i].number;
-            card.style.color = cp.myHand.cards[i].color;
-            card.style.fontSize = "90px";
-            card.style.textAlign = "center";
-            card.style.lineHeight = "100px";
-            card.style.fontFamily = "sans-serif";
-            card.style.fontWeight = "700";
-        }
-
-    }
-}

@@ -18,7 +18,7 @@ public class Player implements PlayerInterface {
 //    private String myUsername;
     private User myUser;
     private Hand myHand;
-    public int myID;
+    private int myID;
     private int inGameID;
     //private int inGameID; // DEPRECIATED
 
@@ -41,7 +41,9 @@ public class Player implements PlayerInterface {
         myUser.setUsername(username);
         this.myHints = new ArrayList<>();
 
+
         this.myHand = new Hand();
+
 
     }
     
