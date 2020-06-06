@@ -344,14 +344,14 @@ function render_user_cards(playerArr) {
         if (usrfromserver.split('@')[0] === cp.myUser.username) {
 
             console.log(cp.myUser.username + ' is me');
-            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "";
+            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";
 
             MYDATA = cp;
-            
-            render_my_cards()
+
+            render_my_cards();
 
         } else {
-            
+
             document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
 
             document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
@@ -377,17 +377,49 @@ function render_card(element_id, color, number) {
 
 function render_my_cards() {
     console.log(MYDATA);
-    
+
     let hints = MYDATA.myHints;
-    
-    let hand = MYDATA.myHand;
-    
-    //figure out what the hints mean
-    
-    render_card("player1Card1", "black", "?");
-    
-    render_card("player1Card2", "black", "?");
-    
-    render_card("player1Card3", "black", "?");
-    
+
+    let hand = MYDATA.myHand.cards;
+
+    let displayedHand = [
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"}
+    ];
+
+    hints.forEach(function (hint) {
+        console.log(hint);
+
+
+        let cardNo = 0;
+
+        hand.forEach(function (card) {
+
+            if (card.color === hint.hintContent) {
+                displayedHand[cardNo].color = hint.hintContent;
+            }
+
+            if (card.number.toString() === hint.hintContent) {
+                displayedHand[cardNo].number = hint.hintContent;
+            }
+
+            cardNo++;
+
+        });
+
+
+    });
+
+    console.log(displayedHand);
+
+
+    let index = 1;
+    displayedHand.forEach(function (card) {
+        console.log("player1Card" + index);
+        render_card("player1Card" + index, card.color, card.number);
+        
+        index++;
+    });
+
 }

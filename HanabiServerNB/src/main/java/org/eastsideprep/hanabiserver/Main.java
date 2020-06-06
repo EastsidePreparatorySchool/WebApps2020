@@ -83,6 +83,9 @@ public class Main {
         g2p1.AddCardToHand(new Card("orange", 4));
         g2p1.AddCardToHand(new Card("yellow", 2));
         
+        g2p1.ReceiveHint(new Hint("blue", "0", "1"));
+        g2p1.ReceiveHint(new Hint("4", "0", "1"));
+        
         g2p2.AddCardToHand(new Card("red", 5));
         g2p2.AddCardToHand(new Card("purple", 3));
         g2p2.AddCardToHand(new Card("blue", 1));
