@@ -1,4 +1,4 @@
-
+let xyz = 1;
 let DEBUG = true;
 let game;
 let debugDiv = document.getElementById("debug");
