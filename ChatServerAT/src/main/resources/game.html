@@ -43,17 +43,10 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    <body style="background-color: red" >
-        <!--the borderstyle was intended to try to fix the unintentional red border, but it didn't seem to fix or break anything-->
-        <!--i moved the style contents to a div containing all of the body in order to make the screen flash effect-->
-        <div id = "backgroundFlash" style = "background-image: linear-gradient(-90deg, cornflowerblue, white); border-style: hidden">
-        
+    <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
         <div>Hanabi</div>
-        
-        
-        
+
         <!--made start button, someone else make actual functionality to start the game-->
-        <button onclick="strikeFlash(1,2)">(DevTool)TEST FOR SCREEN FLASH</button>
         <button onclick="startGame()">Click to start game</button>
         <br>Clues left:
         <p id="clues"></p>
@@ -224,8 +217,5 @@ and open the template in the editor.
 
         <script src="common.js"></script>
         <script src="script.js"></script>
-        
-        </div>
-        
     </body>
 </html>

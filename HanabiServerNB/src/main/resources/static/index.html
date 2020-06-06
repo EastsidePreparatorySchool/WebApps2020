@@ -8,6 +8,10 @@
     </head>
     <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
         <h1>Welcome to Hanabi Live!</h1>
+        <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
+            Signed in as: 
+            <p id="displayusername">Not Logged In</p>
+        </div>
         <h2> Current Games </h2>
         <table id = "gameTable">
             <tr>
@@ -23,10 +27,6 @@
                 <td><div><a href="game.html">Join Game</a></div></td>
             </tr>
         </table>
-        
-        <p id="displayLogIn">Please log in!</p>
-        <button onclick="LogIn()">Log In/Switch User</button> 
-        
         <script src="common.js"></script>
         <script src="script_lobby.js"></script>
     </body>

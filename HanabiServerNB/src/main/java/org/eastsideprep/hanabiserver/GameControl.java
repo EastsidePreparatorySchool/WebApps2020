@@ -21,6 +21,11 @@ public class GameControl implements GameControlInterface {
     public GameData getGameData(){
         return gameData;
     }
+
+    @Override
+    public void moveCard(CardInterface card, CardSpotInterface spotFrom, CardSpotInterface spotTo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public GameControl(GameData gameData){
         this.gameData = gameData;

@@ -51,9 +51,9 @@ public class User implements UserInterface {
     public static void setup(String[] args) {
         System.out.println("it's working");
         staticFiles.location("static");
-        get("/getheaders", (req, res) -> getHeaders(req));
-        get("/loginextra", (req, res) -> loginextra(req, res));
-        get("/login", (req, res) -> login(req, res));
+        get("getheaders", (req, res) -> getHeaders(req));
+        get("loginextra", (req, res) -> loginextra(req, res));
+        get("login", (req, res) -> login(req, res));
 
         get("/headers", (req, res) -> {
             String result = "";
@@ -104,30 +104,9 @@ public class User implements UserInterface {
             if (username == null) {
                 username = "unknown"; // default Name
             }
-            
             return ctx.toString();
+
         });
-
-        get("/getUsername", "application/json", (req, res) -> {       
-            System.out.println("get getUsername");
-
-            spark.Session s = req.session();
-
-            if (s.isNew()) {
-                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
-            }
-
-            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
-
-            String tabid = req.headers("tabid");
-            if (tabid == null) {
-                tabid = "default";
-            }
-
-            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
-//
-            return ctx.user.getUsername();
-        }, new JSONRT());
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
@@ -206,7 +185,7 @@ public class User implements UserInterface {
     }
 
     private static String login(Request req, Response res) {
-        String red = "http://localhost:80/index.html";
+        String red = "http://localhost:80/game.html";
         //logger.info("ChatServer: redirecting: " + red);
         res.redirect(red, 302);
         String username = req.queryParams("username");

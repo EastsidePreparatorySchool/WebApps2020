@@ -7,7 +7,6 @@ package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
 import org.eastsideprep.hanabiserver.interfaces.CardInterface;
-import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
 import org.eastsideprep.hanabiserver.interfaces.HandInterface;
 
 /**
@@ -21,13 +20,7 @@ public class Hand implements HandInterface {
     //bec we have multiple hands
 
     Hand(String name) {
-        Name = Name;
-        cards = new ArrayList<>();
-    }
-    
-    Hand() {
-        cards = new ArrayList<>();
-        Name = "not set";
+        name = Name;
     }
 
     @Override
@@ -35,15 +28,19 @@ public class Hand implements HandInterface {
         cards.add(Card);   //I assumed that this didn't include discarding
     }
 
-    public Card discard(int pos, GameData gd) {
-        Card card = cards.get(pos);
-        
-        return discard(card, gd);
+    public CardInterface discard(int pos) {
+        CardInterface x = cards.get(pos);
+        cards.remove(x);
+
+        //need to change member variable of card, discarded to true
+        return x;
     }
 
-    public Card discard(Card card, GameData gd) {
-        this.addCard(gd.getDeck().draw());
-        return GameControlInterface.moveCard(card, this, gd.getDiscardPile());
+    public CardInterface discard(CardInterface card) {
+        boolean x = cards.remove(card);
+        if (x) {return card;}
+
+        return null;
     }
 
     @Override
@@ -54,9 +51,5 @@ public class Hand implements HandInterface {
     @Override
     public ArrayList<Card> getCards() {
         return cards;
-    }
-    
-    public void addCard(Card c){
-        cards.add(c);
     }
 }

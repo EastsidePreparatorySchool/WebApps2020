@@ -14,8 +14,8 @@ import org.eastsideprep.hanabiserver.interfaces.CardInterface;
 public class Card implements CardInterface {
     String color; 
     int number; 
-    public boolean played;
-    public boolean discarded;    
+    boolean played;
+    boolean discarded;    
     
     //do we still need booleans for color_revealed and/or number_revealed?
 
