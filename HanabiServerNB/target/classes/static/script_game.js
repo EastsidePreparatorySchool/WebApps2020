@@ -218,7 +218,7 @@ function disable(num, id) {
 function setPlayerToGiveClue(playerNum) {
     playerToGiveClue = playerNum;
 
-    disable(0, playerNum);
+    disable(0, playerNum - 1);
 }
 
 // set clue content
@@ -263,9 +263,10 @@ function giveClue() {
     //     }
     // }
 
-    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
+
+    var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
-    request({url: "/give_hint?hint=" + JSON.stringify(hintObject), method: "PUT"})
+    request({url: "/give_hint?hint=" + JSON.stringify(hintObject) + "&gid=" + thisGameID, method: "PUT"})
             .then(data => {
                 console.log("Sent: " + JSON.stringify(hintObject));
             }).catch(error => {
@@ -342,11 +343,12 @@ function test(playerArr) {
     
         console.log("updating cards");
     
-    setTimeout(discard(("blue", 1), 0, "foo1" ), 300);
+    setTimeout(discard(game.players[0].myHand.cards[2]), 300);
     result = result && (player1Card3.innerText !== "1");
     if (result === true){
         //document.write("discard test passed!");
         console.log("discard test passed");
+
     }
 
 

@@ -64,11 +64,11 @@ public class Main {
         p4.AddCardToHand(new Card("orange", 4));
         p4.AddCardToHand(new Card("yellow", 4));
         p4.AddCardToHand(new Card("purple", 3));
-        
+
         p5.AddCardToHand(new Card("red", 5));
         p5.AddCardToHand(new Card("yellow", 3));
         p5.AddCardToHand(new Card("blue", 3));
-        
+
         p6.AddCardToHand(new Card("blue", 5));
         p6.AddCardToHand(new Card("red", 4));
         p6.AddCardToHand(new Card("purple", 1));
@@ -192,51 +192,78 @@ public class Main {
         });
         put("/give_hint", (req, res) -> {
             String hintParam = req.queryParams("hint");
+            String gameIdString = req.queryParams("gid");
 
             Hint givenHint = JSONRT.gson.fromJson(hintParam, Hint.class);
-            System.out.println("Received Hint: " + givenHint.toString());
+            System.out.println("Received Hint:");
+            System.out.println("\tTo:\t\t" + givenHint.playerToId);
+            System.out.println("\tIs Color:\t" + givenHint.isColor);
+            System.out.println("\tContent:\t" + givenHint.hintContent);
 
-            // Find this usesr and give them this hint
-            for (GameControl game
-                    : gameControls) {
-                for (Player player
-                        : game.getGameData().getPlayers()) {
-                    final User playerUser = player.GetUser();
+            Player target;
 
-                    if (playerUser.GetID().equals(givenHint.playerToId)) {
-                        // Validate Hint
-                        boolean validHint = false;
-                        for (Card card
-                                : player.GetHand().getCards()) {
-                            if (givenHint.isColor) {
-                                if (card.color.equals(givenHint.hintContent)) {
-                                    validHint = true;
-                                    break;
-                                }
-                            } else {
-                                if (card.number == Integer.parseInt(
-                                        givenHint.hintContent)) {
-                                    validHint = true;
-                                    break;
-                                }
+            try {
+                final GameData targetGameData
+                        = gameControls.get(Integer.parseInt(gameIdString)).
+                                getGameData();
+                target = targetGameData.getPlayerAtId(Integer.parseInt(
+                        givenHint.playerToId));
+
+                if (target != null) {
+                    User playerUser = target.GetUser();
+
+                    // Validate Hint
+                    boolean validHint = false;
+                    for (Card card
+                            : target.GetHand().getCards()) {
+                        if (givenHint.isColor) {
+                            if (card.color.equals(givenHint.hintContent)) {
+                                validHint = true;
+                                break;
+                            }
+                        } else {
+                            if (card.number == Integer.parseInt(
+                                    givenHint.hintContent)) {
+                                validHint = true;
+                                break;
                             }
                         }
-
-                        if (validHint) {
-                            // set the from ID based on context
-                            givenHint.playerFromId = getContext(req).user.
-                                    GetID();
-                            player.ReceiveHint(givenHint);
-                            return "Gave hint to user " + playerUser.GetID();
-                        } else {
-                            return "Hint to user " + playerUser.GetID()
-                                    + " was invalid";
-                        }
                     }
-                }
-            }
 
-            return "Could not find user " + givenHint.playerToId;
+                    if (validHint) {
+                        // set the from ID based on context
+                        for (Player player
+                                : targetGameData.getPlayers()) {
+                            if (player.GetUser().equals(getContext(req).user)) {
+                                givenHint.playerFromId = Integer.toString(
+                                        player.myID);
+                                target.ReceiveHint(givenHint);
+                                final String msg
+                                        = "Gave hint to user " + playerUser.
+                                                GetID();
+                                System.out.println(msg);
+                                return msg;
+                            }
+                        }
+                        return "User " + getContext(req).user
+                                + " is not in game "
+                                + gameIdString + ". Can't give hint!";
+                    } else {
+                        return "Hint to player " + target.myID
+                                + " was invalid";
+                    }
+                } else {
+                    final String errMsg
+                            = "Target player " + givenHint.playerToId
+                            + " not found!";
+                    System.out.println(errMsg);
+                    return errMsg;
+                }
+            } catch (Exception e) {
+                String errMsg = "Invalid hint params!: " + e.toString();
+                System.out.println(errMsg);
+                return errMsg;
+            }
         });
 
         put("/discard", "application/json", (req, res) -> {
@@ -252,8 +279,10 @@ public class Main {
             Player player = game.getGameData().getPlayerAtId(playerId);
             Hand playerHand = player.GetHand();
 
-            for (Card card : playerHand.getCards()) {
-                if (card.color.equals(discard.color) && card.number == discard.number) {
+            for (Card card
+                    : playerHand.getCards()) {
+                if (card.color.equals(discard.color) && card.number
+                        == discard.number) {
                     return playerHand.discard(card, game.getGameData());
                 }
             }
