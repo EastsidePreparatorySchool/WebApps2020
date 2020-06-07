@@ -1,3 +1,5 @@
+let playerusername;
+
 function request(obj) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();

@@ -1,9 +1,11 @@
-let xyz = 1;
 let DEBUG = true;
 let game;
 let thisGameID = 0;
 let debugDiv = document.getElementById("debug");
 
+let MYDATA;
+
+let a = new URLSearchParams(window.location.search).get('id');
 var updated = false;
 var discarded = false;
 
@@ -85,7 +87,7 @@ function unblurButtons() {
 }
 
 function blurPileButtons() {
-    document.getElementById("redpilebutton").setAttribute('disabled', 'disabled');
+    
     document.getElementById("greenpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("yellowpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("bluepilebutton").setAttribute('disabled', 'disabled');
@@ -267,6 +269,7 @@ function giveClue() {
     //     }
     // }
 
+
     var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
     request({url: "/give_hint?hint=" + JSON.stringify(hintObject) + "&gid=" + thisGameID, method: "PUT"})
@@ -327,31 +330,51 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(updated, discarded) {
-
+function test(playerArr) {
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
-    console.log("updated =" + updated);
-    if (updated === true) {
+    var result = true;
+    var player1Card2 = document.getElementById("player1Card2");
+    var player1Card3 = document.getElementById("player1Card3");
+    console.log("player1card2=" + player1Card2.innerText);
+    console.log("player1card2=" + player1Card3.innerText);
+    result = result && (player1Card2.innerText === "3");
+    result = result && (player1Card3.innerText === "1");
+    if (result === true){
+       // document.write("update test passed!");
+        console.log("update test passed");
+    }
+        
+     
+    
         console.log("updating cards");
-    }
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("dicarded = " + discarded);
+    
+    setTimeout(discard(game.players[0].myHand.cards[2]), 300);
+    result = result && (player1Card3.innerText !== "1");
+    if (result === true){
+        //document.write("discard test passed!");
+        console.log("discard test passed");
 
-    if (discarded === true) {
-        console.log("discarding cards");
-
     }
-    setTimeout(play(1), 300);
+
+
+    setTimeout(play(0), 300);
+    result = result && (player1Card2.innerText !== "3");
     console.log("playing card");
+    if (result === true){
+      //  document.write("play card test passed!");
+        console.log("play card test passed");
+    }
 
     setTimeout(() => {
         playerToGiveClue = 0;
         isClueColor = false;
         clueContent = 5;
         giveClue();
+        // document.write("give clue test passed");
     }, 300);
     console.log("Gave clue to player 0");
+ 
 }
 
 
@@ -370,25 +393,96 @@ function render_update(data) {
 }
 
 function render_user_cards(playerArr) {
-    console.log("rendering usernames");
+    //console.log("rendering usernames");
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
 
         let cp = playerArr[numPlayer];
 
-        console.log('at player ' + numPlayer);
-        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+        //console.log('at player ' + numPlayer);
 
-        for (var i = 0; i <= 2; i++) {
-            let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));
-            console.log(playerArr[numPlayer]);
-            card.innerText = cp.myHand.cards[i].number;
-            card.style.color = cp.myHand.cards[i].color;
-            card.style.fontSize = "90px";
-            card.style.textAlign = "center";
-            card.style.lineHeight = "100px";
-            card.style.fontFamily = "sans-serif";
-            card.style.fontWeight = "700";
+
+        usrfromserver = playerusername.split('"')[1];
+
+        if (usrfromserver.split('@')[0] === cp.myUser.username) {
+
+            console.log(cp.myUser.username + ' is me');
+            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";
+
+            MYDATA = cp;
+
+            render_my_cards();
+
+        } else {
+
+            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+
+            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
+            for (var i = 0; i <= 2; i++) {
+                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
+            }
+
         }
 
     }
+}
+
+function render_card(element_id, color, number) {
+    let card = document.getElementById(element_id);
+    //console.log(playerArr[numPlayer]);
+    card.innerText = number;
+    card.style.color = color;
+    card.style.fontSize = "90px";
+    card.style.textAlign = "center";
+    card.style.lineHeight = "100px";
+    card.style.fontFamily = "sans-serif";
+    card.style.fontWeight = "700";
+}
+
+function render_my_cards() {
+    console.log(MYDATA);
+
+    let hints = MYDATA.myHints;
+
+    let hand = MYDATA.myHand.cards;
+
+    let displayedHand = [
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"}
+    ];
+
+    hints.forEach(function (hint) {
+        console.log(hint);
+
+
+        let cardNo = 0;
+
+        hand.forEach(function (card) {
+
+            if (card.color === hint.hintContent) {
+                displayedHand[cardNo].color = hint.hintContent;
+            }
+
+            if (card.number.toString() === hint.hintContent) {
+                displayedHand[cardNo].number = hint.hintContent;
+            }
+
+            cardNo++;
+
+        });
+
+
+    });
+
+    console.log(displayedHand);
+
+
+    let index = 1;
+    displayedHand.forEach(function (card) {
+        console.log("player1Card" + index);
+        render_card("player1Card" + index, card.color, card.number);
+        
+        index++;
+    });
+
 }

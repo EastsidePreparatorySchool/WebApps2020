@@ -115,7 +115,20 @@ public class User implements UserInterface {
         get("/getUsername", "application/json", (req, res) -> {
             System.out.println("get getUsername");
 
-            Context ctx = getCtx(req);
+            spark.Session s = req.session();
+
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+            }
+
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
             return ctx.user.getUsername();
         }, new JSONRT());
 
