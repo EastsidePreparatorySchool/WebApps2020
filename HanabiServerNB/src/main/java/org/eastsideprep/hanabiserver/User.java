@@ -39,6 +39,7 @@ public class User implements UserInterface {
     private String Name;
     private String ID;
     private int InGameID;
+    private int attachedPlayerID;
 
     public User(String name, String id) {
         Name = name;
@@ -275,6 +276,16 @@ public class User implements UserInterface {
     @Override
     public int GetInGameID() {
         return InGameID;
+    }
+
+    @Override
+    public void SetAttachedPlayerID(int playerID) {
+        attachedPlayerID = playerID;
+    }
+
+    @Override
+    public int GetAttachedPlayerID() {
+        return attachedPlayerID;
     }
 
 }

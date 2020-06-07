@@ -22,8 +22,10 @@ public interface UserInterface {
     public void joinGame(); 
     
     public void SetInGameID(int gameID);
+    public void SetAttachedPlayerID(int playerID);
     
     public String GetName();
     public String GetID();
-    public int GetInGameID();    
+    public int GetInGameID();
+    public int GetAttachedPlayerID();
 }

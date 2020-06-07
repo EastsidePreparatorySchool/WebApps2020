@@ -1,6 +1,7 @@
-let DEBUG = true;
+let DEBUG = true; // what's up with this? there's duplicate code when it get's used... ~KY
 let game;
-let thisGameID = 0;
+var thisGameID = -1;
+var myPlayerID;
 let debugDiv = document.getElementById("debug");
 
 let MYDATA;
@@ -13,9 +14,15 @@ setInterval(function () {
     if (DEBUG) {
         request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
-                    game = JSON.parse(data);
-                    render_update(data);
-                    console.log("Update requested");
+                    if (thisGameID === -1) {
+                        let myUser = JSON.parse(data);
+                        thisGameID = myUser.InGameID;
+                        myPlayerID = myUser.attachedPlayerID;
+                    } else {
+                        game = JSON.parse(data);
+                        render_update(data);
+                        console.log("Update requested");
+                    }
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -87,7 +94,7 @@ function unblurButtons() {
 }
 
 function blurPileButtons() {
-    
+
     document.getElementById("greenpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("yellowpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("bluepilebutton").setAttribute('disabled', 'disabled');
@@ -339,18 +346,18 @@ function test(playerArr) {
     console.log("player1card2=" + player1Card3.innerText);
     result = result && (player1Card2.innerText === "3");
     result = result && (player1Card3.innerText === "1");
-    if (result === true){
-       // document.write("update test passed!");
+    if (result === true) {
+        // document.write("update test passed!");
         console.log("update test passed");
     }
-        
-     
-    
-        console.log("updating cards");
-    
-    setTimeout(discard(("blue", 1), 0, "foo1" ), 300);
+
+
+
+    console.log("updating cards");
+
+    setTimeout(discard(("blue", 1), 0, "foo1"), 300);
     result = result && (player1Card3.innerText !== "1");
-    if (result === true){
+    if (result === true) {
         //document.write("discard test passed!");
         console.log("discard test passed");
     }
@@ -361,8 +368,8 @@ function test(playerArr) {
     result = result && (player1Card2.innerText !== "3");
 
     console.log("playing card");
-    if (result === true){
-      //  document.write("play card test passed!");
+    if (result === true) {
+        //  document.write("play card test passed!");
         console.log("play card test passed");
     }
 
@@ -374,7 +381,7 @@ function test(playerArr) {
         // document.write("give clue test passed");
     }, 300);
     console.log("Gave clue to player 0");
-   if (result === true){
+    if (result === true) {
         console.log("whole test passed");
         document.write("whole test passed");
     }
@@ -484,7 +491,7 @@ function render_my_cards() {
     displayedHand.forEach(function (card) {
         console.log("player1Card" + index);
         render_card("player1Card" + index, card.color, card.number);
-        
+
         index++;
     });
 
