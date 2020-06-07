@@ -76,7 +76,7 @@ public class User implements UserInterface {
         // no context? no problem.
         if (ctx == null) {
             // TODO: fix this user generation
-            User user = new User("GenericUserName", "GenericUserID");
+            User user = new User("GenericUserName", "GenericUserID", false);
             ctx = new org.eastsideprep.hanabiserver.Context(user);
             System.out.println("context=" + ctx);
             System.out.println(user);

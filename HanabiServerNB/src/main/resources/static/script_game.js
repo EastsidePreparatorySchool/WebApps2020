@@ -12,7 +12,7 @@ var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid="    + thisGameID, method: "GET"})
+        request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
                     if (thisGameID === -1) {
                         let myUser = JSON.parse(data);
@@ -36,16 +36,6 @@ setInterval(function () {
         //                .catch(error => {
         //                    console.log("error: " + error);
         //                });
-    } else {
-        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("Update requested");
-                    render_update(data);
-                    console.log("Update received");
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
     }
 }, 1000);
 

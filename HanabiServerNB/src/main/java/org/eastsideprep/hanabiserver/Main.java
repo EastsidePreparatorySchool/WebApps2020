@@ -86,9 +86,9 @@ public class Main {
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
-        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1"),
+        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1", true),
                 1);
-        Player g2p2 = new Player(new User("everest@oreizy.com", "blah2"), 2);
+        Player g2p2 = new Player(new User("everest@oreizy.com", "blah2", true), 2);
 
         g2p1.AddCardToHand(new Card("blue", 1));
         g2p1.AddCardToHand(new Card("orange", 4));
@@ -142,7 +142,7 @@ public class Main {
             // no context? no problem.
             if (ctx == null) {
                 // TODO: fix this user generation
-                User user = new User("GenericUserName", "GenericUserID");
+                User user = new User("GenericUserName", "GenericUserID", false);
                 ctx = new Context(user);
                 System.out.println("context=" + ctx);
                 System.out.println(user);
@@ -225,6 +225,43 @@ public class Main {
             return "";
         });
 
+        put("/join_game", (req, res) -> {
+            // Get user ID and requested game ID
+            String userID = req.queryParams("usr_id");
+            String gameID = req.queryParams("game_id");
+
+            System.out.println("Find this user in the lobby!");
+
+            for (User user
+                    : lobbyUsers) { // Find this user in the lobby
+                
+                if (user.GetID().equals(userID)) {
+                    for (GameControl game
+                            : gameControls) { // Find this game
+                        if (gameID.equals(game.getGameData().getid())) {
+                            for (Player player : players) {
+                                if (player.myUser.CompPlayer) {
+                                    players.remove(player);
+                                    break;
+                                }
+                            }
+                            if (players.size() < 6) {
+                                user.SetInGameID(game.getGameData().getid());
+                                players.add(new Player(user)); // Create a new player with this user and add them to the game
+                                lobbyUsers.remove(user); // Remove user from lobby
+                                return "Entered user " + userID + " into game "
+                                        + gameID;
+                            } else {
+                                return "Game " + gameID + " at max capacity";
+                            }
+                        }
+                    }
+                    return "Could not find game " + gameID;
+                }
+            }
+            return "Could not find user " + userID;
+        });
+        
         put("/enter_game", (req, res) -> {
             // Get user ID and requested game ID
             String userID = req.queryParams("usr_id");
