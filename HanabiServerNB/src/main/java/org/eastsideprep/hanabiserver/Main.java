@@ -226,32 +226,50 @@ public class Main {
         });
 
         put("/join_game", (req, res) -> {
-            // Get user ID and requested game ID
-            String userID = req.queryParams("usr_id");
-            String gameID = req.queryParams("game_id");
+            addToLobby(req);
 
-            System.out.println("Find this user in the lobby!");
+            // Get user ID and requested game ID
+            String userID = req.queryParams("userid");
+            int gameID = Integer.parseInt(req.queryParams("gameid"));
+            
+            System.out.println("join_game: userID = " + userID);
+            System.out.println("join_game: gameID = " + gameID);
+            
+            System.out.println("join_game: Find this user in the lobby!");
 
             for (User user
                     : lobbyUsers) { // Find this user in the lobby
                 
                 if (user.GetID().equals(userID)) {
+                    System.out.println("join_game: Found user " + user.GetID());
                     for (GameControl game
                             : gameControls) { // Find this game
-                        if (gameID.equals(game.getGameData().getid())) {
+                        System.out.println("join_game: game id is = " + game.getGameData().getid());
+                        
+                        if (gameID == game.getGameData().getid()) {
+                            System.out.println("join_game: Found game " + gameID);
+                            
                             for (Player player : players) {
                                 if (player.myUser.CompPlayer) {
+                                    System.out.println("join_game: Removing computer player");
                                     players.remove(player);
                                     break;
                                 }
                             }
                             if (players.size() < 6) {
+                                System.out.println("join_game: Adding user to the game");
+                                
                                 user.SetInGameID(game.getGameData().getid());
+                                
                                 players.add(new Player(user)); // Create a new player with this user and add them to the game
                                 lobbyUsers.remove(user); // Remove user from lobby
+                                
+                                System.out.println("join_game: Added user to the game");
+
                                 return "Entered user " + userID + " into game "
                                         + gameID;
                             } else {
+                                System.out.println("join_game: Game is full");
                                 return "Game " + gameID + " at max capacity";
                             }
                         }
@@ -394,6 +412,20 @@ public class Main {
         }, new JSONRT());
     }
 
+    public static void addToLobby(Request req) {
+        String userID = req.queryParams("userid");
+        String username = req.queryParams("username");
+
+        for(User user
+                : lobbyUsers) {            
+            if (user.GetID().equals(userID)) {
+                return;
+            }                    
+        }
+
+        lobbyUsers.add(new User(username, userID, false));
+   }
+    
     public static Context getContext(Request req) {
         spark.Session s = req.session();
         if (s.isNew()) {

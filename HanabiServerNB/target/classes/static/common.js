@@ -1,4 +1,7 @@
 let playerusername;
+gameid = 0;
+userid = "";
+usernameForJoinGame = "";
 
 function request(obj) {
     return new Promise((resolve, reject) => {
@@ -40,7 +43,7 @@ function request(obj) {
 //}
 
 function getheaders() {
-    request({url: "getheaders", verb: "GET"})
+    request({url: "getheaders", method: "GET"})
             .then(result => {
                 console.log(result);
             })
@@ -71,10 +74,13 @@ request({url: "/load"})
 function getUsername() {
     request({url: "/getUsername", method: "GET"})
             .then(username => {
+                username = JSON.parse(username);
                 console.log("function getUsername(): " + username);
                 if (username === "null") {
                     document.getElementById("displayLogIn").innerText = "Not logged in.";
                 } else {
+                    userid = username + sessionStorage.getItem("tabid");
+                    usernameForJoinGame = username;
                     document.getElementById("displayLogIn").innerText = "Logged in as " + username + ".";
                 }
             })
@@ -96,4 +102,46 @@ function LogIn() {
 getUsername();
 
 
+// template functions for updating available games in lobby
+function getGames(f) {
+    request({url: "/lobby-games", method: "GET"})
+            .then(data => {
+                console.log("success, updating games");
+                f(data);
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
+
+
+function getGamesUpdateTable() {
+    getGames(function (data) {
+        var table = document.getElementById("gameTable");
+        let games = JSON.parse(data);
+        for (var i = 0; i < games.length; i++) {
+            var row = table.insertRow(1);
+            row.insertCell(0).innerHTML = games[i].gameData.name;
+       //    row.insertCell(1).innerHTML = "<a href='game.html?id=" + i + "'>Join Game</a>";
+            row.insertCell(1).innerHTML = "<button onclick='joinGame()'>Join Game</button>";
+            gameid = i;
+        }
+    });
+}
+
+getGamesUpdateTable();
+
+function joinGame() {
+    console.log("i am here!!");
+    console.log(userid);
+    
+    request({url: "/join_game?gameid=" + gameid + "&userid=" + userid + "&username=" + usernameForJoinGame, method: "PUT"})
+            .then(data => {
+                console.log("success, joining game");
+                window.location.href = '/game.html';
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
+}
 
