@@ -81,6 +81,7 @@ function getUsername() {
                 } else {
                     userid = username + sessionStorage.getItem("tabid");
                     usernameForJoinGame = username;
+                    playerusername = username;
                     document.getElementById("displayLogIn").innerText = "Logged in as " + username + ".";
                 }
             })

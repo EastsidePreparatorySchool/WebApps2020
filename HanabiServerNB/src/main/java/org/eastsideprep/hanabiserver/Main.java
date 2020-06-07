@@ -42,13 +42,13 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        Player p1 = new Player(new User("bar1", "foo1", true), 1);
-        Player p2 = new Player(new User("bar2", "foo2", true), 2);
-        Player p3 = new Player(new User("bar3", "foo3", true), 3);
-        Player p4 = new Player(new User("blah4", "blah4", true), 4);
-        Player p5 = new Player(new User("Windows", "foo", true), 5);
-        Player p6 = new Player(new User("macOS", "fooy", true), 6);
-
+        Player p1 = new Player(new User("randomperson@yahoo.com", "foo1", true), 1);
+        Player p2 = new Player(new User("gunnarmein@eastsideprep.org", "foo2", true), 2);
+        Player p3 = new Player(new User("keyboardtyping@lol.net", "foo3", true), 3);
+        Player p4 = new Player(new User("blah4x@gmail.com", "blah4", true), 4);
+        Player p5 = new Player(new User("Windows@google.com", "foo", true), 5);
+        Player p6 = new Player(new User("macOS@google.com", "fooy", true), 6);
+        
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
         p1.AddCardToHand(new Card("yellow", 5));
@@ -169,8 +169,8 @@ public class Main {
                 User reqUser = getContext(req).user;
                 
                 // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
-                reqUser = testPlayers.get(0).GetUser();
-                reqUser.SetInGameID(0);
+//                reqUser = testPlayers.get(0).GetUser();
+                reqUser.SetInGameID(1);
                 
                 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 
