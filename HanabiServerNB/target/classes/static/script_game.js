@@ -1,11 +1,7 @@
-let xyz = 1;
 let DEBUG = true;
 let game;
 let thisGameID = 0;
 let debugDiv = document.getElementById("debug");
-
-var updated = false;
-var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
@@ -85,7 +81,7 @@ function unblurButtons() {
 }
 
 function blurPileButtons() {
-    document.getElementById("redpilebutton").setAttribute('disabled', 'disabled');
+    
     document.getElementById("greenpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("yellowpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("bluepilebutton").setAttribute('disabled', 'disabled');
@@ -251,7 +247,21 @@ function reenableClueBtns() {
 // send clues to server
 // TODO: confirm player ID. assuming player order in game data matches display ID
 function giveClue() {
+    // var toPlayer = -1;
+    // for (var i = 0; i < clueButtons[0].length; i++) {
+    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
+    //         toPlayer++;
+    //         break;
+    //     }
+    // }
 
+    // var hintIndex = 0;
+    // for (var i = 0; i < clueButtons[1].length; i++) {
+    //     hintIndex++;
+    //     if (!document.getElementById(clueButtons[0][i]).disabled) {
+    //         break;
+    //     }
+    // }
 
     var hintObject = {isColor: isClueColor, playerFromId: "", playerToId: game.players[playerToGiveClue].myUser.myID, hintContent: clueContent};
     console.log("Sending hint: " + JSON.stringify(hintObject));
@@ -263,7 +273,6 @@ function giveClue() {
     });
 
     reenableClueBtns();
-
 }
 
 
@@ -314,64 +323,55 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(updated, discarded) {
-
+function test(playerArr) {
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
-    console.log("updated =" + updated);
-    if (updated === true) {
+    var result = true;
+    var player1Card2 = document.getElementById("player1Card2");
+    var player1Card3 = document.getElementById("player1Card3");
+    console.log("player1card2=" + player1Card2.innerText);
+    console.log("player1card2=" + player1Card3.innerText);
+    result = result && (player1Card2.innerText === "3");
+    result = result && (player1Card3.innerText === "1");
+    if (result === true){
+       // document.write("update test passed!");
+        console.log("update test passed");
+    }
+        
+     
+    
         console.log("updating cards");
+    
+    setTimeout(discard(("blue", 1), 0, "foo1" ), 300);
+    result = result && (player1Card3.innerText !== "1");
+    if (result === true){
+        //document.write("discard test passed!");
+        console.log("discard test passed");
     }
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("dicarded = " + discarded);
 
-    if (discarded === true) {
-        console.log("discarding cards");
 
-        /*
-         testctx.beginPath();
-         testctx.lineWidth = "6";
-         testctx.strokeStyle = "green";
-         testctx.rect(5, 5, 290, 140);
-         testctx.stroke();
-         * 
-         */
-    }
-    setTimeout(play(1), 300);
+    setTimeout(play(0), 300);
+    result = result && (player1Card2.innerText !== "3");
     console.log("playing card");
+    if (result === true){
+      //  document.write("play card test passed!");
+        console.log("play card test passed");
+    }
 
     setTimeout(() => {
         playerToGiveClue = 0;
         isClueColor = false;
         clueContent = 5;
         giveClue();
+        // document.write("give clue test passed");
     }, 300);
     console.log("Gave clue to player 0");
+ 
 }
 
 
 
 
-function test() {
-    //add way to give clue
-    setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
-    console.log("updating cards");
-
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("discarding cards");
-
-    setTimeout(play(1), 300);
-    console.log("playing card");
-
-
-    setTimeout(() => {
-        playerToGiveClue = 0;
-        isClueColor = false;
-        clueContent = 5;
-        giveClue();
-    }, 300);
-    console.log("Gave clue to player 0");
-}
 
 
 function render_update(data) {
