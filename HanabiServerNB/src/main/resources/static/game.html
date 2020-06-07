@@ -8,17 +8,28 @@
         <link rel="stylesheet" type="text/css" href="style_game.css">
     </head>
 
-    <body style="background-image: linear-gradient(-90deg, cornflowerblue, white)">
+    <body style="background-color: red">
+        
+        <!--the borderstyle was intended to try to fix the unintentional red border, but it didn't seem to fix or break anything-->
+        <!--i moved the style contents to a div containing all of the body in order to make the screen flash effect-->
+        <div id = "backgroundFlash" style = "background-image: linear-gradient(-90deg, cornflowerblue, white); border-style: hidden;height:800px">
+        
         <p id="displayLogIn">Not Logged In</p>
         <!--   <button onclick="LogIn(); return false;">Log In/Switch User</button> -->
 
         <button onclick="test()">Test Game</button>
 
         <div>Hanabi</div>
+               
 
         <!--made start button, someone else make actual functionality to start the game-->
         <button onclick="startGame()">Click to start game</button>
-
+        <br/>
+        <button onclick="strikeFlash(1,2)">(DevTool)TEST FOR SCREEN FLASH</button>
+        <br/>
+        <button onclick="showWinScreen(1, 2, 3, 4, 5)">(DevTool)TEST FOR WIN SCREEN</button>
+        <br/>
+        
         <div id="interactives">
             <button onclick="selectPlay()" id="playbutton">Play</button>
             <button onclick="selectDiscard()" id="discardbutton">Discard</button>
@@ -71,8 +82,11 @@
             <div id="player5Card2" class="boxed inline-block" style="color:black">0</div>
             <div id="player5Card3" class="boxed inline-block" style="color:black">0</div>
         </div>
-
+        
         <div id="container">
+            
+            <div id="winScreen" style="margin: 20px 20px;font-size:30px"></div>
+            
             <div id="redPile" class="boxed inline-block" style="color: red; border-color: red"><br><br><br><br><br>
                 0</div>
             <div id="greenPile" class="boxed inline-block" style="color: green; border-color: green">
@@ -186,6 +200,9 @@
 
         <script src="common.js"></script>
         <script src="script_game.js"></script>
+        
+        </div>
+        
     </body>
 
 </html>
