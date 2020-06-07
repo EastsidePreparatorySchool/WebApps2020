@@ -86,6 +86,32 @@ public class Main {
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
+        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1"),
+                1);
+        Player g2p2 = new Player(new User("everest@oreizy.com", "blah2"), 2);
+
+        g2p1.AddCardToHand(new Card("blue", 1));
+        g2p1.AddCardToHand(new Card("orange", 4));
+        g2p1.AddCardToHand(new Card("yellow", 2));
+
+        g2p1.ReceiveHint(new Hint("blue", "0", "1"));
+        g2p1.ReceiveHint(new Hint("4", "0", "1"));
+
+        g2p2.AddCardToHand(new Card("red", 5));
+        g2p2.AddCardToHand(new Card("purple", 3));
+        g2p2.AddCardToHand(new Card("blue", 1));
+
+        ArrayList<Player> g2testPlayers = new ArrayList<>();
+        g2testPlayers.add(g2p1);
+        g2testPlayers.add(g2p2);
+        g2testPlayers.add(p3);
+        g2testPlayers.add(p4);
+
+        GameData testGD2 = new GameData(g2testPlayers, 5, 30,
+                "everest username testing", 1);
+        GameControl testGC2 = new GameControl(testGD2);
+        gameControls.add(testGC2);
+
         // get a silly route up for testing
         get("/hello", (req, res) -> {
             System.out.println("Hey we were invoked:");
@@ -126,20 +152,55 @@ public class Main {
             return ctx.toString();
         });
 
+        get("/lobby-games", "application/json", (req, res) -> {
+            return gameControls;
+        }, new JSONRT());
+
         get("/update", "application/json", (req, res) -> {
             String gameID = req.queryParams("gid");
             System.out.println("Update requested by " + req.ip() + " for game "
                     + gameID);
 
-            if (gameID != null) { // Check for cor responding Game
-                int gameID_int = Integer.parseInt(gameID);
-                GameControl game = gameControls.get(gameID_int);
-                GameData gameData = game.getGameData();
-                //System.out.println("returning gamedata");
-                return gameData;
-            } else {
+            if (gameID.equals("")) { // return all games
                 System.out.println("returning all games");
                 return gameControls;
+            } else if (Integer.parseInt(gameID) < 0) { // get IDs
+                System.out.println("parsed -1, gathering user info");
+                User reqUser = getContext(req).user;
+                
+                // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
+                reqUser = testPlayers.get(0).GetUser();
+                reqUser.SetInGameID(0);
+                
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                
+                for (Player player
+                        : gameControls.get(reqUser.GetInGameID()).getGameData().
+                                getPlayers()) {
+                    System.out.println("Grabed players from game");
+                    if (player.GetUser().equals(reqUser)) {
+                        System.out.println("Grabed player this user is attached to");
+                        reqUser.SetAttachedPlayerID(player.myID);
+                        return reqUser;
+                    }
+                }
+                
+                String errMsg = "Failed to grab user " + reqUser + " in game " + reqUser.GetInGameID();
+                System.out.println(errMsg);
+                return errMsg;
+            } else { // get a specific game
+                int gameID_int = Integer.parseInt(gameID);
+                System.out.println("returning game data for game "+gameID_int);
+                GameControl game;
+                try {
+                    game = gameControls.get(gameID_int);
+                    GameData gameData = game.getGameData();
+
+                    return gameData;
+                } catch (Exception e) {
+                    return "user " + getContext(req).user
+                            + " is not a player in this game!";
+                }
             }
         }, new JSONRT());
 
@@ -179,6 +240,7 @@ public class Main {
                             : gameControls) { // Find this game
                         if (gameID.equals(game.getGameData().getid())) {
                             if (players.size() < 6) {
+                                user.SetInGameID(game.getGameData().getid());
                                 players.add(new Player(user)); // Create a new player with this user and add them to the game
                                 lobbyUsers.remove(user); // Remove user from lobby
                                 return "Entered user " + userID + " into game "

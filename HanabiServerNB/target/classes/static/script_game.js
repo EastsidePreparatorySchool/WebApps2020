@@ -1,9 +1,12 @@
-let xyz = 1;
-let DEBUG = true;
+let DEBUG = true; // what's up with this? there's duplicate code when it get's used... ~KY
 let game;
-let thisGameID = 0;
+var thisGameID = -1;
+var myPlayerID;
 let debugDiv = document.getElementById("debug");
 
+let MYDATA;
+
+let a = new URLSearchParams(window.location.search).get('id');
 var updated = false;
 var discarded = false;
 
@@ -11,9 +14,15 @@ setInterval(function () {
     if (DEBUG) {
         request({url: "/update?gid="    + thisGameID, method: "GET"})
                 .then(data => {
-                    console.log("Update requested");
-                    render_update(data);
-                    console.log("Update received");
+                    if (thisGameID === -1) {
+                        let myUser = JSON.parse(data);
+                        thisGameID = myUser.InGameID;
+                        myPlayerID = myUser.attachedPlayerID;
+                    } else {
+                        game = JSON.parse(data);
+                        render_update(data);
+                        console.log("Update requested");
+                    }
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -86,7 +95,7 @@ function unblurButtons() {
 }
 
 function blurPileButtons() {
-    document.getElementById("redpilebutton").setAttribute('disabled', 'disabled');
+
     document.getElementById("greenpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("yellowpilebutton").setAttribute('disabled', 'disabled');
     document.getElementById("bluepilebutton").setAttribute('disabled', 'disabled');
@@ -328,31 +337,55 @@ x.addEventListener("keyup", function (event) {
     }
 });
 
-function test(updated, discarded) {
-
+function test(playerArr) {
     setTimeout(updateCardInfo(1, 2, "purple", 3), 300);
     setTimeout(updateCardInfo(1, 3, "blue", 1), 300);
-    console.log("updated =" + updated);
-    if (updated === true) {
-        console.log("updating cards");
+    var result = true;
+    var player1Card2 = document.getElementById("player1Card2");
+    var player1Card3 = document.getElementById("player1Card3");
+    console.log("player1card2=" + player1Card2.innerText);
+    console.log("player1card2=" + player1Card3.innerText);
+    result = result && (player1Card2.innerText === "3");
+    result = result && (player1Card3.innerText === "1");
+    if (result === true) {
+        // document.write("update test passed!");
+        console.log("update test passed");
     }
-    setTimeout(discard(game.players[0].myHand.cards[0]), 300);
-    console.log("dicarded = " + discarded);
 
-    if (discarded === true) {
-        console.log("discarding cards");
 
+
+    console.log("updating cards");
+
+    setTimeout(discard(("blue", 1), 0, "foo1"), 300);
+    result = result && (player1Card3.innerText !== "1");
+    if (result === true) {
+        //document.write("discard test passed!");
+        console.log("discard test passed");
     }
-    setTimeout(play(1), 300);
+
+
+
+    setTimeout(play(0), 300);
+    result = result && (player1Card2.innerText !== "3");
+
     console.log("playing card");
+    if (result === true) {
+        //  document.write("play card test passed!");
+        console.log("play card test passed");
+    }
 
     setTimeout(() => {
         playerToGiveClue = 0;
         isClueColor = false;
         clueContent = 5;
         giveClue();
+        // document.write("give clue test passed");
     }, 300);
     console.log("Gave clue to player 0");
+    if (result === true) {
+        console.log("whole test passed");
+        document.write("whole test passed");
+    }
 }
 
 function render_update(data) {
@@ -366,11 +399,10 @@ function render_update(data) {
 }
 
 function render_user_cards(playerArr) {
-    console.log("rendering usernames");
+    //console.log("rendering usernames");
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
 
         let cp = playerArr[numPlayer];
-
         console.log('at player ' + numPlayer);
         document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.Name;
 
@@ -384,7 +416,91 @@ function render_user_cards(playerArr) {
             card.style.lineHeight = "100px";
             card.style.fontFamily = "sans-serif";
             card.style.fontWeight = "700";
+        //console.log('at player ' + numPlayer);
+
+
+        usrfromserver = playerusername.split('"')[1];
+
+        if (usrfromserver.split('@')[0] === cp.myUser.username) {
+
+            console.log(cp.myUser.username + ' is me');
+            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";
+
+            MYDATA = cp;
+
+            render_my_cards();
+
+        } else {
+
+            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+
+            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
+            for (var i = 0; i <= 2; i++) {
+                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
+            }
         }
 
     }
+}
+
+function render_card(element_id, color, number) {
+    let card = document.getElementById(element_id);
+    //console.log(playerArr[numPlayer]);
+    card.innerText = number;
+    card.style.color = color;
+    card.style.fontSize = "90px";
+    card.style.textAlign = "center";
+    card.style.lineHeight = "100px";
+    card.style.fontFamily = "sans-serif";
+    card.style.fontWeight = "700";
+}
+
+function render_my_cards() {
+    console.log(MYDATA);
+
+    let hints = MYDATA.myHints;
+
+    let hand = MYDATA.myHand.cards;
+
+    let displayedHand = [
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"},
+        {"color": "black", "number": "?"}
+    ];
+
+    hints.forEach(function (hint) {
+        console.log(hint);
+
+
+        let cardNo = 0;
+
+        hand.forEach(function (card) {
+
+            if (card.color === hint.hintContent) {
+                displayedHand[cardNo].color = hint.hintContent;
+            }
+
+            if (card.number.toString() === hint.hintContent) {
+                displayedHand[cardNo].number = hint.hintContent;
+            }
+
+            cardNo++;
+
+        });
+
+
+    });
+
+    console.log(displayedHand);
+
+
+    let index = 1;
+    displayedHand.forEach(function (card) {
+        console.log("player1Card" + index);
+        render_card("player1Card" + index, card.color, card.number);
+
+        index++;
+    });
+
+}
 }
