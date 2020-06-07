@@ -55,8 +55,51 @@ if (sessionStorage.getItem("tabid") === null) {
     sessionStorage.setItem("tabid", id);
 }
 
+<<<<<<< Updated upstream
 request({url:"/load"})
         .then(data=>{console.log(data);})
         .catch(error=>{console.log(error);});
     
    // updateUser();
+=======
+request({url: "/load"})
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+
+getUsername();
+
+
+function getUsername() {
+    request({url: "/getUsername", method: "GET"})
+            .then(username => {
+                console.log("function getUsername(): " + username);
+                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";        
+            })
+            .catch(error => {
+                console.log("function getUsername(): error: " + error);
+            });
+}
+
+function LogIn() {
+    console.log("function LogIn():");
+
+    switchUser();
+    request({url: "/getUsername", method: "GET"})
+            .then(username => {
+                console.log("function getUsername(): " + username);
+                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+            })
+            .catch(error => {
+                console.log("function getUsername(): error: " + error);
+            });
+}
+
+function switchUser() {
+    window.location.href = '/loginextra?tabid=' + sessionStorage.getItem("tabid");
+}
+>>>>>>> Stashed changes

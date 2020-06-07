@@ -80,7 +80,11 @@ public class Main {
         
         System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
         
+<<<<<<< Updated upstream
         GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0, cardpiles);
+=======
+        GameData testGD = new GameData(testPlayers, 5, 30, "everyones favorite hanabi gamE", 0);
+>>>>>>> Stashed changes
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -217,6 +221,7 @@ public class Main {
                                     break;
                                 }
                             }
+<<<<<<< Updated upstream
                         }
 
                         if (validHint) {
@@ -259,13 +264,30 @@ public class Main {
                                 Card i=game.getGameData().getDeck().getCards().remove(0);
                                 player.GetHand().getCards().add(i);
                             }
+=======
+                        }
+
+                        if (validHint) {
+                            // set the from ID based on context
+                            givenHint.playerFromId = getContext(req).user.GetID();
+                            player.ReceiveHint(givenHint);
+                            return "Gave hint to user " + playerUser.GetID();
+                        } else {
+                            return "Hint to user " + playerUser.GetID()
+                                    + " was invalid";
+>>>>>>> Stashed changes
                         }
                     }
                 }
             }
+<<<<<<< Updated upstream
             //   ctx.
 
             return null;
+=======
+
+            return "Could not find user " + givenHint.playerToId;
+>>>>>>> Stashed changes
         });
         
         

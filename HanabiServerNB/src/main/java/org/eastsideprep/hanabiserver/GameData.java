@@ -38,9 +38,14 @@ public class GameData implements GameInterface {
 
     //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
+<<<<<<< Updated upstream
     private HashMap<String, PlayedCards> playedCardPiles;
     
     public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId, HashMap<String, PlayedCards> p) {
+=======
+
+    public GameData(ArrayList<Player> players, int startingStrikes, int deckVolume, String name, int gameId) {
+>>>>>>> Stashed changes
         this.players = players;
         this.remainingStrikes = startingStrikes;
         this.deck = new Deck(new ArrayList<Card>());
@@ -48,7 +53,10 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
+<<<<<<< Updated upstream
         playedCardPiles=p;
+=======
+>>>>>>> Stashed changes
         
         for (int i = 0; i < players.size(); i++) {
             players.get(i).myID = i;

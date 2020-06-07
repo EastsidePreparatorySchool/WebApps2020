@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 logIn();
 
 function logIn() {
@@ -12,6 +13,39 @@ function logIn() {
                 console.log("error: " + error);
             });
 }
+=======
+
+//function getUsername() {           
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogInLobby").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function LogIn() {
+//    console.log("function LogIn():");
+//    
+//    switchUser();
+//    getUsername();
+//    request({url: "/getUsername", method: "GET"})
+//            .then(username => {
+//                console.log("function getUsername(): " + username);
+//                document.getElementById("displayLogIn").innerHTML = "Logged in as " + username + ".";
+//            })
+//            .catch(error => {
+//                console.log("function getUsername(): error: " + error);
+//            });
+//}
+//
+//function switchUser(){
+//    window.location.href='/loginextra?tabid=' + sessionStorage.getItem("tabid");
+//}
+
+>>>>>>> Stashed changes
 
 // template functions for updating available games in lobby
 function getGames(f) {

@@ -104,9 +104,47 @@ public class User implements UserInterface {
             if (username == null) {
                 username = "unknown"; // default Name
             }
+<<<<<<< Updated upstream
+=======
+            
+>>>>>>> Stashed changes
             return ctx.toString();
 
         });
+        
+        // optional chat feature in lobby (Aybala)
+        put("/send", (req, res) -> {
+            System.out.println("put send");
+
+<<<<<<< Updated upstream
+            String msg = req.queryParams("msg");           
+            Message newMessage = new Message();
+=======
+        get("/getUsername", "application/json", (req, res) -> {       
+            System.out.println("get getUsername");
+>>>>>>> Stashed changes
+
+//       
+            spark.Session s = req.session();
+
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+            }
+
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+//
+<<<<<<< Updated upstream
+
+=======
+            return ctx.user.getUsername();
+        }, new JSONRT());
         
         // optional chat feature in lobby (Aybala)
         put("/send", (req, res) -> {
@@ -132,6 +170,7 @@ public class User implements UserInterface {
             org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
 //
 
+>>>>>>> Stashed changes
             String username = ctx.user.getUsername();                       
             
             newMessage.username = username;           
