@@ -11,7 +11,6 @@ var updated = false;
 var discarded = false;
 
 setInterval(function () {
-    if (DEBUG) {
         request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
                     if (thisGameID === -1) {
@@ -19,9 +18,11 @@ setInterval(function () {
                         thisGameID = myUser.InGameID;
                         myPlayerID = myUser.attachedPlayerID;
                     } else {
-                        game = JSON.parse(data);
-                        render_update(data);
                         console.log("Update requested");
+                        console.log(data);
+                        game = JSON.parse(data);
+                        console.log("Going to render")
+                        render_update(data);
                     }
                 })
                 .catch(error => {
@@ -36,16 +37,6 @@ setInterval(function () {
         //                .catch(error => {
         //                    console.log("error: " + error);
         //                });
-    } else {
-        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("update received");
-                    render_update(data);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
-    }
 }, 1000);
 
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
@@ -393,17 +384,17 @@ function test(playerArr) {
 
 
 function render_update(data) {
-    let update_data = JSON.parse(data);
+    // let update_data = JSON.parse(data);
     //console.log(update_data);
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.username;
-    render_user_cards(update_data.players);
-    getUsername();
+    render_user_cards(game.players);
+    // getUsername();
 
 }
 
 function render_user_cards(playerArr) {
-    //console.log("rendering usernames");
+    console.log("rendering usernames");
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
 
         let cp = playerArr[numPlayer];

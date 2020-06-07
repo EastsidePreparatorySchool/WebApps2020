@@ -167,39 +167,43 @@ public class Main {
             } else if (Integer.parseInt(gameID) < 0) { // get IDs
                 System.out.println("parsed -1, gathering user info");
                 User reqUser = getContext(req).user;
-                
+
                 // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
                 reqUser = testPlayers.get(0).GetUser();
                 reqUser.SetInGameID(0);
-                
+
                 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                
                 for (Player player
                         : gameControls.get(reqUser.GetInGameID()).getGameData().
                                 getPlayers()) {
                     System.out.println("Grabed players from game");
                     if (player.GetUser().equals(reqUser)) {
-                        System.out.println("Grabed player this user is attached to");
+                        System.out.println(
+                                "Grabed player this user is attached to");
                         reqUser.SetAttachedPlayerID(player.myID);
                         return reqUser;
                     }
                 }
-                
-                String errMsg = "Failed to grab user " + reqUser + " in game " + reqUser.GetInGameID();
+
+                String errMsg = "Failed to grab user " + reqUser + " in game "
+                        + reqUser.GetInGameID();
                 System.out.println(errMsg);
                 return errMsg;
             } else { // get a specific game
                 int gameID_int = Integer.parseInt(gameID);
-                System.out.println("returning game data for game "+gameID_int);
-                GameControl game;
-                try {
-                    game = gameControls.get(gameID_int);
+                if (gameID_int < gameControls.size()) {
+                    System.out.println("returning game data for game "
+                            + gameID_int);
+                    GameControl game = gameControls.get(gameID_int);
                     GameData gameData = game.getGameData();
 
+                    System.out.println(new JSONRT().render(gameData));
+
                     return gameData;
-                } catch (Exception e) {
-                    return "user " + getContext(req).user
-                            + " is not a player in this game!";
+                } else {
+                    final String errMsg = "Game requested does not exist";
+                    System.out.println(errMsg);
+                    return errMsg;
                 }
             }
         }, new JSONRT());
