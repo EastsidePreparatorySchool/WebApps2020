@@ -42,12 +42,12 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        Player p1 = new Player(new User("bar1", "foo1"), 1);
-        Player p2 = new Player(new User("bar2", "foo2"), 2);
-        Player p3 = new Player(new User("bar3", "foo3"), 3);
-        Player p4 = new Player(new User("blah4", "blah4"), 4);
-        Player p5 = new Player(new User("Windows", "foo"), 5);
-        Player p6 = new Player(new User("macOS", "fooy"), 6);
+        Player p1 = new Player(new User("bar1", "foo1", true), 1);
+        Player p2 = new Player(new User("bar2", "foo2", true), 2);
+        Player p3 = new Player(new User("bar3", "foo3", true), 3);
+        Player p4 = new Player(new User("blah4", "blah4", true), 4);
+        Player p5 = new Player(new User("Windows", "foo", true), 5);
+        Player p6 = new Player(new User("macOS", "fooy", true), 6);
 
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
@@ -169,8 +169,11 @@ public class Main {
             String userID = req.queryParams("usr_id");
             String gameID = req.queryParams("game_id");
 
+            System.out.println("Find this user in the lobby!");
+
             for (User user
                     : lobbyUsers) { // Find this user in the lobby
+                
                 if (user.GetID().equals(userID)) {
                     for (GameControl game
                             : gameControls) { // Find this game

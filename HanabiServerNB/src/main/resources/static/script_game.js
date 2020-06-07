@@ -9,11 +9,11 @@ var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid=" + thisGameID, method: "GET"})
+        request({url: "/update?gid="    + thisGameID, method: "GET"})
                 .then(data => {
-                    game = JSON.parse(data);
-                    render_update(data);
                     console.log("Update requested");
+                    render_update(data);
+                    console.log("Update received");
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -30,8 +30,9 @@ setInterval(function () {
     } else {
         request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
                 .then(data => {
-                    console.log("update received");
+                    console.log("Update requested");
                     render_update(data);
+                    console.log("Update received");
                 })
                 .catch(error => {
                     console.log("error: " + error);
@@ -354,11 +355,6 @@ function test(updated, discarded) {
     console.log("Gave clue to player 0");
 }
 
-
-
-
-
-
 function render_update(data) {
     let update_data = JSON.parse(data);
     //console.log(update_data);
@@ -376,7 +372,7 @@ function render_user_cards(playerArr) {
         let cp = playerArr[numPlayer];
 
         console.log('at player ' + numPlayer);
-        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
+        document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.Name;
 
         for (var i = 0; i <= 2; i++) {
             let card = document.getElementById("player" + (numPlayer + 2) + "Card" + (i + 1));

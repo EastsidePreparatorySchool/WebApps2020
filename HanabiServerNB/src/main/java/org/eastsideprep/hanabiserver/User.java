@@ -36,13 +36,15 @@ public class User implements UserInterface {
     String username;
     String tabid;
 
-    private String Name;
+    public boolean CompPlayer;
+    public String Name;
     private String ID;
     private int InGameID;
 
-    public User(String name, String id) {
+    public User(String name, String id, boolean compPlayer) {
         Name = name;
         ID = id;
+        CompPlayer = compPlayer;
     }
 
     // optional chat feature
