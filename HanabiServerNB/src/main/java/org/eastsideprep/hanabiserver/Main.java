@@ -85,6 +85,30 @@ public class Main {
         GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
+        
+        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1"), "eoreizy");
+        Player g2p2 = new Player(new User("everest@oreizy.com","blah2"), "everest");
+        
+        g2p1.AddCardToHand(new Card("blue", 1));
+        g2p1.AddCardToHand(new Card("orange", 4));
+        g2p1.AddCardToHand(new Card("yellow", 2));
+        
+        g2p1.ReceiveHint(new Hint("blue", "0", "1"));
+        g2p1.ReceiveHint(new Hint("4", "0", "1"));
+        
+        g2p2.AddCardToHand(new Card("red", 5));
+        g2p2.AddCardToHand(new Card("purple", 3));
+        g2p2.AddCardToHand(new Card("blue", 1));
+        
+        ArrayList<Player> g2testPlayers = new ArrayList<>();
+        g2testPlayers.add(g2p1);
+        g2testPlayers.add(g2p2);
+        g2testPlayers.add(p3);
+        g2testPlayers.add(p4);
+        
+        GameData testGD2 = new GameData(g2testPlayers, 5, 30, "everest username testing", 1);
+        GameControl testGC2 = new GameControl(testGD2);
+        gameControls.add(testGC2);
 
         // get a silly route up for testing
         get("/hello", (req, res) -> {
@@ -126,6 +150,10 @@ public class Main {
             return ctx.toString();
         });
 
+        get("/lobby-games", "application/json", (req, res) -> {
+            return gameControls;
+        }, new JSONRT());
+        
         get("/update", "application/json", (req, res) -> {
             String gameID = req.queryParams("gid");
             System.out.println("Update requested by " + req.ip() + " for game "
