@@ -169,8 +169,8 @@ public class Main {
                 User reqUser = getContext(req).user;
                 
                 // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
-                reqUser = testPlayers.get(0).GetUser();
-                reqUser.SetInGameID(0);
+//                reqUser = testPlayers.get(0).GetUser();
+                reqUser.SetInGameID(1);
                 
                 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 

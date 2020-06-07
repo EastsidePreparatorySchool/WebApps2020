@@ -75,6 +75,7 @@ function getUsername() {
                 if (username === "null") {
                     document.getElementById("displayLogIn").innerText = "Not logged in.";
                 } else {
+                    playerusername = username;
                     document.getElementById("displayLogIn").innerText = "Logged in as " + username + ".";
                 }
             })

@@ -6,13 +6,13 @@ let debugDiv = document.getElementById("debug");
 
 let MYDATA;
 
-let a = new URLSearchParams(window.location.search).get('id');
+let thisGameIDx = new URLSearchParams(window.location.search).get('id');
 var updated = false;
 var discarded = false;
 
 setInterval(function () {
     if (DEBUG) {
-        request({url: "/update?gid=" + thisGameID, method: "GET"})
+        request({url: "/update?gid=" + thisGameIDx, method: "GET"})
                 .then(data => {
                     if (thisGameID === -1) {
                         let myUser = JSON.parse(data);
@@ -36,15 +36,6 @@ setInterval(function () {
         //                .catch(error => {
         //                    console.log("error: " + error);
         //                });
-    } else {
-        request({url: "/update?gid=" + thisGameID, method: "GET"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("update received");
-                    render_update(data);
-                })
-                .catch(error => {
-                    console.log("error: " + error);
-                });
     }
 }, 1000);
 
@@ -394,11 +385,11 @@ function test(playerArr) {
 
 function render_update(data) {
     let update_data = JSON.parse(data);
-    //console.log(update_data);
+    console.log(update_data);
     //debugDiv.innerHTML = data;
-    //debugDiv.innerHTML = update_data.players[0].myUser.username;
+    //debugDiv.innerHTML = update_data.players[0].myUser.Name;
     render_user_cards(update_data.players);
-    getUsername();
+    //getUsername();
 
 }
 
@@ -413,9 +404,9 @@ function render_user_cards(playerArr) {
 
         usrfromserver = playerusername.split('"')[1];
 
-        if (usrfromserver.split('@')[0] === cp.myUser.username) {
+        if (usrfromserver.split('@')[0] === cp.myUser.Name) {
 
-            console.log(cp.myUser.username + ' is me');
+            console.log(cp.myUser.Name + ' is me');
             document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";
 
             MYDATA = cp;
@@ -424,9 +415,11 @@ function render_user_cards(playerArr) {
 
         } else {
 
-            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
-
-            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.username;
+            console.log("else");
+            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.Name;
+            console.log("did playerlabel");
+            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.Name;
+            console.log("did buttonlabel");
             for (var i = 0; i <= 2; i++) {
                 render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
             }
