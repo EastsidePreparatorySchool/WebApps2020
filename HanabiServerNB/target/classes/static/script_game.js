@@ -379,10 +379,6 @@ function test(playerArr) {
 }
 
 
-
-
-
-
 function render_update(data) {
     let update_data = JSON.parse(data);
     console.log(update_data);
@@ -404,7 +400,7 @@ function render_user_cards(playerArr) {
 
         usrfromserver = playerusername.split('"')[1];
 
-        if (usrfromserver.split('@')[0] === cp.myUser.Name) {
+        if (usrfromserver === cp.myUser.Name) {
 
             console.log(cp.myUser.Name + ' is me');
             document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";

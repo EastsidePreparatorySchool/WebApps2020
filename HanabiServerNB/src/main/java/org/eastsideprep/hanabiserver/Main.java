@@ -42,12 +42,12 @@ public class Main {
         gameControls = new ArrayList<>();
 
         //Making a test GameControl object
-        Player p1 = new Player(new User("bar1", "foo1"), 1);
-        Player p2 = new Player(new User("bar2", "foo2"), 2);
-        Player p3 = new Player(new User("bar3", "foo3"), 3);
-        Player p4 = new Player(new User("blah4", "blah4"), 4);
-        Player p5 = new Player(new User("Windows", "foo"), 5);
-        Player p6 = new Player(new User("macOS", "fooy"), 6);
+        Player p1 = new Player(new User("randomperson@yahoo.com", "foo1"), 1);
+        Player p2 = new Player(new User("gunnarmein@eastsideprep.org", "foo2"), 2);
+        Player p3 = new Player(new User("keyboardtyping@lol.net", "foo3"), 3);
+        Player p4 = new Player(new User("blah4x@gmail.com", "blah4"), 4);
+        Player p5 = new Player(new User("Windows@google.com", "foo"), 5);
+        Player p6 = new Player(new User("macOS@google.com", "fooy"), 6);
 
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
