@@ -327,7 +327,38 @@ public class Main {
                 return errMsg;
             }
         });
+         put("/play_card", (req, res) -> {
+            Context ctx = getContext(req);
 
+            String pilecolor = req.queryParams("pile");
+            int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
+            int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
+            String PlayerID = req.queryParams("playerID");           //need way to get playerID
+
+            for (GameControl game
+                    : gameControls) {
+                if (game.getGameData().getid() == gamID) {
+                    for (Player player
+                            : game.getGameData().getPlayers()) {
+                        if (player.GetUser().GetID().equals(PlayerID)) { //check if they are both strings
+                            Card x = player.GetHand().getCards().remove(cardindex);
+                            //doesn't check right now to see if card can be played
+                            //card added to played card pile
+                            game.getGameData().getPlayedCardPile(pilecolor).getCards().add(x);
+                            //new card added to hand from deck
+                            if (game.getGameData().getDeck().getCards().size() > 0) {
+                                Card i=game.getGameData().getDeck().getCards().remove(0);
+                                player.GetHand().getCards().add(i);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //   ctx.
+
+            return null;
+        });
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");
 
