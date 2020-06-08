@@ -335,21 +335,30 @@ public class Main {
             }
         });
         put("/play_card", (req, res) -> {
-            Context ctx = getContext(req);
-
+            try {
+                //  Block of code to try
+            } catch (Exception e) {
+                //  Block of code to handle errors
+            }
             String pilecolor = req.queryParams("pile");
             int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
             int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
             int PlayerID = Integer.parseInt(req.queryParams("playerID"));           //need way to get playerID
-
+            System.out.println("CardIndex:    " + cardindex
+                    + "      GameID: " + gamID + " PlayerID: " + PlayerID + "  Pile color: " + pilecolor
+            ); 
             GameControl gm = gameControls.get(gamID);
             Player player = gm.getGameData().getPlayerAtId(PlayerID); //Method taken from Max
             Hand hand = player.GetHand();
             GameData gamedata = gm.getGameData();
 
-            hand.play(cardindex, gamedata, pilecolor);
-         //   return 234;
-            return "Error. How did this happen, we're smarter than this!";
+            if (hand.play(cardindex, gamedata, pilecolor)) {
+                return "Success";
+            } else {
+                return 234;
+            }
+            //   return 234;
+
         });
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");

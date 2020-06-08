@@ -46,9 +46,14 @@ public class Hand implements HandInterface {
         return GameControlInterface.moveCard(card, this, gd.getDiscardPile());
     }
     
-    public Card play(int pos, GameData gd, String color){
+    public boolean play(int pos, GameData gd, String color){
         this.addCard(gd.getDeck().draw());
-        return GameControlInterface.moveCard(cards.get(pos), this, gd.getPlayedCardPile(color));
+        int temp=gd.getPlayedCardPile(color).getCards().size()-1;
+        if(cards.get(pos).number==temp+1){
+            GameControlInterface.moveCard(cards.get(pos), this, gd.getPlayedCardPile(color));
+            return true;
+        }
+        return false;
     }
     
     @Override
