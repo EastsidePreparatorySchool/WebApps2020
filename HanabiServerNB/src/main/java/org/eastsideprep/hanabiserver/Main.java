@@ -432,6 +432,7 @@ public class Main {
             int playerId = Integer.parseInt(req.queryParams("player_id"));
 
             String toDiscard = req.queryParams("to_discard");
+            System.out.println(toDiscard);
             Card discard = JSONRT.gson.fromJson(toDiscard, Card.class);
 
             GameControl game = gameControls.get(gameId);

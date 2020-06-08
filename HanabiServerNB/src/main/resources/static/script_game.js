@@ -232,40 +232,29 @@ function play(id) {
 }
 
 
-function discard(card, gameID, playerID) {
+function discard(card) {
 
     //remove card
     //add card to discard pile
     //draw new card
     //TODO: end turn
-    card = JSON.stringify(card);
-    if (!DEBUG) {
-        request({url: "/discard?to_discard=" + card + "&game_id=" + gameID + "&player_id=" + playerID, method: "PUT"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("Discarded:");
+    console.log(game);
+    console.log("myID: " + myPlayerID);
+    console.log(game.players[myPlayerID].myHand.cards[card]);
+    request({url: "/discard?to_discard=" + JSON.stringify(game.players[myPlayerID].myHand.cards[card]) + "&game_id=" + thisGameID + "&player_id=" + myPlayerID, method: "PUT"}) // "a" needs to be a game ID
+            .then(data => {
+                console.log("Discarded:");
 
-                    discarded = true;
-                    console.log(data);
-                    return discarded;
+                discarded = true;
+                console.log(data);
+                return discarded;
 
-                    console.log(data);
+                console.log(data);
 
-                })
-                .catch(error => {
-                    console.log("Discard error: " + error);
-                });
-    } else {
-        console.log("DISCARDING IS WORKING (debug)");
-        request({url: "/discard?to_discard=" + card + "&game_id=" + 0 + "&player_id=" + 0, method: "PUT"}) // "a" needs to be a game ID
-                .then(data => {
-                    console.log("Discarded:");
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.log("Discard error: " + error);
-                });
-    }
-
+            })
+            .catch(error => {
+                console.log("Discard error: " + error);
+            });
 }
 
 
@@ -535,7 +524,7 @@ function render_user_cards(gameid, playerId, playerArr) {
     }
 }
 
-function render_card(element_id, color, number) {
+function render_card(element_id, color, number, cardObject) {
     let card = document.getElementById(element_id);
     //console.log(playerArr[numPlayer]);
     card.innerText = number;
