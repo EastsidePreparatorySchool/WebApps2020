@@ -83,8 +83,16 @@ public class Main {
         testPlayers.add(p5);
 //        testPlayers.add(p6);
 
+        //adding cardpiles
+        HashMap<String, PlayedCards> cardpiles = new HashMap();
+        cardpiles.put("blue", new PlayedCards("blue"));
+        cardpiles.put("green", new PlayedCards("green"));
+        cardpiles.put("yellow", new PlayedCards("yellow"));
+        cardpiles.put("red", new PlayedCards("red"));
+        cardpiles.put("purple", new PlayedCards("purple"));
+
 //        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        GameData testGD = new GameData(testPlayers, 3, 30, "game for aybala", 0);
+        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0, cardpiles);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -110,7 +118,7 @@ public class Main {
         g2testPlayers.add(p4);
 
         GameData testGD2 = new GameData(g2testPlayers, 5, 30,
-                "everest username testing", 1);
+                "everest username testing", 1, cardpiles);
         GameControl testGC2 = new GameControl(testGD2);
         gameControls.add(testGC2);
 
@@ -169,8 +177,9 @@ public class Main {
             } else if (Integer.parseInt(gameID) < 0) { // get IDs
                 System.out.println("update: parsed -1, gathering user info");
                 User reqUser = getContext(req).user;
-                
-                // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
+
+                // TODO: do we need to cycle through all games here? Should be able to get from user context
+
                 // reqUser = testPlayers.get(0).GetUser();
                 // reqUser.SetInGameID(1);
                 
@@ -394,7 +403,28 @@ public class Main {
                 return errMsg;
             }
         });
+        put("/play_card", (req, res) -> {
+            String pilecolor = req.queryParams("pile");
+            int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
+            int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
+            int PlayerID = Integer.parseInt(req.queryParams("playerID"));           //need way to get playerID
+            System.out.println("CardIndex:    " + cardindex
+                    + "      GameID: " + gamID + " PlayerID: " + PlayerID + "  Pile color: " + pilecolor
+            ); 
+            GameControl gm = gameControls.get(gamID);
+            Player player = gm.getGameData().getPlayerAtId(PlayerID); //Method taken from Max
+            Hand hand = player.GetHand();
+            GameData gamedata = gm.getGameData();
 
+            if (hand.play(cardindex, gamedata, pilecolor)) {
+                return "Success";
+            } else {
+                gamedata.decreaseStrikes();
+                return 234;
+            }
+            //   return 234;
+
+        });
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");
 

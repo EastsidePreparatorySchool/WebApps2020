@@ -125,44 +125,88 @@ function selectDiscard() {
 }
 
 //stores information about the selected card
-var selectedCard = 0;
+var selectedCard = -1;
 
 //id tells you which button you pressed (1-5)
 function selectCard(id) {
     //takes the values of the card and stores them into the variable above
     //selectedCard = hand.id.value (guess of how the hand class works)
+    selectedCard = id;
     if (playdiscard === 1) {
-        play(id);
+        if (pile !== 0) {
+            play(selectedCard);
+        }
+        blurButtons();
     } else if (playdiscard === 2) {
         discard(id);
+        playdiscard = 0;
+        blurButtons();
     }
-    playdiscard = 0;
-    blurButtons();
 
 }
 
 var pile = 0;
-function selectPile(num) {
-    pile = num;
+function selectPile(txt) {
+    var colors = ["smurple", "red", "green", "yellow", "blue", "purple"];
+    pile = colors[txt];
     blurPileButtons();
+
+    if (playdiscard === 1 && pile !== 0 && selectedCard !== -1) {
+        play(selectedCard);
+    }
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
 }
 function play(id) {
     //select pile
     unblurPileButtons();
+    if (!DEBUG) {
+        request({url: "/play_card?pile=" + pile + "&playerID=" + myPlayerID + "&cardnumber=" + id + "&gameID=" + thisGameID, verb: "PUT"})
+                .then(data => {
+                    console.log("Play card should work")
+                    console.log(data);
+                    var s = data;
+                    if (s == 234) {
+                        //do Jonathans alert or something
+                        try {
+                            strikeFlash(0, 2);
+                        } catch (err) {
+                            console.log("I don't understand");
+                        }
+                        alert("Can't let you play that card, star fox");
+                    }
+                })
+                .catch(error => {
+                    console.log("error, play card not working: " + error);
+                });
+    } else {
+        console.log("Playing card should be running (debug)");
+        request({url: "/play_card?pile=" + pile + "&playerID=" + 0 + "&cardnumber=" + cardindex + "&gameID=" + 0, verb: "PUT"})
+                .then(data => {
+                    console.log("Play :");
+                    console.log(data);
+                    var s = data;
+                    if (s == 234) {
+                        //do Jonathans alert or something
+                        try {
+                            strikeFlash(0, 2);
+                        } catch (err) {
+                            console.log("I don't understand");
+                        }
+                        alert("Can't let you play that card, star fox");
+                    }
+                })
+                .catch(error => {
+                    console.log("error, play card not working: " + error);
+                });
+    }
 
-    //remove card
-    //hand.remove(id)
-
-    //add value to pile
-    //pile.value++;
-
-    //draw new card
-    //hand.draw();
-
-    //end turn
     pile = 0;
+    selectedCard = -1;
+    playdiscard = 0;
+
+    document.getElementById("playbutton").removeAttribute('disabled');
+    document.getElementById("discardbutton").removeAttribute('disabled');
 }
 
 
@@ -364,8 +408,9 @@ function test(playerArr) {
     }
 
 
-
+    pile = "purple";
     setTimeout(play(0), 300);
+    pile = 0;
     result = result && (player1Card2.innerText !== "3");
 
     console.log("playing card");
