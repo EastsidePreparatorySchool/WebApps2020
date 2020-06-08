@@ -335,11 +335,6 @@ public class Main {
             }
         });
         put("/play_card", (req, res) -> {
-            try {
-                //  Block of code to try
-            } catch (Exception e) {
-                //  Block of code to handle errors
-            }
             String pilecolor = req.queryParams("pile");
             int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
             int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
