@@ -137,7 +137,8 @@ function selectCard(id) {
 
 var pile = 0;
 function selectPile(txt) {
-    pile = txt;
+    var colors = ["smurple","red","green","yellow","blue","purple"];
+    pile = colors[txt];
     blurPileButtons();
 
     if (playdiscard === 1 && pile !== 0 && selectedCard !== -1) {
@@ -145,14 +146,6 @@ function selectPile(txt) {
     }
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
-}
-function selectPile(txt) {
-    pile = txt;
-    blurPileButtons();
-
-    if (playdiscard === 1 && pile !== 0 && selectedCard !== -1) {
-        play(selectedCard);
-    }
 }
 function play(id) {
     //select pile
@@ -178,7 +171,7 @@ function play(id) {
                     console.log(data);
                 })
                 .catch(error => {
-                    console.log("Discard error: " + error);
+                    console.log("error, play card not working: " + error);
                 });
     }
 
