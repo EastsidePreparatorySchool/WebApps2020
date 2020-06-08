@@ -110,6 +110,10 @@ public class GameData implements GameInterface {
     public int getRemainingStrikes() {
         return remainingStrikes;
     }
+    
+    public void decreaseStrikes() {
+        remainingStrikes-=1;
+    }
 
     @Override
     public ArrayList<Hint> getAllSentHints() {

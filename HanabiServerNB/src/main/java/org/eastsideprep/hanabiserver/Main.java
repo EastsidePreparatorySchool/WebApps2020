@@ -355,6 +355,7 @@ public class Main {
             if (hand.play(cardindex, gamedata, pilecolor)) {
                 return "Success";
             } else {
+                gamedata.decreaseStrikes();
                 return 234;
             }
             //   return 234;
