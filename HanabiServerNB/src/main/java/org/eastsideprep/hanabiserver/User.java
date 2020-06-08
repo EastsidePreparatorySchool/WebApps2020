@@ -36,14 +36,15 @@ public class User implements UserInterface {
     String username;
     String tabid;
 
-    private String Name;
+    public boolean CompPlayer;
     private String ID;
     private int InGameID;
     private int attachedPlayerID;
 
-    public User(String name, String id) {
-        Name = name;
+    public User(String name, String id, boolean compPlayer) {
+        username = name;
         ID = id;
+        CompPlayer = compPlayer;
     }
 
     // optional chat feature
@@ -74,7 +75,7 @@ public class User implements UserInterface {
         // no context? no problem.
         if (ctx == null) {
             // TODO: fix this user generation
-            User user = new User("GenericUserName", "GenericUserID");
+            User user = new User("GenericUserName", "GenericUserID", false);
             ctx = new org.eastsideprep.hanabiserver.Context(user);
             System.out.println("context=" + ctx);
             System.out.println(user);
@@ -102,7 +103,6 @@ public class User implements UserInterface {
 
         get("/load", (Request req, Response res) -> {
             Context ctx = getCtx(req);
-            // String username = ctx.user.getName();
             String username = ctx.user.getUsername() + ctx.user.getTabId();
             System.out.println("user=" + username);
 
@@ -185,6 +185,14 @@ public class User implements UserInterface {
     public String getTabId() {
         return tabid;
     }
+    
+    public void setID(String userID) {
+        this.ID = userID;
+    }
+
+    public String getID() {
+        return ID;
+    }
 
     public static String loginextra(Request req, Response res) {
         String red = "https://epsauth.azurewebsites.net/login?url=http://localhost:80/login&loginparam=username&passthroughparam=tabid&passthrough="
@@ -202,13 +210,15 @@ public class User implements UserInterface {
         String tabid = req.queryParams("tabid");
         HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
         Context ctx = map.get(tabid);
-        String eachUser = username + tabid;
+        String userID = username + tabid;
         System.out.println("username in login=" + username);
         System.out.println("tabid in login=" + tabid);
         System.out.println("ctx in login=" + ctx);
         ctx.user.setTabId(tabid);
         ctx.user.setUsername(username);
-        System.out.println("eachUser=" + eachUser);
+        ctx.user.setID(userID);
+        
+        System.out.println("userID=" + userID);
         return username;
     }
 
@@ -265,7 +275,7 @@ public class User implements UserInterface {
 
     @Override
     public String GetName() {
-        return Name;
+        return username;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Player implements PlayerInterface {
 
     // Private Variables
 //    private String myUsername;
-    private User myUser;
+    public User myUser;
     private Hand myHand;
     public int myID;
 
