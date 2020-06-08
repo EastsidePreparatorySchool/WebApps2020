@@ -157,6 +157,7 @@ function play(id) {
                     var s = data;
                     if (s == 234) {
                         //do Jonathans alert or something
+                        alert("Can't let you play that card, star fox");
                     }
                 })
                 .catch(error => {
@@ -171,6 +172,7 @@ function play(id) {
                     var s = data;
                     if (s == 234) {
                         //do Jonathans alert or something
+                        alert("Can't let you play that card, star fox");
                     }
                 })
                 .catch(error => {
