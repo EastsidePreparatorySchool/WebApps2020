@@ -154,9 +154,15 @@ function play(id) {
         request({url: "/play_card?pile=" + pile + "&playerID=" + myPlayerID + "&cardnumber=" + id + "&gameID=" + thisGameID, verb: "PUT"})
                 .then(data => {
                     console.log("Play card should work")
+                    console.log(data);
                     var s = data;
                     if (s == 234) {
                         //do Jonathans alert or something
+                        try {
+                            strikeFlash(0, 2);
+                        } catch (err) {
+                            console.log("I don't understand");
+                        }
                         alert("Can't let you play that card, star fox");
                     }
                 })
@@ -172,6 +178,12 @@ function play(id) {
                     var s = data;
                     if (s == 234) {
                         //do Jonathans alert or something
+                        try {
+                            strikeFlash(0, 2);
+                        } catch (err) {
+                            console.log("I don't understand");
+                        }
+                        alert("Can't let you play that card, star fox");
                     }
                 })
                 .catch(error => {
