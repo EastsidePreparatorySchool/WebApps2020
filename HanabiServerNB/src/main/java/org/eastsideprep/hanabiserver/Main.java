@@ -515,10 +515,10 @@ public class Main {
         // no context? no problem.
         if (ctx == null) {
             // TODO: fix this user generation
-            User user = new User("GenericUserName", "GenericUserID", false);
-            ctx = new org.eastsideprep.hanabiserver.Context(user);
-            System.out.println("context=" + ctx);
-            System.out.println(user);
+//            User user = new User("GenericUserName", "GenericUserID", false);
+            ctx = new org.eastsideprep.hanabiserver.Context(null);
+//            System.out.println("context=" + ctx);
+//            System.out.println(user);
             map.put(tabid, ctx);
         }
         return ctx;
@@ -569,7 +569,10 @@ public class Main {
             if (tabid == null) {
                 tabid = "default";
             }
-
+            
+            System.out.println("tabid: "+tabid);
+            System.out.println("Context: "+map.get(tabid));
+            
             org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
             return User.getUsername(ctx);
         }, new JSONRT());

@@ -64,7 +64,7 @@ public class User implements UserInterface {
     
     public static String getUsername(Context ctx) {
         if (ctx.user != null) {
-            return ctx.user.getUsername();
+            return User.getUsername(ctx);
         }
         
         return "<Username: User not set yet>";
@@ -111,14 +111,18 @@ public class User implements UserInterface {
         HashMap<String, org.eastsideprep.hanabiserver.Context> map = getSession(req).attribute("map");
         Context ctx = map.get(tabid);
         String userID = username + tabid;
+        
+        User newUser = new User(username, userID, false);
+        ctx.user = newUser;
+        
+        ctx.user.setTabId(tabid);
+//        ctx.user.setUsername(username);
+//        ctx.user.setID(userID);
+        
         System.out.println("username in login=" + username);
         System.out.println("tabid in login=" + tabid);
-        System.out.println("ctx in login=" + ctx);
-        ctx.user.setTabId(tabid);
-        ctx.user.setUsername(username);
-        ctx.user.setID(userID);
-        
         System.out.println("userID=" + userID);
+        System.out.println("ctx in login=" + ctx);
         return username;
     }
 
