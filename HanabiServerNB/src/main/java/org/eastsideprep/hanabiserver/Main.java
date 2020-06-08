@@ -81,8 +81,16 @@ public class Main {
         testPlayers.add(p5);
         testPlayers.add(p6);
 
+        //adding cardpiles
+        HashMap<String, PlayedCards> cardpiles = new HashMap();
+        cardpiles.put("blue", new PlayedCards("blue"));
+        cardpiles.put("green", new PlayedCards("green"));
+        cardpiles.put("yellow", new PlayedCards("yellow"));
+        cardpiles.put("red", new PlayedCards("red"));
+        cardpiles.put("purple", new PlayedCards("purple"));
+        
 //        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0);
+        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0, cardpiles);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -108,7 +116,7 @@ public class Main {
         g2testPlayers.add(p4);
 
         GameData testGD2 = new GameData(g2testPlayers, 5, 30,
-                "everest username testing", 1);
+                "everest username testing", 1, cardpiles);
         GameControl testGC2 = new GameControl(testGD2);
         gameControls.add(testGC2);
 
