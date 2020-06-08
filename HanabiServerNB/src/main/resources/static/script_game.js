@@ -123,7 +123,7 @@ function selectCard(id) {
     //selectedCard = hand.id.value (guess of how the hand class works)
     selectedCard = id;
     if (playdiscard === 1) {
-        if(pile !== 0){
+        if (pile !== 0) {
             play(selectedCard);
         }
         blurButtons();
@@ -137,7 +137,7 @@ function selectCard(id) {
 
 var pile = 0;
 function selectPile(txt) {
-    var colors = ["smurple","red","green","yellow","blue","purple"];
+    var colors = ["smurple", "red", "green", "yellow", "blue", "purple"];
     pile = colors[txt];
     blurPileButtons();
 
@@ -150,25 +150,28 @@ function selectPile(txt) {
 function play(id) {
     //select pile
     unblurPileButtons();
-
-
-    var gameID = "hmm";
-    var cardindex = id;
-    var player = "fillme";
-     if (!DEBUG) {
-          request({url: "/play_card?pile=" + pile + "&playerID=" + player + "&cardnumber=" + cardindex + "&gameID=" + gameID, verb: "PUT"})
-            .then(data => {
-                console.log("Play card should work")
-            })
-            .catch(error => {
-                console.log("error, play card not working: " + error);
-            });
+    if (!DEBUG) {
+        request({url: "/play_card?pile=" + pile + "&playerID=" + myPlayerID + "&cardnumber=" + id + "&gameID=" + thisGameID, verb: "PUT"})
+                .then(data => {
+                    console.log("Play card should work")
+                    var s = data;
+                    if (s == 234) {
+                        //do Jonathans alert or something
+                    }
+                })
+                .catch(error => {
+                    console.log("error, play card not working: " + error);
+                });
     } else {
         console.log("Playing card should be running (debug)");
-          request({url: "/play_card?pile=" + pile + "&playerID=" + 0 + "&cardnumber=" + cardindex + "&gameID=" + 0, verb: "PUT"})
+        request({url: "/play_card?pile=" + pile + "&playerID=" + 0 + "&cardnumber=" + cardindex + "&gameID=" + 0, verb: "PUT"})
                 .then(data => {
                     console.log("Play :");
                     console.log(data);
+                    var s = data;
+                    if (s == 234) {
+                        //do Jonathans alert or something
+                    }
                 })
                 .catch(error => {
                     console.log("error, play card not working: " + error);
@@ -176,9 +179,9 @@ function play(id) {
     }
 
     pile = 0;
-    selectedCard=-1;
-    playdiscard=0;
-    
+    selectedCard = -1;
+    playdiscard = 0;
+
     document.getElementById("playbutton").removeAttribute('disabled');
     document.getElementById("discardbutton").removeAttribute('disabled');
 }
@@ -382,9 +385,9 @@ function test(playerArr) {
     }
 
 
-    pile="purple";
+    pile = "purple";
     setTimeout(play(0), 300);
-    pile=0;
+    pile = 0;
     result = result && (player1Card2.innerText !== "3");
 
     console.log("playing card");

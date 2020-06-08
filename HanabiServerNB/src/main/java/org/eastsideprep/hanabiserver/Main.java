@@ -88,7 +88,7 @@ public class Main {
         cardpiles.put("yellow", new PlayedCards("yellow"));
         cardpiles.put("red", new PlayedCards("red"));
         cardpiles.put("purple", new PlayedCards("purple"));
-        
+
 //        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
         GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0, cardpiles);
         GameControl testGC = new GameControl(testGD);
@@ -175,13 +175,12 @@ public class Main {
             } else if (Integer.parseInt(gameID) < 0) { // get IDs
                 System.out.println("parsed -1, gathering user info");
                 User reqUser = getContext(req).user;
-                
+
                 // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
 //                reqUser = testPlayers.get(0).GetUser();
                 reqUser.SetInGameID(1);
-                
+
                 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                
                 for (Player player
                         : gameControls.get(reqUser.GetInGameID()).getGameData().
                                 getPlayers()) {
@@ -192,13 +191,13 @@ public class Main {
                         return reqUser;
                     }
                 }
-                
+
                 String errMsg = "Failed to grab user " + reqUser + " in game " + reqUser.GetInGameID();
                 System.out.println(errMsg);
                 return errMsg;
             } else { // get a specific game
                 int gameID_int = Integer.parseInt(gameID);
-                System.out.println("returning game data for game "+gameID_int);
+                System.out.println("returning game data for game " + gameID_int);
                 GameControl game;
                 try {
                     game = gameControls.get(gameID_int);
@@ -335,37 +334,22 @@ public class Main {
                 return errMsg;
             }
         });
-         put("/play_card", (req, res) -> {
+        put("/play_card", (req, res) -> {
             Context ctx = getContext(req);
 
             String pilecolor = req.queryParams("pile");
             int cardindex = Integer.parseInt(req.queryParams("cardnumber"));//need to make sure things match
             int gamID = Integer.parseInt(req.queryParams("gameID")); //need way to get gameID
-            String PlayerID = req.queryParams("playerID");           //need way to get playerID
+            int PlayerID = Integer.parseInt(req.queryParams("playerID"));           //need way to get playerID
 
-            for (GameControl game
-                    : gameControls) {
-                if (game.getGameData().getid() == gamID) {
-                    for (Player player
-                            : game.getGameData().getPlayers()) {
-                        if (player.GetUser().GetID().equals(PlayerID)) { //check if they are both strings
-                            Card x = player.GetHand().getCards().remove(cardindex);
-                            //doesn't check right now to see if card can be played
-                            //card added to played card pile
-                            game.getGameData().getPlayedCardPile(pilecolor).getCards().add(x);
-                            //new card added to hand from deck
-                            if (game.getGameData().getDeck().getCards().size() > 0) {
-                                Card i=game.getGameData().getDeck().getCards().remove(0);
-                                player.GetHand().getCards().add(i);
-                            }
-                        }
-                    }
-                }
-            }
+            GameControl gm = gameControls.get(gamID);
+            Player player = gm.getGameData().getPlayerAtId(PlayerID); //Method taken from Max
+            Hand hand = player.GetHand();
+            GameData gamedata = gm.getGameData();
 
-            //   ctx.
-
-            return null;
+            hand.play(cardindex, gamedata, pilecolor);
+         //   return 234;
+            return "Error. How did this happen, we're smarter than this!";
         });
         put("/discard", "application/json", (req, res) -> {
             System.out.println("Discarding...");
