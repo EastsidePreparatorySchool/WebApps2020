@@ -41,8 +41,10 @@ public class GameData implements GameInterface {
     //   private ArrayList<Card> deck; // Can be an instance of the Deck class
     private Deck deck; // Can be an instance of the Deck class
 
+    private HashMap<String, PlayedCards> playedCardPiles;
+    
     public GameData(ArrayList<Player> players, int startingStrikes,
-            int deckVolume, String name, int gameId) {
+            int deckVolume, String name, int gameId, HashMap<String, PlayedCards> p) {
         this.players = players;
         this.remainingStrikes = startingStrikes;
         this.deck = new Deck(new ArrayList<Card>());
@@ -50,14 +52,13 @@ public class GameData implements GameInterface {
         this.gameId = gameId;
         //do the stuff to fill the deck//
         this.deck = this.createDeck(); // Shuffled & everything
-
+        this.playedCardPiles=p;
         for (int i = 0;
                 i < players.size();
                 i++) {
             players.get(i).myID = i;
         }
     }
-    private HashMap<String, PlayedCards> playedCardPiles;
 
     private Discard discardPile = new Discard();
 
@@ -69,6 +70,29 @@ public class GameData implements GameInterface {
         // GameIdSettingValue+=1;
     }
 
+    @Override
+    public int getPlayersSize() {
+        return players.size();
+    }
+       
+    @Override
+    public void removeComputerPlayer() {
+        for (Player player : players) {
+            if (player.myUser.CompPlayer == true) {
+                System.out.println("Removing computer player");
+                players.remove(player);
+                return;
+            }
+        }        
+        
+        System.out.println("No computer player found!");
+    }
+    
+    @Override
+    public void insertPlayer(Player player) {
+        players.add(player);
+    }
+                
     @Override
     public ArrayList<Player> getPlayers() {
         System.out.println(players);
@@ -108,6 +132,10 @@ public class GameData implements GameInterface {
     @Override
     public int getRemainingStrikes() {
         return remainingStrikes;
+    }
+    
+    public void decreaseStrikes() {
+        remainingStrikes-=1;
     }
 
     @Override

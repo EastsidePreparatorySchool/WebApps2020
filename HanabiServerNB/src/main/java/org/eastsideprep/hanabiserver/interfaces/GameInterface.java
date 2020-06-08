@@ -17,6 +17,9 @@ public interface GameInterface {
     
     public ArrayList<Player> getPlayers();
     
+    public int getPlayersSize();
+    public void removeComputerPlayer();
+    public void insertPlayer(Player player);
     public Player getPlayerAtId(int id);
     
     public Hand getPlayerHandAtId(int id);
