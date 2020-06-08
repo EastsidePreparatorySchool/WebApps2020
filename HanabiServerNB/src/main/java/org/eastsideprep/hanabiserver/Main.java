@@ -55,25 +55,25 @@ public class Main {
         Player p5 = new Player(new User("Windows@google.com", "foo", true), 5);
 //        Player p6 = new Player(new User("macOS@google.com", "fooy", true), 6);
         
-        p1.AddCardToHand(new Card("blue", 2));
-        p1.AddCardToHand(new Card("red", 4));
-        p1.AddCardToHand(new Card("yellow", 5));
-
-        p2.AddCardToHand(new Card("orange", 5));
-        p2.AddCardToHand(new Card("purple", 1));
-        p2.AddCardToHand(new Card("blue", 1));
-
-        p3.AddCardToHand(new Card("red", 3));
-        p3.AddCardToHand(new Card("red", 2));
-        p3.AddCardToHand(new Card("blue", 2));
-
-        p4.AddCardToHand(new Card("orange", 4));
-        p4.AddCardToHand(new Card("yellow", 4));
-        p4.AddCardToHand(new Card("purple", 3));
-
-        p5.AddCardToHand(new Card("red", 5));
-        p5.AddCardToHand(new Card("yellow", 3));
-        p5.AddCardToHand(new Card("blue", 3));
+//        p1.AddCardToHand(new Card("blue", 2));
+//        p1.AddCardToHand(new Card("red", 4));
+//        p1.AddCardToHand(new Card("yellow", 5));
+//
+//        p2.AddCardToHand(new Card("orange", 5));
+//        p2.AddCardToHand(new Card("purple", 1));
+//        p2.AddCardToHand(new Card("blue", 1));
+//
+//        p3.AddCardToHand(new Card("red", 3));
+//        p3.AddCardToHand(new Card("red", 2));
+//        p3.AddCardToHand(new Card("blue", 2));
+//
+//        p4.AddCardToHand(new Card("orange", 4));
+//        p4.AddCardToHand(new Card("yellow", 4));
+//        p4.AddCardToHand(new Card("purple", 3));
+//
+//        p5.AddCardToHand(new Card("red", 5));
+//        p5.AddCardToHand(new Card("yellow", 3));
+//        p5.AddCardToHand(new Card("blue", 3));
 
 //        p6.AddCardToHand(new Card("blue", 5));
 //        p6.AddCardToHand(new Card("red", 4));
@@ -125,7 +125,10 @@ public class Main {
                 "everest username testing", 1, cardpiles);
         GameControl testGC2 = new GameControl(testGD2);
         gameControls.add(testGC2);
-
+        
+        testGD.dealHands();
+        testGD2.dealHands();
+        
         // get a silly route up for testing
         get("/hello", (req, res) -> {
             System.out.println("Hey we were invoked:");
