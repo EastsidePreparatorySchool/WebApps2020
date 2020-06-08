@@ -6,8 +6,12 @@
 
 package org.eastsideprep.hanabiserver;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import static org.eastsideprep.hanabiserver.User.loginextra;
+import static org.eastsideprep.hanabiserver.User.msgs;
 import spark.Request;
 import spark.Response;
 import static spark.Spark.*;
@@ -39,7 +43,7 @@ public class Main {
 
         // tell spark where to find all the HTML and JS
         staticFiles.location("static");
-        User.setup(args);
+        setup(args);
 
         gameControls = new ArrayList<>();
 
@@ -466,20 +470,141 @@ public class Main {
         lobbyUsers.add(new User(username, userID, false));
    }
     
-    public static Context getContext(Request req) {
+//    public static Context getContext(Request req) {
+//        spark.Session s = req.session();
+//        if (s.isNew()) {
+//            s.attribute("map", new HashMap<String, Context>());
+//        }
+//        HashMap<String, Context> map = s.attribute("map");
+//        //System.out.println("map =" + map);
+//        String tabid = req.headers("tabid");
+//        if (tabid == null) {
+//            tabid = "default";
+//            System.out.println(tabid);
+//        }
+//        Context ctx = map.get(tabid);
+//
+//        return ctx;
+//    }
+    
+    public static Context getContext(spark.Request req) {
+        // Open new, independent tab
         spark.Session s = req.session();
+
+        // if the session is new, make sure it has a context map
         if (s.isNew()) {
-            s.attribute("map", new HashMap<String, Context>());
+            s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
         }
-        HashMap<String, Context> map = s.attribute("map");
-        //System.out.println("map =" + map);
+
+        // now we can safely access the context map whether the session is new or not
+        HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+        System.out.println("map =" + map);
+
+        // find the context that goes with the tab
         String tabid = req.headers("tabid");
         if (tabid == null) {
             tabid = "default";
             System.out.println(tabid);
         }
-        Context ctx = map.get(tabid);
+        org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+        System.out.println("tabid =" + tabid);
 
+        // no context? no problem.
+        if (ctx == null) {
+            // TODO: fix this user generation
+            User user = new User("GenericUserName", "GenericUserID", false);
+            ctx = new org.eastsideprep.hanabiserver.Context(user);
+            System.out.println("context=" + ctx);
+            System.out.println(user);
+            map.put(tabid, ctx);
+        }
         return ctx;
+    }
+    
+    public static void setup(String[] args) {
+        System.out.println("it's working");
+        staticFiles.location("static");
+        get("/getheaders", (req, res) -> User.getHeaders(req));
+        get("/loginextra", (req, res) -> loginextra(req, res));
+        get("/login", (req, res) -> User.login(req, res));
+
+        get("/headers", (req, res) -> {
+            String result = "";
+
+            for (String s : req.headers()) {
+                result += s + ":" + req.headers(s) + "<br>";
+            }
+
+            return result;
+        });
+
+        get("/load", (Request req, Response res) -> {
+            Context ctx = getContext(req);
+//            String username = ctx.user.getUsername() + ctx.user.getTabId();
+            String username = User.getUsername(ctx) + User.getTabId(ctx);
+            System.out.println("user=" + username);
+
+            if (username == null) {
+                username = "unknown"; // default Name
+            }
+
+            return ctx.toString();
+        });
+
+        get("/getUsername", "application/json", (req, res) -> {
+            System.out.println("get getUsername");
+
+            spark.Session s = req.session();
+
+            if (s.isNew()) {
+                s.attribute("map", new HashMap<String, org.eastsideprep.hanabiserver.Context>());
+            }
+
+            HashMap<String, org.eastsideprep.hanabiserver.Context> map = s.attribute("map");
+
+            String tabid = req.headers("tabid");
+            if (tabid == null) {
+                tabid = "default";
+            }
+
+            org.eastsideprep.hanabiserver.Context ctx = map.get(tabid);
+            return User.getUsername(ctx);
+        }, new JSONRT());
+
+        // optional chat feature in lobby (Aybala)
+        put("/send", (req, res) -> {
+            System.out.println("put send");
+
+            String msg = req.queryParams("msg");
+            Message newMessage = new Message();
+
+            Context ctx = getContext(req);
+
+            String username = User.getUsername(ctx);
+
+            newMessage.username = username;
+            System.out.println(newMessage.username);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            newMessage.msgtime = dtf.format(LocalDateTime.now());
+            newMessage.msg = msg;
+
+            synchronized (msgs) {
+                msgs.add(newMessage);
+                System.out.println(msgs.toString());
+            }
+
+            return "hi";
+        });
+
+        get("/get", "application/json", (req, res) -> {
+            JSONRT rt = new JSONRT(); // created a response transformer object
+            synchronized (msgs) {
+                String result = rt.render(msgs); // rendered java objects into JSON string
+
+                return result;
+            }
+        }, new JSONRT());
+
     }
 }
