@@ -70,6 +70,29 @@ public class GameData implements GameInterface {
     }
 
     @Override
+    public int getPlayersSize() {
+        return players.size();
+    }
+       
+    @Override
+    public void removeComputerPlayer() {
+        for (Player player : players) {
+            if (player.myUser.CompPlayer == true) {
+                System.out.println("Removing computer player");
+                players.remove(player);
+                return;
+            }
+        }        
+        
+        System.out.println("No computer player found!");
+    }
+    
+    @Override
+    public void insertPlayer(Player player) {
+        players.add(player);
+    }
+                
+    @Override
     public ArrayList<Player> getPlayers() {
         System.out.println(players);
         return players;

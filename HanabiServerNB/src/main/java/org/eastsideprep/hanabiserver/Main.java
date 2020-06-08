@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.eastsideprep.hanabiserver;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import spark.Request;
 import spark.Response;
 import static spark.Spark.*;
+import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
 
 //HANABI SERVER NB
 public class Main {
@@ -47,7 +49,7 @@ public class Main {
         Player p3 = new Player(new User("keyboardtyping@lol.net", "foo3", true), 3);
         Player p4 = new Player(new User("blah4x@gmail.com", "blah4", true), 4);
         Player p5 = new Player(new User("Windows@google.com", "foo", true), 5);
-        Player p6 = new Player(new User("macOS@google.com", "fooy", true), 6);
+//        Player p6 = new Player(new User("macOS@google.com", "fooy", true), 6);
         
         p1.AddCardToHand(new Card("blue", 2));
         p1.AddCardToHand(new Card("red", 4));
@@ -69,9 +71,9 @@ public class Main {
         p5.AddCardToHand(new Card("yellow", 3));
         p5.AddCardToHand(new Card("blue", 3));
 
-        p6.AddCardToHand(new Card("blue", 5));
-        p6.AddCardToHand(new Card("red", 4));
-        p6.AddCardToHand(new Card("purple", 1));
+//        p6.AddCardToHand(new Card("blue", 5));
+//        p6.AddCardToHand(new Card("red", 4));
+//        p6.AddCardToHand(new Card("purple", 1));
 
         ArrayList<Player> testPlayers = new ArrayList<>();
         testPlayers.add(p1);
@@ -79,10 +81,10 @@ public class Main {
         testPlayers.add(p3);
         testPlayers.add(p4);
         testPlayers.add(p5);
-        testPlayers.add(p6);
+//        testPlayers.add(p6);
 
 //        System.out.println(testPlayers.get(0).GetHand().getCards().get(0).color);
-        GameData testGD = new GameData(testPlayers, 3, 30, "a game", 0);
+        GameData testGD = new GameData(testPlayers, 3, 30, "game for aybala", 0);
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
@@ -158,39 +160,46 @@ public class Main {
 
         get("/update", "application/json", (req, res) -> {
             String gameID = req.queryParams("gid");
-            System.out.println("Update requested by " + req.ip() + " for game "
+            System.out.println("update: Update requested by " + req.ip() + " for game "
                     + gameID);
 
             if (gameID.equals("")) { // return all games
-                System.out.println("returning all games");
+                System.out.println("update: returning all games");
                 return gameControls;
             } else if (Integer.parseInt(gameID) < 0) { // get IDs
-                System.out.println("parsed -1, gathering user info");
+                System.out.println("update: parsed -1, gathering user info");
                 User reqUser = getContext(req).user;
                 
                 // TODO: TESTING, NEED TO CHANGE WHEN LOGIN IMPLEMENTED
-//                reqUser = testPlayers.get(0).GetUser();
-                reqUser.SetInGameID(1);
+                // reqUser = testPlayers.get(0).GetUser();
+                // reqUser.SetInGameID(1);
                 
                 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 
-                for (Player player
-                        : gameControls.get(reqUser.GetInGameID()).getGameData().
-                                getPlayers()) {
-                    System.out.println("Grabed players from game");
-                    if (player.GetUser().equals(reqUser)) {
-                        System.out.println("Grabed player this user is attached to");
-                        reqUser.SetAttachedPlayerID(player.myID);
-                        return reqUser;
+                System.out.println("update: Look for player " + reqUser.GetID() + " from game");
+                
+                for(GameControl game 
+                        : gameControls) {               
+                    for(Player player 
+                            : game.getGameData().getPlayers()) {
+
+                        System.out.println(reqUser.GetID() + " == " + player.myUser.GetID());
+                        
+                        if (player.myUser.GetID().equals(reqUser.GetID())) {
+                            System.out.println("update: Grabed player " + player.myUser.GetID() + " from game");
+                            reqUser.SetAttachedPlayerID(player.myID);
+
+                            return reqUser;
+                        }
                     }
                 }
-                
+                                
                 String errMsg = "Failed to grab user " + reqUser + " in game " + reqUser.GetInGameID();
                 System.out.println(errMsg);
                 return errMsg;
             } else { // get a specific game
                 int gameID_int = Integer.parseInt(gameID);
-                System.out.println("returning game data for game "+gameID_int);
+                System.out.println("update: returning game data for game "+gameID_int);
                 GameControl game;
                 try {
                     game = gameControls.get(gameID_int);
@@ -244,26 +253,26 @@ public class Main {
                     System.out.println("join_game: Found user " + user.GetID());
                     for (GameControl game
                             : gameControls) { // Find this game
-                        System.out.println("join_game: game id is = " + game.getGameData().getid());
+
+                        GameData gameData = game.getGameData();
+                        System.out.println("join_game: game id is = " + gameData.getid());
                         
-                        if (gameID == game.getGameData().getid()) {
+                        if (gameID == gameData.getid()) {
                             System.out.println("join_game: Found game " + gameID);
                             
-                            for (Player player : players) {
-                                if (player.myUser.CompPlayer) {
-                                    System.out.println("join_game: Removing computer player");
-                                    players.remove(player);
-                                    break;
-                                }
-                            }
-                            if (players.size() < 6) {
+                            gameData.removeComputerPlayer();
+
+                            if (gameData.getPlayersSize() < 6) {
                                 System.out.println("join_game: Adding user to the game");
                                 
-                                user.SetInGameID(game.getGameData().getid());
+                                user.SetInGameID(gameData.getid());
+
+                                gameData.insertPlayer(new Player(user));                                
                                 
-                                players.add(new Player(user)); // Create a new player with this user and add them to the game
                                 lobbyUsers.remove(user); // Remove user from lobby
-                                
+                                                                                           
+                                user.SetInGameID(gameID);
+
                                 System.out.println("join_game: Added user to the game");
 
                                 return "Entered user " + userID + " into game "

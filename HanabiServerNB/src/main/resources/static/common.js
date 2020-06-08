@@ -1,5 +1,4 @@
 let playerusername;
-gameid = 0;
 userid = "";
 usernameForJoinGame = "";
 
@@ -123,23 +122,21 @@ function getGamesUpdateTable() {
         for (var i = 0; i < games.length; i++) {
             var row = table.insertRow(1);
             row.insertCell(0).innerHTML = games[i].gameData.name;
-       //    row.insertCell(1).innerHTML = "<a href='game.html?id=" + i + "'>Join Game</a>";
-            row.insertCell(1).innerHTML = "<button onclick='joinGame()'>Join Game</button>";
-            gameid = i;
+            row.insertCell(1).innerHTML = "<button onclick='joinGame(" + i + ")'>Join Game " + i +"</button>";
         }
     });
 }
 
 getGamesUpdateTable();
 
-function joinGame() {
+function joinGame(gameid) {
     console.log("i am here!!");
     console.log(userid);
     
     request({url: "/join_game?gameid=" + gameid + "&userid=" + userid + "&username=" + usernameForJoinGame, method: "PUT"})
             .then(data => {
                 console.log("success, joining game");
-                window.location.href = '/game.html';
+                window.location.href = '/game.html?id=' + gameid;
             })
             .catch(error => {
                 console.log("error: " + error);
