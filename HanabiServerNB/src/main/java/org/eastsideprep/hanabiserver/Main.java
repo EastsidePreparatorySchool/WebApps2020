@@ -289,36 +289,36 @@ public class Main {
             return "Could not find user " + userID;
         });
         
-        put("/enter_game", (req, res) -> {
-            // Get user ID and requested game ID
-            String userID = req.queryParams("usr_id");
-            String gameID = req.queryParams("game_id");
-
-            System.out.println("Find this user in the lobby!");
-
-            for (User user
-                    : lobbyUsers) { // Find this user in the lobby
-                
-                if (user.GetID().equals(userID)) {
-                    for (GameControl game
-                            : gameControls) { // Find this game
-                        if (gameID.equals(game.getGameData().getid())) {
-                            if (players.size() < 6) {
-                                user.SetInGameID(game.getGameData().getid());
-                                players.add(new Player(user)); // Create a new player with this user and add them to the game
-                                lobbyUsers.remove(user); // Remove user from lobby
-                                return "Entered user " + userID + " into game "
-                                        + gameID;
-                            } else {
-                                return "Game " + gameID + " at max capacity";
-                            }
-                        }
-                    }
-                    return "Could not find game " + gameID;
-                }
-            }
-            return "Could not find user " + userID;
-        });
+//        put("/enter_game", (req, res) -> {
+//            // Get user ID and requested game ID
+//            String userID = req.queryParams("usr_id");
+//            String gameID = req.queryParams("game_id");
+//
+//            System.out.println("Find this user in the lobby!");
+//
+//            for (User user
+//                    : lobbyUsers) { // Find this user in the lobby
+//                
+//                if (user.GetID().equals(userID)) {
+//                    for (GameControl game
+//                            : gameControls) { // Find this game
+//                        if (gameID.equals(game.getGameData().getid())) {
+//                            if (players.size() < 6) {
+//                                user.SetInGameID(game.getGameData().getid());
+//                                players.add(new Player(user)); // Create a new player with this user and add them to the game
+//                                lobbyUsers.remove(user); // Remove user from lobby
+//                                return "Entered user " + userID + " into game "
+//                                        + gameID;
+//                            } else {
+//                                return "Game " + gameID + " at max capacity";
+//                            }
+//                        }
+//                    }
+//                    return "Could not find game " + gameID;
+//                }
+//            }
+//            return "Could not find user " + userID;
+//        });
         put("/give_hint", (req, res) -> {
             String hintParam = req.queryParams("hint");
             String gameIdString = req.queryParams("gid");
