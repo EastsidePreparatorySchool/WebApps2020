@@ -127,7 +127,7 @@ function getGamesUpdateTable() {
     });
 }
 
-getGamesUpdateTable();
+//getGamesUpdateTable();
 
 function joinGame(gameid) {
     console.log("i am here!!");

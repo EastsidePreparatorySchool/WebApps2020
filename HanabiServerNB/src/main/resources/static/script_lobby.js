@@ -10,6 +10,8 @@ function getGames(f) {
             });
 }
 
+getGamesUpdateTable();
+
 //function getGamesUpdateTable() {
 //    getGames(function (data) {
 //        var table = document.getElementById("gameTable");
