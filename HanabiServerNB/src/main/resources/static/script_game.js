@@ -382,8 +382,9 @@ function test(playerArr) {
     }
 
 
-
+    pile="purple";
     setTimeout(play(0), 300);
+    pile=0;
     result = result && (player1Card2.innerText !== "3");
 
     console.log("playing card");
