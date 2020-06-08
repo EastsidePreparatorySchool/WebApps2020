@@ -49,6 +49,28 @@ setInterval(function () {
     //                });
 }, 1000);
 
+//function to call for screenflash when strike number decreases
+//pass current strike count and unupdated strike count to function and it will trigger a screen flash when it detects the strike count to be more than it was
+//could remove the if statement and the parameters if you just need the screen to flash whenever the function is called
+function strikeFlash(previousStrike, strikeCount) {
+    if (strikeCount > previousStrike) {
+        var flashArea = document.getElementById('backgroundFlash');
+        setTimeout(function () {
+            flashArea.style.display = (flashArea.style.display == 'none' ? '' : 'none');
+        }, 0);
+        setTimeout(function () {
+            flashArea.style.display = (flashArea.style.display == 'none' ? '' : 'none');
+        }, 200);
+    }
+}
+
+function showWinScreen(s1, s2, s3, s4, s5) {
+    //each of the inputs is the highest numbered card in each colored stack when the game ends
+    //call this function when the game ends(when the strike counter hits 3 or when everyone plays their last move after the last card in deck is drawn)
+    var score = s1 + s2 + s3 + s4 + s5;
+    document.getElementById("winScreen").innerHTML = "<strong>Game Over<br/>Score: " + score + "</strong>";
+}
+
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
     var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
