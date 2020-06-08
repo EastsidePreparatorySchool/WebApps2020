@@ -216,6 +216,7 @@ function discard(card) {
     //add card to discard pile
     //draw new card
     //TODO: end turn
+    console.log(game);
     console.log("myID: " + myPlayerID);
     console.log(game.players[myPlayerID].myHand.cards[card]);
     request({url: "/discard?to_discard=" + JSON.stringify(game.players[myPlayerID].myHand.cards[card]) + "&game_id=" + thisGameID + "&player_id=" + myPlayerID, method: "PUT"}) // "a" needs to be a game ID
