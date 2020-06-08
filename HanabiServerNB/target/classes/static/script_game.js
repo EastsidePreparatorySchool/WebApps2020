@@ -1,4 +1,4 @@
-let DEBUG = true; // what's up with this? there's duplicate code when it get's used... ~KY
+let DEBUG = false; // what's up with this? there's duplicate code when it get's used... ~KY
 let game;
 var thisGameID = -1;
 var myPlayerID;
@@ -36,6 +36,7 @@ setInterval(function () {
             })
             .catch(error => {
                 console.log("error: " + error);
+                console.log(error.stack);
             });
     }
     //        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});

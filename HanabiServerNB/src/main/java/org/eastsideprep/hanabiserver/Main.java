@@ -100,8 +100,7 @@ public class Main {
         GameControl testGC = new GameControl(testGD);
         gameControls.add(testGC);
 
-        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1", true),
-                1);
+        Player g2p1 = new Player(new User("eoreizy@eastsideprep.org", "blah1", true),1);
         Player g2p2 = new Player(new User("everest@oreizy.com", "blah2", true), 2);
 
         g2p1.AddCardToHand(new Card("blue", 1));
@@ -120,6 +119,7 @@ public class Main {
         g2testPlayers.add(g2p2);
         g2testPlayers.add(p3);
         g2testPlayers.add(p4);
+        //g2testPlayers.add(p5);
 
         GameData testGD2 = new GameData(g2testPlayers, 5, 30,
                 "everest username testing", 1, cardpiles);
