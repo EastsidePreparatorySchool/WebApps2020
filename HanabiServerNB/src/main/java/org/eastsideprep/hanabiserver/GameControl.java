@@ -17,13 +17,13 @@ import org.eastsideprep.hanabiserver.interfaces.GameControlInterface;
 public class GameControl implements GameControlInterface {
 
     private GameData gameData;
-    
-    public GameData getGameData(){
+
+    public GameData getGameData() {
         return gameData;
     }
-    
-    public GameControl(GameData gameData){
+
+    public GameControl(GameData gameData) {
         this.gameData = gameData;
     }
-    
+
 }

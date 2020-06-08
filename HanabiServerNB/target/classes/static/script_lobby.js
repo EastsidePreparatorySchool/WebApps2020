@@ -10,17 +10,28 @@ function getGames(f) {
             });
 }
 
-function getGamesUpdateTable() {
-    getGames(function (data) {
-        var table = document.getElementById("gameTable");
-        let games = JSON.parse(data);
-        for (var i = 0; i < games.length; i++) {
-            var row = table.insertRow(1);
-            row.insertCell(0).innerHTML = games[i].gameData.name;
-            row.insertCell(1).innerHTML = "<a href='game.html?id=" + i + "'>Join Game</a>";
-        }
-    });
-        
-}
-
-getGamesUpdateTable();
+//function getGamesUpdateTable() {
+//    getGames(function (data) {
+//        var table = document.getElementById("gameTable");
+//        let games = JSON.parse(data);
+//        for (var i = 0; i < games.length; i++) {
+//            var row = table.insertRow(1);
+//            row.insertCell(0).innerHTML = games[i].gameData.name;
+//       //    row.insertCell(1).innerHTML = "<a href='game.html?id=" + i + "'>Join Game</a>";
+//            row.insertCell(1).innerHTML = "<button onlick='joinGame()'>Join Game</button>";
+//        }
+//    });
+//}
+//
+//getGamesUpdateTable();
+//
+//function joinGame() {
+//    console.log("i am here!!");
+//    request({url: "/join_game?gameid=" + gameid, verb: "GET"})
+//            .then(data => {
+//                console.log("success, joining game");
+//            })
+//            .catch(error => {
+//                console.log("error: " + error);
+//            });
+//}

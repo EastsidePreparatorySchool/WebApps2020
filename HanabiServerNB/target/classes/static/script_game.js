@@ -11,39 +11,49 @@ var updated = false;
 var discarded = false;
 
 setInterval(function () {
-    if (DEBUG) {
-        request({url: "/update?gid=" + thisGameIDx, method: "GET"})
+    if (thisGameID == -1) {
+        request({url: "/update?gid=" + thisGameID, method: "GET"})
                 .then(data => {
-                    if (thisGameID === -1) {
-                        let myUser = JSON.parse(data);
-                        thisGameID = myUser.InGameID;
-                        myPlayerID = myUser.attachedPlayerID;
-                    } else {
-                        game = JSON.parse(data);
-                        render_update(data);
-                        console.log("Update requested");
-                    }
+                    let myUser = JSON.parse(data);
+                    console.log("<BEGIN>")
+                    console.log(myUser);
+                    console.log("<END>")
+                    thisGameID = myUser.InGameID;
+                    console.log("New gameID is " + thisGameID);
+                    myPlayerID = myUser.ID;
+                    console.log("Update attachedPlayerID " + myPlayerID);
                 })
                 .catch(error => {
                     console.log("error: " + error);
                 });
-        //        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
-        //        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
-        //        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
-        //                .then(data => {
-        //                    console.log(data);
-        //                })
-        //                .catch(error => {
-        //                    console.log("error: " + error);
-        //                });
+    } else {
+                
+    request({url: "/update?gid=" + thisGameIDx, method: "GET"})
+            .then(data => {
+                game = JSON.parse(data);
+                render_update(thisGameIDx, myPlayerID, data);
+                console.log("Update requested");
+            })
+            .catch(error => {
+                console.log("error: " + error);
+            });
     }
+    //        let card = JSON.stringify({color: "Purple", number: 2, played: false, discarded: false});
+    //        let turn = JSON.stringify({gameId: 0, isDiscard: true, isPlay: false, isHint: false, playerTo: "", hintType: "", hint: ""});
+    //        request({url: "/turn?turn=" + turn + "&card=" + card, method: "GET"})
+    //                .then(data => {
+    //                    console.log(data);
+    //                })
+    //                .catch(error => {
+    //                    console.log("error: " + error);
+    //                });
 }, 1000);
 
 function updateCardInfo(playerNumber, slotNumber, newColor, newNumber) {
     //player number and slot number select what card is going to be changed, slot number is from left to right (1 for left, 2 is middle, etc)
     var playerCard = document.getElementById("player" + playerNumber + "Card" + slotNumber);
     playerCard.style.color = newColor;
-    playerCard.innerHTML = newNumber;
+    playerCard.innerText = newNumber;
     updated = true;
     return updated;
 }
@@ -58,7 +68,7 @@ function RandomizeCards() { //function to randomize cards from 1-5 and colors wi
 }
 
 function displayUsername(playerNumber, username) {
-    document.getElementById("playerLabel" + playerNumber).innerHTML = username;
+    document.getElementById("playerLabel" + playerNumber).innerText = username;
 }
 
 //0 is neither 1 is play 2 is discard
@@ -424,49 +434,82 @@ function test(playerArr) {
 }
 
 
-function render_update(data) {
+function render_update(gameId, playerId, data) {
     let update_data = JSON.parse(data);
-    console.log(update_data);
     //debugDiv.innerHTML = data;
     //debugDiv.innerHTML = update_data.players[0].myUser.Name;
-    render_user_cards(update_data.players);
+    render_user_cards(gameId, playerId, update_data.players);
     //getUsername();
-
 }
 
-function render_user_cards(playerArr) {
+function render_user_cards(gameid, playerId, playerArr) {
     //console.log("rendering usernames");
+    //console.log('playerArr ' + JSON.stringify(playerArr));    
+    var element =  document.getElementById('playerLabel5');
+    if (typeof(element) == 'undefined' || element == null) {
+        return;
+    }
+
+    var playerCount = 0;
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
-
+        let playerLocation = 1;
         let cp = playerArr[numPlayer];
+        
+        console.log("cp.myUser.InGameID " + cp.myUser.InGameID);
+        console.log(gameid);
+        if (cp.myUser.InGameID == gameid) {            
+            console.log("cp.myUser.ID " + cp.myUser.ID);
+            console.log(playerId);
+            if (cp.myUser.ID == playerId) {
+                playerLocation = 1;
+            } else {
+                playerLocation = playerCount + 2;
+                playerCount++;
+            }            
+                            
+            console.log('playerLabel' + playerLocation + ' = ' + cp.myUser.ID);
+            document.getElementById("playerLabel" + playerLocation).innerText = cp.myUser.username;
 
-        //console.log('at player ' + numPlayer);
-
-
-        usrfromserver = playerusername.split('"')[1];
-
-        if (usrfromserver === cp.myUser.Name) {
-
-            console.log(cp.myUser.Name + ' is me');
-            document.getElementById("player" + (numPlayer + 2) + "Cards").innerHTML = "You are Player " + numPlayer + "!";
-
-            MYDATA = cp;
-
-            render_my_cards();
-
-        } else {
-
-            console.log("else");
-            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.Name;
-            console.log("did playerlabel");
-            document.getElementById("P" + (numPlayer + 2) + "clue").innerText = cp.myUser.Name;
-            console.log("did buttonlabel");
-            for (var i = 0; i <= 2; i++) {
-                render_card("player" + (numPlayer + 2) + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
-            }
-
+//            if (cp.myHand.cards.length > 0) {
+//                for (var i = 0; i <= 2; i++) {
+//                    let card = document.getElementById("player" + playerLocation + "Card" + (i + 1));
+//                    console.log(playerArr[numPlayer]);
+//                    card.innerText = cp.myHand.cards[i].number;
+//                    card.style.color = cp.myHand.cards[i].color;
+//                    card.style.fontSize = "90px";
+//                    card.style.textAlign = "center";
+//                    card.style.lineHeight = "100px";
+//                    card.style.fontFamily = "sans-serif";
+//                    card.style.fontWeight = "700";
+//                    //console.log('at player ' + numPlayer);
+//
+////                    usrfromserver = playerusername.split('"')[1];
+////
+////                    if (usrfromserver === cp.myUser.Name) {
+////
+////                        console.log(cp.myUser.Name + ' is me');
+////                        document.getElementById("player" + playerLocation + "Cards").innerText = "You are Player " + numPlayer + "!";
+////
+////                        MYDATA = cp;
+////
+////                        render_my_cards();
+////
+////                    } else {
+////
+////                        console.log("else");
+////                        document.getElementById("playerLabel" + playerLocation).innerText = cp.myUser.Name;
+////                        console.log("did playerlabel");
+////                        document.getElementById("P" + playerLocation + "clue").innerText = cp.myUser.Name;
+////                        console.log("did buttonlabel");
+////                        console.log(JSON.stringify(cp.myHand));
+////
+////                        for (var i = 0; i <= 2; i++) {
+////                            render_card("player" + playerLocation + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
+////                        }
+////                    }    
+//                }
+//            }
         }
-
     }
 }
 
@@ -519,7 +562,6 @@ function render_my_cards() {
     });
 
     console.log(displayedHand);
-
 
     let index = 1;
     displayedHand.forEach(function (card) {
