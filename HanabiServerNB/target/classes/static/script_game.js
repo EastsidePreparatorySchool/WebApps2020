@@ -448,7 +448,8 @@ function test(playerArr) {
 function render_update(gameId, playerId, data) {
     let update_data = JSON.parse(data);
     //debugDiv.innerHTML = data;
-    //debugDiv.innerHTML = update_data.players[0].myUser.Name;
+    //debugDiv.innerHTML = update_data.players[0].myUser.username;
+    console.log(update_data);
     render_user_cards(gameId, playerId, update_data.players);
     //getUsername();
 }
@@ -456,75 +457,68 @@ function render_update(gameId, playerId, data) {
 function render_user_cards(gameid, playerId, playerArr) {
     //console.log("rendering usernames");
     //console.log('playerArr ' + JSON.stringify(playerArr));    
-    var element =  document.getElementById('playerLabel5');
-    if (typeof(element) == 'undefined' || element == null) {
-        return;
-    }
+    
+//    var element =  document.getElementById('playerLabel5');
+//    if (typeof(element) === 'undefined' || element === null) {
+//        return;
+//    }
 
     var playerCount = 0;
     for (var numPlayer = 0; numPlayer < playerArr.length; numPlayer++) {
         let playerLocation = 1;
         let cp = playerArr[numPlayer];
         
-        console.log("cp.myUser.InGameID " + cp.myUser.InGameID);
-        console.log(gameid);
-        if (cp.myUser.InGameID == gameid) {            
-            console.log("cp.myUser.ID " + cp.myUser.ID);
-            console.log(playerId);
-            if (cp.myUser.ID == playerId) {
+        //console.log("cp.myUser.InGameID " + cp.myUser.InGameID);
+        //console.log(gameid);
+        
+            //console.log("cp.myUser.ID " + cp.myUser.ID);
+            //console.log(playerId);
+            if (cp.myUser.ID === playerId) {
                 playerLocation = 1;
             } else {
                 playerLocation = playerCount + 2;
                 playerCount++;
             }            
                             
-            console.log('playerLabel' + playerLocation + ' = ' + cp.myUser.ID);
-            document.getElementById("playerLabel" + playerLocation).innerText = cp.myUser.username;
+            //console.log('playerLabel' + (numPlayer + 2) + ' = ' + cp.myUser.ID);
+            document.getElementById("playerLabel" + (numPlayer + 2)).innerText = cp.myUser.username;
 
-//            if (cp.myHand.cards.length > 0) {
-//                for (var i = 0; i <= 2; i++) {
-//                    let card = document.getElementById("player" + playerLocation + "Card" + (i + 1));
-//                    console.log(playerArr[numPlayer]);
-//                    card.innerText = cp.myHand.cards[i].number;
-//                    card.style.color = cp.myHand.cards[i].color;
-//                    card.style.fontSize = "90px";
-//                    card.style.textAlign = "center";
-//                    card.style.lineHeight = "100px";
-//                    card.style.fontFamily = "sans-serif";
-//                    card.style.fontWeight = "700";
-//                    //console.log('at player ' + numPlayer);
-//
-////                    usrfromserver = playerusername.split('"')[1];
-////
-////                    if (usrfromserver === cp.myUser.Name) {
-////
-////                        console.log(cp.myUser.Name + ' is me');
-////                        document.getElementById("player" + playerLocation + "Cards").innerText = "You are Player " + numPlayer + "!";
-////
-////                        MYDATA = cp;
-////
-////                        render_my_cards();
-////
-////                    } else {
-////
-////                        console.log("else");
-////                        document.getElementById("playerLabel" + playerLocation).innerText = cp.myUser.Name;
-////                        console.log("did playerlabel");
-////                        document.getElementById("P" + playerLocation + "clue").innerText = cp.myUser.Name;
-////                        console.log("did buttonlabel");
-////                        console.log(JSON.stringify(cp.myHand));
-////
-////                        for (var i = 0; i <= 2; i++) {
-////                            render_card("player" + playerLocation + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
-////                        }
-////                    }    
-//                }
-//            }
-        }
+            if (cp.myHand.cards.length > 0) {
+                for (var i = 0; i <= 2; i++) {
+                    
+                    render_card( "player" + playerLocation + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
+
+                    usrfromserver = playerusername/*.split('"')[1]*/;
+                    console.log("about to test " + cp.myUser.username);
+
+                    if (usrfromserver === cp.myUser.username) {
+
+                        console.log(cp.myUser.username + ' is me');
+                        document.getElementById("player" + playerLocation + "Cards").innerText = "You are Player " + numPlayer + "!";
+
+                        MYDATA = cp;
+
+                        render_my_cards(cp);
+
+                    } else {
+
+                        //console.log("else");
+                        document.getElementById("playerLabel" + playerLocation).innerText = cp.myUser.username;
+                        //console.log("did playerlabel");
+                        document.getElementById("P" + playerLocation + "clue").innerText = cp.myUser.username;
+                        //console.log("did buttonlabel");
+                        //console.log(JSON.stringify(cp.myHand));
+
+                        for (var i = 0; i <= 2; i++) {
+                            render_card("player" + playerLocation + "Card" + (i + 1), cp.myHand.cards[i].color, cp.myHand.cards[i].number);
+                        }
+                    }    
+                }
+            }
     }
 }
 
-function render_card(element_id, color, number, cardObject) {
+function render_card(element_id, color, number) {
     let card = document.getElementById(element_id);
     //console.log(playerArr[numPlayer]);
     card.innerText = number;
@@ -536,12 +530,13 @@ function render_card(element_id, color, number, cardObject) {
     card.style.fontWeight = "700";
 }
 
-function render_my_cards() {
-    console.log(MYDATA);
+function render_my_cards(data) {
+    console.log(data);
+    console.log("TRYING TO RENDER MY CARDS");
 
-    let hints = MYDATA.myHints;
+    let hints = data.myHints;
 
-    let hand = MYDATA.myHand.cards;
+    let hand = data.myHand.cards;
 
     let displayedHand = [
         {"color": "black", "number": "?"},
